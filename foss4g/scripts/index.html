@@ -39,6 +39,7 @@
     <script type="module">
         const viewer = new Cesium.Viewer('cesiumContainer');
         viewer.scene.globe.depthTestAgainstTerrain = true;
+        viewer.scene.requestRenderMode = true;
 
         // 🌟 Modify the path based on your environment
         // ✏️ Using your Directory Path
@@ -46,11 +47,11 @@
         const resource_terrain = './assets/terrain/';
 
         // ✏️ Using your geoserver url
-        const geoserverUrl = 'http://www.mago3d_workspace.com';
+        const geoserverUrl = 'http://localhost:8080/geoserver/wms';
 
         // ✏️ Using layer name in geoserver
-        const resource_2d = 'mago3d:T47PPR_20240430T033541_TCI_10m';
-        const resource_transportation = 'mago3d:khlongtoei_transportation';
+        const resource_2d = 'mago3d:sentinel';
+        const resource_transportation = 'mago3d:transportation';
 
         // Set terrain
         viewer.terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(resource_terrain);

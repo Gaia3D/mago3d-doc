@@ -1,6 +1,6 @@
 # Table of Contents
 
-## [1. Mago3D Data Collection Guide](1_Resource_Guide_En.md)
+## [1. Mago3D Data Collection Guide](guides/english/1_Resource_Guide_En.md)
 
 ### Data Construction Approach
 
@@ -13,7 +13,7 @@
 - Downloading Copernicus Data Space Ecosystem (Sentinel) Data
 - Downloading NASA DEM Data
 
-## [2. Mago3D Data Processing Guide](2_Processing_Guide_En.md)
+## [2. Mago3D Data Processing Guide](guides/english/2_Processing_Guide_En.md)
 
 ### Preprocessing Data to be Used
 
@@ -40,3 +40,5 @@
 - IntelliJ
 
 - ⭐result⭐
+
+## [+) Hardware Acceleration](guides/english/Hardware_Acceleration_En.md)
