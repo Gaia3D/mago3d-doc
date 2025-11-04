@@ -63,6 +63,8 @@ services:
       options:
         <<: *logging-fluentd
         tag: docker.configserver
+    ports:
+      - "8888:8888"
 
   healthcheck:
     depends_on:
@@ -92,6 +94,8 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
+    ports:
+      - "8082:8080"
 
   keycloak:
     environment:
@@ -177,12 +181,13 @@ services:
       - traefik.http.middlewares.minio-ui-trailingSlash.redirectRegex.regex=^(https?://[^/]+/[^/]+)$$
       - traefik.http.middlewares.minio-ui-trailingSlash.redirectRegex.replacement=$1/
       - traefik.http.middlewares.minio-ui-trailingSlash.redirectRegex.permanent=true
-
     logging:
       driver: fluentd
       options:
         <<: *logging-fluentd
         tag: docker.minio
+    ports:
+      - "9001:9000"
 
   traefik:
     command:
@@ -282,6 +287,8 @@ services:
         condition: service_healthy
       healthcheck:
           condition: service_healthy
+    ports:
+      - "8081:8080"
 
 
   userset:

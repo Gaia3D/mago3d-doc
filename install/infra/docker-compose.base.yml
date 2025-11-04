@@ -37,12 +37,12 @@ services:
 
   configrepo:
     image: ${REGISTRY}/mago3d-configrepo:latest
-    user: '0'
+    #    user: '0'
     environment:
       - GITEA__server__ROOT_URL=https://${DOMAIN}/configrepo
     networks: *networks
-    volumes:
-      - config-data:/var/lib/gitea
+  #    volumes:
+  #      - config-data:/var/lib/gitea
 
   configserver:
     image: ${REGISTRY}/mago3d-configserver:latest
