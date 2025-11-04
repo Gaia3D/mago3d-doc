@@ -122,7 +122,7 @@ Explain how to use the service in mago3D using the data downloaded according to 
 ### Extrusion model
 buildings.geojson -> 3D Tiles
 
-1. Upload builds.geojson to Mago3D.
+1. Upload builds.geojson to mago3D.
 2. Converts builds.geojson to 3D Tiles format within mago3D.
    Select the appropriate conversion options for the data as follows.
     - Input Type: GeoJSON
@@ -132,7 +132,7 @@ buildings.geojson -> 3D Tiles
 ### 3D model
 sample.fbx -> 3D Tiles
 
-1. Upload the 3D original data to Mago3D.
+1. Upload the 3D original data to mago3D.
 2. Converts 3D original data to 3D Tiles format within mago3D.
    Select the appropriate conversion options for the data as follows.
     - Input Type: FBX
@@ -142,7 +142,7 @@ sample.fbx -> 3D Tiles
 ### Terrain Model
 dem.tif -> Cesium Terrain Mesh
 
-1. Upload the terrain.tif file to Mago3D.
+1. Upload the terrain.tif file to mago3D.
 2. Convert the terrain.tif file to the Cesium Terrain Mesh format.
    Select the appropriate conversion options for the data as follows.
     - Min Depth: 0
@@ -152,7 +152,7 @@ dem.tif -> Cesium Terrain Mesh
 ### 2D Grid
 satellite.tif -> WMS
 
-1. Upload the satellite.tif file to Mago3D.
+1. Upload the satellite.tif file to mago3D.
 2. Convert the image file by selecting the coordinate system and the output data type.
 3. Automatically publishes the converted image to the GeoServer layer.
 4. Visualize and verify the converted image in mago3D with WMS
@@ -160,7 +160,7 @@ satellite.tif -> WMS
 ### 2D Vector
 water.geojson -> WMS
 
-1. Upload the water.geojson file to Mago3D.
+1. Upload the water.geojson file to mago3D.
 2. Select the appropriate conversion option for the data to convert the water.geojson file.
     - Input Type: GeoJSON
     - EPSG code: 4326

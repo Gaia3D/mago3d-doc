@@ -1,6 +1,6 @@
 # 목차
 
-## [1. Mago3D 데이터 수집 가이드](guides/korean/1_Resource_Guide_Ko.md)
+## [1. mago3D 데이터 수집 가이드](guides/korean/1_Resource_Guide_Ko.md)
 
 ### 데이터 구축 방안
 
@@ -13,7 +13,7 @@
 - Copernicus Data Space Ecosystem(Sentinel) 다운로드
 - NASA DEM 다운로드
   
-## [2. Mago3D 데이터 가공 가이드](guides/korean/2_Processing_Guide_Ko.md)
+## [2. mago3D 데이터 가공 가이드](guides/korean/2_Processing_Guide_Ko.md)
 
 ### 사용할 데이터 전처리
 
@@ -21,7 +21,7 @@
 - Copernicus Data Space Ecosystem(Sentinel) 데이터 가공
 - NASA DEM 데이터 가공
 
-### Mago3D 사용 가이드
+### mago3D 사용 가이드
 
 - mago3DTiler
 - mago3DTerrainer
