@@ -73,11 +73,11 @@ Transform raw geospatial data into web-optimized 3D tiles and terrain.
 
 **Topics covered:**
 - Preprocessing vector data with **GDAL/OGR**
-- Converting 3D buildings to 3D Tiles using **mago3DTiler**
+- Converting 3D buildings to OGC 3DTiles using **mago3DTiler**
 - Generating quantized mesh terrain using **mago3DTerrainer**
-- Processing point cloud data (LAS/LAZ) for vegetation
-- Publishing layers using **OGC WMTS** standards
-- Working with various data formats (GeoJSON, Shapefile, GeoTIFF, LAS/LAZ)
+- Convert point cloud data (LAS/LAZ) to OGC 3DTiles using **mago3DTiler**
+- Generate OGC 3DTiles with randomly placed tree instances within vegetation areas using **mago3DTiler**
+- Publish aerial imagery layers using the **OGC WMTS** standard
 
 ### Part 3: Visualization (45 minutes)
 Build an interactive 3D web application to visualize your digital twin city.

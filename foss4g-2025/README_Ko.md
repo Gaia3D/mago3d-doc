@@ -69,15 +69,15 @@
 - **NASA SRTM/ASTER DEM** 고도 데이터 획득
 
 ### 2부: 데이터 가공 (90분)
-원시 지오스페이셜 데이터를 웹 최적화된 3D 타일과 지형으로 변환합니다.
+원본 데이터를 웹 최적화된 3D 타일과 지형으로 변환합니다.
 
 **주요 내용:**
 - **GDAL/OGR**을 활용한 벡터 데이터 전처리
-- **mago3DTiler**를 사용한 3D 건물의 3D Tiles 변환
-- **mago3DTerrainer**를 사용한 양자화 메시 지형 생성
-- 식생용 포인트 클라우드 데이터 (LAS/LAZ) 처리
+- **mago3DTiler**를 사용하여 3D 건물의 OGC 3DTiles 변환
+- **mago3DTerrainer**를 사용한 Quantized Mesh 지형 생성
+- **mago3DTiler**를 사용하여 포인트 클라우드 데이터 (LAS/LAZ) OGC 3DTiles 변환
+- **mago3DTiler**를 사용하여 식생 영역에 램덤으로 나무 개체목 인스턴스를 위치시키는 OGC 3DTiles 생성
 - **OGC WMTS** 표준을 사용한 레이어 발행
-- 다양한 데이터 형식 작업 (GeoJSON, Shapefile, GeoTIFF, LAS/LAZ)
 
 ### 3부: 시각화 (45분)
 디지털 트윈 도시를 시각화하는 인터랙티브 3D 웹 애플리케이션을 구축합니다.
