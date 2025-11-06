@@ -61,7 +61,7 @@ Learn how to collect and download open geospatial data from various sources.
 
 **Topics covered:**
 - Setting up the development environment
-- Downloading building footprints and vegetation theme data from **Overture Maps**
+- Downloading building footprints and vegetation distribution data from **Overture Maps**
 - Acquiring DEM, road layers, aerial imagery, and point cloud data from **LINZ Data Service**
 
 For reference, open data from around the world can be obtained from sources such as:
@@ -72,31 +72,29 @@ For reference, open data from around the world can be obtained from sources such
 Transform raw geospatial data into web-optimized 3D tiles and terrain.
 
 **Topics covered:**
-- Preprocessing vector data with **GDAL/OGR**
+- Generating Quantized Mesh terrain using **mago3DTerrainer**
+- Preprocessing building data with **GDAL/OGR**
 - Converting 3D buildings to OGC 3DTiles using **mago3DTiler**
-- Generating quantized mesh terrain using **mago3DTerrainer**
-- Convert point cloud data (LAS/LAZ) to OGC 3DTiles using **mago3DTiler**
-- Generate OGC 3DTiles with randomly placed tree instances within vegetation areas using **mago3DTiler**
-- Publish aerial imagery layers using the **OGC WMTS** standard
+- Converting forest data to 3DTiles i3dm format using **mago3DTiler**
+- Converting point cloud data (LAS/LAZ) to OGC 3DTiles using **mago3DTiler**
 
 ### Part 3: Visualization (45 minutes)
 Build an interactive 3D web application to visualize your digital twin city.
 
 **Topics covered:**
-- Setting up a CesiumJS viewer
-- Loading 3D Tiles for buildings and terrain layers
-- Adding aerial imagery and road vector overlays
-- Integrating point cloud data and planting trees
-- Implementing camera controls and interactions
+- Setting up Access Token and CesiumJS viewer
+- Loading terrain (Quantized Mesh)
+- Adding aerial imagery and road layers
+- Loading building 3D Tiles
+- Loading forest and point cloud 3D Tiles
 - Viewing the final 3D digital twin city
 
 ### Part 4 (Optional): Hardware Acceleration (15 minutes)
-Optimize data processing performance with GPU acceleration.
+Optimize data processing performance through GPU acceleration.
 
 **Topics covered:**
-- Configuring Docker for GPU support
-- Using NVIDIA CUDA for accelerated processing
-- Performance comparison and best practices
+- Checking graphics acceleration status in your browser
+- Hands-on comparison of performance before and after enabling graphics acceleration
 
 ---
 

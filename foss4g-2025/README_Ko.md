@@ -61,42 +61,40 @@
 
 **주요 내용:**
 - 개발 환경 설정
-- **Overture Maps**에서 건물 풋프린트, 식생 주제도 다운로드
-- **LINZ Data Service**에서 DEM, 도로 레이어, 항공 영상, 포인트 클라우드 데이터 획득
+- **Overture Maps**에서 건물 풋프린트, 식생 분포도 다운로드
+- **LINZ Data Service**에서 DEM, 도로, 항공 영상, 포인트 클라우드 데이터 획득
 
 참고로, 전 세계 오픈 데이터는 아래와 같은 소스에서 얻을 수 있습니다:
 - **Copernicus Data Space Ecosystem**에서 Sentinel 위성 영상 다운로드
-- **NASA SRTM/ASTER DEM** 고도 데이터 획득
+- **NASA SRTM/ASTER DEM** DEM 데이터 획득
 
 ### 2부: 데이터 가공 (90분)
 원본 데이터를 웹 최적화된 3D 타일과 지형으로 변환합니다.
 
 **주요 내용:**
-- **GDAL/OGR**을 활용한 벡터 데이터 전처리
-- **mago3DTiler**를 사용하여 3D 건물의 OGC 3DTiles 변환
 - **mago3DTerrainer**를 사용한 Quantized Mesh 지형 생성
-- **mago3DTiler**를 사용하여 포인트 클라우드 데이터 (LAS/LAZ) OGC 3DTiles 변환
-- **mago3DTiler**를 사용하여 식생 영역에 램덤으로 나무 개체목 인스턴스를 위치시키는 OGC 3DTiles 생성
-- **OGC WMTS** 표준을 사용한 레이어 발행
+- **GDAL/OGR**을 활용한 건물 데이터 전처리
+- **mago3DTiler**를 사용하여 3D 건물의 OGC 3DTiles 변환
+- **mago3DTiler**를 사용한 산림 3DTiles i3dm 변환
+- **mago3DTiler**를 사용하여 포인트 클라우드 (LAS/LAZ) OGC 3DTiles 변환
 
 ### 3부: 시각화 (45분)
 디지털 트윈 도시를 시각화하는 인터랙티브 3D 웹 애플리케이션을 구축합니다.
 
 **주요 내용:**
-- CesiumJS 뷰어 설정
-- 건물용 3D Tiles 및 지형 레이어 로드
-- 항공 영상 및 도로 벡터 오버레이 추가
-- 포인트 클라우드 데이터 통합 및 나무 심기
-- 카메라 컨트롤 및 인터랙션 구현
+- Access Token 설정 및 CesiumJS 뷰어 설정
+- 지형(Quantized Mesh) 로드
+- 항공 영상 및 도로 레이어 추가
+- 건물 3D Tiles 로드 
+- 산림 및 포인트 클라우드 3D Tiles 로드
 - 최종 3D 디지털 트윈 도시 확인
 
 ### 4부 (선택): 하드웨어 가속 (15분)
 GPU 가속을 통한 데이터 처리 성능 최적화
 
 **주요 내용:**
-- GPU 지원을 위한 Docker 구성
-- 가속 처리를 위한 NVIDIA CUDA 활용
-- 성능 비교 및 모범 사례
+- 접속 브라우저의 그래픽 가속 여부 확인
+- 그래픽 가속 설정 전/후 성능 비교 실습
 
 ---
 
@@ -131,6 +129,15 @@ GPU 가속을 통한 데이터 처리 성능 최적화
 - Overture Maps 건물 풋프린트
 - 오픈 데이터 소스에서 항공 영상
 - NASA SRTM/ASTER DEM 고도 데이터
+
+- DEM
+https://data.linz.govt.nz/layer/121859-new-zealand-lidar-1m-dem/
+- 항공 영상
+https://data.linz.govt.nz/layer/121752-auckland-0075m-urban-aerial-photos-2024-2025/
+- 도로
+https://data.linz.govt.nz/layer/53378-nz-roads-road-section-geometry/
+- 포인트 클라우드
+https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-cloud-2024/
 
 ---
 
