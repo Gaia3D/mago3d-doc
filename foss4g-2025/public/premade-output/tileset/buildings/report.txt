@@ -1,0 +1,18 @@
+===============================================
+[Report Information]
+Name : 
+Version : Unknown
+Java Version : 17.0.16
+Start Time : 2025-11-06 12:40:57 09
+End Time : 2025-11-06 12:42:30 29
+Duration : 1m 33s 199ms
+-----------------------------------------------
+[Report Summary]
+Info Count : 0
+Warning Count : 0
+Error Count : 0
+Fatal Count : 0
+Total Report Count : 0
+-----------------------------------------------
+[No Detail Report]
+===============================================
