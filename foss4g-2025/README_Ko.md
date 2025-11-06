@@ -72,8 +72,8 @@
 원본 데이터를 웹 최적화된 3D 타일과 지형으로 변환합니다.
 
 **주요 내용:**
+- **GDAL/OGR**을 활용한 데이터 전처리
 - **mago3DTerrainer**를 사용한 Quantized Mesh 지형 생성
-- **GDAL/OGR**을 활용한 건물 데이터 전처리
 - **mago3DTiler**를 사용하여 3D 건물의 OGC 3DTiles 변환
 - **mago3DTiler**를 사용한 산림 3DTiles i3dm 변환
 - **mago3DTiler**를 사용하여 포인트 클라우드 (LAS/LAZ) OGC 3DTiles 변환
