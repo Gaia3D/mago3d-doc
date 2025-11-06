@@ -33,11 +33,16 @@ Linux의 경우, Docker 서비스를 실행합니다.
   ```
 * 인증서 생성
   ```cmd
-  cd install/infra/trafik/certs
-  mkcert -cert-file default.crt -key-file default.key localhost dev.localhost *.localhost 127.0.0.1 ::1
+  mkdir certs
+  ```
+  ```cmd
+  cd certs
+  ```
+  ```cmd
+  mkcert -cert-file default.crt -key-file default.key localhost dev.localhost *.localhost
   ```
 
-서버에 인증서가 설치되어 있으면, 인증서를 복사하여 `install/traefik/certs` 경로에 배치합니다.
+서버에 인증서가 설치되어 있으면, 인증서를 복사하여 `certs` 경로에 배치합니다.
 
 
 ## 2. Docker Network 생성

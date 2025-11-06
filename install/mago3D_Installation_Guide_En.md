@@ -30,16 +30,20 @@ Generate a localhost certificate using [mkcert](https://github.com/FiloSottile/m
   ```cmd
   mkcert -install
   ```
+
 * Generate the certificate
   ```cmd
-  cd install/traefik/certs
+  mkdir certs
+  ```
+  ```cmd
+  cd certs
   ```
   ```cmd
   mkcert -cert-file default.crt -key-file default.key localhost dev.localhost *.localhost
   ```
 
 If a certificate is installed on the server
-Copy the certificate and place it in the `install/traefik/certs` path.
+Copy the certificate and place it in the `certs` path.
 
 
 ## 2. Create Docker Network

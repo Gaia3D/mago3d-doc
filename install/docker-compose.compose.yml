@@ -224,8 +224,6 @@ services:
       - --entrypoints.minio.address=:9000
       - --entrypoints.minio.http.tls=true
 
-    volumes:
-      - ./traefik/certs:/etc/certs:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`${DOMAIN}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
