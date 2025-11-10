@@ -9,7 +9,8 @@ Participants will:
 - **Transform data** using open-source tools (**mago3DTiler**, **mago3DTerrainer**)
 - **Experience the full workflow** of serving data according to **OGC (Open Geospatial Consortium) standards**
 
-You will visualize city buildings and terrain in 3D, overlay road layers and aerial imagery to construct a realistic urban environment. Additionally, participants will transform and overlay point cloud data, and then **plant trees in the city**.
+You will visualize city **buildings** and **terrain** in 3D, overlay **road** layers and **aerial imagery** to construct a realistic urban environment.
+Additionally, you will create **forests** by planting trees in the city, and then transform and overlay large-scale point cloud data.
 
 This entire process relies on **open data, open source, and open standards**, allowing participants to experience building a digital twin city from scratch on an unprepared PC.
 
@@ -25,14 +26,14 @@ By the end of this workshop, participants will be able to:
 4. Transform point cloud data and visualize vegetation-based individual tree models
 5. Serve geospatial data using OGC WMTS
 6. Create interactive 3D web applications with CesiumJS
-7. Build a complete digital twin city from scratch in 3 hours.
+7. Build a complete digital twin city from scratch in 3 hours
 
 ---
 
 ## Prerequisites
 
 ### Required Software
-- **Docker Desktop** (Windows/Mac) or Docker Engine (Linux)
+- **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
 - **Git** for cloning repositories
 - **Python** (version 3.8 or higher)
 - **Node.js** (version 14 or higher)
@@ -56,19 +57,22 @@ By the end of this workshop, participants will be able to:
 
 ## Workshop Structure
 
-### Part 1: Data Collection (30 minutes)
+### Part 1: Introduction (15 minutes)
+Introduction to workshop overview, objectives, and environment setup.
+
+### Part 2: Data Collection (45 minutes)
 Learn how to collect and download open geospatial data from various sources.
 
 **Topics covered:**
-- Setting up the development environment
-- Downloading building footprints and vegetation distribution data from **Overture Maps**
+- Setting up the working environment
+- Downloading building footprints and land use data from **Overture Maps**
 - Acquiring DEM, road layers, aerial imagery, and point cloud data from **LINZ Data Service**
 
 For reference, open data from around the world can be obtained from sources such as:
 - Downloading Sentinel satellite imagery from **Copernicus Data Space Ecosystem**
 - Obtaining elevation data from **NASA SRTM/ASTER DEM**
 
-### Part 2: Data Processing (90 minutes)
+### Part 3: Data Processing (60 minutes)
 Transform raw geospatial data into web-optimized 3D tiles and terrain.
 
 **Topics covered:**
@@ -78,7 +82,7 @@ Transform raw geospatial data into web-optimized 3D tiles and terrain.
 - Converting forest data to 3DTiles i3dm format using **mago3DTiler**
 - Converting point cloud data (LAS/LAZ) to OGC 3DTiles using **mago3DTiler**
 
-### Part 3: Visualization (45 minutes)
+### Part 4: Visualization (40 minutes)
 Build an interactive 3D web application to visualize your digital twin city.
 
 **Topics covered:**
@@ -89,7 +93,7 @@ Build an interactive 3D web application to visualize your digital twin city.
 - Loading forest and point cloud 3D Tiles
 - Viewing the final 3D digital twin city
 
-### Part 4 (Optional): Hardware Acceleration (15 minutes)
+### Part 5: Hardware Acceleration (10 minutes)
 Optimize data processing performance through GPU acceleration.
 
 **Topics covered:**
@@ -100,16 +104,16 @@ Optimize data processing performance through GPU acceleration.
 
 ## Workshop Schedule
 
-| Time | Section | Activity |
-|------|---------|----------|
-| 00:00 - 00:15 | Introduction | Workshop overview and environment setup |
-| 00:15 - 00:45 | Data Collection | Download and organize geospatial data |
-| 00:45 - 01:30 | Data Processing - Part 1 | GDAL preprocessing and building conversion |
-| 01:30 - 02:00 | Data Processing - Part 2 | Terrain generation and OGC WMTS setup |
-| 02:00 - 02:15 | Break | Coffee break |
-| 02:15 - 03:00 | Visualization | Build 3D web application |
-| 03:00 - 03:15 | Advanced Topics | Hardware acceleration (optional) |
-| 03:15 - 03:30 | Q&A | Questions and wrap-up |
+| Time          | Section                          | Activity                                |
+|---------------|----------------------------------|-----------------------------------------|
+| 01:30 - 01:45 | Introduction (15min)             | Workshop overview and environment setup |
+| 01:45 - 02:30 | Data Collection (45min)          | Download geospatial data                |
+| 02:30 - 03:00 | Data Processing - Part 1 (30min) | GDAL preprocessing                      |
+| 03:00 - 03:30 | Break (30min)                    | Coffee break                            |
+| 03:30 - 04:00 | Data Processing - Part 2 (30min) | 3D data conversion                      |
+| 04:00 - 04:40 | Visualization (40min)            | Build 3D web application                |
+| 04:40 - 04:50 | Advanced Topics (10min)          | Hardware acceleration                   |
+| 04:50 - 05:00 | Q&A (10min)                      | Questions and wrap-up                   |
 
 **Total Duration**: 3.5 hours
 
@@ -120,24 +124,14 @@ Optimize data processing performance through GPU acceleration.
 ### [1. Data Collection Guide](guides/1_Resource_Guide_En.md)
 
 #### Basic Setup
-- Creating the workshop directory structure
-- IDE preparation and configuration
-- Docker installation and verification
-- OGC WMTS service verification
+- Creating working directory for the workshop
+- IDE preparation and Git repository clone
+- Installing and verifying required software
 
 #### Downloading Data
-- Overture Maps building footprints
-- Aerial imagery from open data sources
-- NASA SRTM/ASTER DEM elevation data
-
-- DEM
-https://data.linz.govt.nz/layer/121859-new-zealand-lidar-1m-dem/
-- Aerial Imagery
-https://data.linz.govt.nz/layer/121752-auckland-0075m-urban-aerial-photos-2024-2025/
-- Roads
-https://data.linz.govt.nz/layer/53378-nz-roads-road-section-geometry/
-- Point Cloud
-https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-cloud-2024/
+- Overture Maps building footprints and land use vector data
+- Open data sources (LINZ Data Service) DEM and point cloud data
+- Open data sources (LINZ Data Service) aerial imagery and road WMTS service
 
 ---
 
@@ -151,13 +145,13 @@ https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-clou
 #### mago3D Tools Overview
 - **mago3DTerrainer**: Generate optimized terrain
   - Creates terrain tiles from DEM (GeoTIFF) with simple commands
-  - Generates high-precision Quantized mesh
+  - Generates high-accuracy Quantized mesh
   - Supports multi-resolution DEM tile generation
   - Calculates Normal Vectors for terrain lighting
   - Provides various customization options
 - **mago3DTiler**: Convert to 3D Tiles format
   - Supports various formats: 3DS, OBJ, FBX, Collada DAE, GlTF, GLB, IFC, etc.
-  - High-precision LAS, LAZ data conversion
+  - High-accuracy LAS, LAZ data conversion
   - Height extrusion and attribute mapping
   - Coordinate system transformation and terrain draping
   - Provides various customization options
@@ -175,23 +169,22 @@ https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-clou
 #### Building the 3D Application
 - Sample code structure and setup
 - Running the application in your IDE
-- Understanding CesiumJS integration
-- Adding custom interactions
+- Sample code explanation
+- Verifying results based on conversion options
 
 #### Results
+- Visualizing layers in CesiumJS viewer
+- Layer toggling and attribute inspection
 - Viewing the complete 3D digital twin
-- Performance optimization tips
-- Sharing and deployment options
 
 ---
 
 ### [Optional: Hardware Acceleration](guides/Hardware_Acceleration_En.md)
 
 #### GPU-Accelerated Processing
-- Docker GPU support configuration
-- NVIDIA CUDA setup for Linux/Windows
-- Performance benchmarks
-- Troubleshooting common issues
+- Optimizing data processing performance through GPU acceleration
+- Checking graphics acceleration status in your browser
+- Performance comparison before/after acceleration
 
 ---
 
@@ -199,59 +192,53 @@ https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-clou
 
 This workshop uses **real-world open data from the FOSS4G host city/region**, including:
 - Building footprints from Overture Maps
-- Aerial imagery from open data sources
-- Elevation data from NASA SRTM/ASTER
-- Road network data
-- Point cloud data for vegetation
+- Land use data from Overture Maps
+- Elevation data from LINZ Data Service
+- Aerial imagery from LINZ Data Service
+- Road network data from LINZ Data Service
+- Point cloud data from LINZ Data Service
 
-**Target Region**: To be determined based on FOSS4G 2025 location
+**Target Region**: Downtown Auckland, New Zealand (FOSS4G 2025 host city)
 
-Sample datasets are provided in the [`dataset/`](dataset/) directory for participants who cannot download data during the workshop.
+Sample datasets are provided in the [`public/`](public/) directory for participants who cannot download data during the workshop.
 
 ---
 
 ## Sample Code
 
 Complete working examples are available in the [`src/`](src/) directory, including:
-- HTML/JavaScript samples for CesiumJS integration
-- Configuration files for mago3D platform
-- GDAL processing scripts
-- Docker Compose deployment examples
+- CesiumJS-based 3D web application
+- Loading terrain, aerial imagery, roads, buildings, forests, and point cloud layers
+- Custom interactions and visualization settings
 
 ---
 
 ## Additional Resources
 
-### Documentation
-- [mago3D Introduction](../lang/en/1_mago3D_Introduction.md)
-- [mago3D Installation Guide](../lang/en/2_mago3D_Installation_Guide.md)
-- [mago3D User Guide](../lang/en/3_mago3D_User_Guide.md)
-- [mago3D API Documentation](https://mdtp.gaia3d.com/doc/)
-
 ### Data Sources
 - [Overture Maps](https://overturemaps.org/)
-- [NASA Earthdata](https://earthdata.nasa.gov/)
-- Open aerial imagery data sources
+- [LINZ Data Service](https://data.linz.govt.nz/)
 
 ### Tools and Libraries
+- [Docker](https://www.docker.com/)
 - [GDAL/OGR](https://gdal.org/)
+- [mago3D Terrainer](https://github.com/Gaia3D/mago-3d-terrainer)
+- [mago3D Tiler](https://github.com/Gaia3D/mago-3d-tiler)
 - [OGC WMTS Standard](https://www.ogc.org/standard/wmts/)
 - [CesiumJS](https://cesium.com/cesiumjs/)
-- [Docker](https://www.docker.com/)
 
 ---
 
 ## Support and Contact
 
 **Workshop Instructors:**
-- TBD
+- Yeonhwa Jeong, Gaia3D, yhjeong@gaia3d.com
+- Sungjun Jo, Gaia3D, sjcho@gaia3d.com
+- Jungin Yoon, Gaia3D, jiyoon@gaia3d.com
 
 **Technical Support:**
 - GitHub Issues: [github.com/Gaia3D/mago3d-doc](https://github.com/Gaia3D/mago3d-doc)
 - Official Website: [www.mago3d.com](http://www.mago3d.com/)
-
-**Organization:**
-- Gaia3D, Inc.
 
 ---
 

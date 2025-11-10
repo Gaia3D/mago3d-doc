@@ -2,16 +2,17 @@
 
 ## 워크샵 개요
 
-이 워크샵은 FOSS4G가 개최되는 지역의 오픈 데이터를 활용하여 **디지털 트윈 도시를 처음부터 구축하는 경험**을 제공합니다.
+이 워크샵은 FOSS4G가 개최되는 지역의 오픈 데이터를 활용하여 **디지털 트윈 도시를 처음부터 구축하는 경험**을 제공합니다.   
 
 참가자들은:
 - 다양한 지오스페이셜 소스에서 **오픈 데이터를 수집**
 - 오픈소스 도구(**mago3DTiler**, **mago3DTerrainer**)를 사용하여 **데이터를 변환**
 - **OGC(Open Geospatial Consortium) 표준**에 따라 데이터를 제공하는 **전체 워크플로우를 경험**
 
-도시 건물과 지형을 3D로 시각화하고, 도로 레이어와 항공 영상을 오버레이하여 현실적인 도시 환경을 구축합니다. 또한 포인트 클라우드 데이터를 변환하고 오버레이한 후, **도시에 나무를 심습니다**.
+도시 **건물**과 **지형**을 3D로 시각화하고, **도로** 레이어와 **항공 영상**을 오버레이하여 현실적인 도시 환경을 구축합니다.    
+또한 도시에 나무를 심어 **산림**을 구성해보고, 대용량 포인트 클라우드 데이터를 변환하고 오버레이합니다.   
 
-이 모든 과정은 **오픈 데이터, 오픈소스, 오픈 표준**에만 의존하여, 참가자들이 준비되지 않은 PC에서 디지털 트윈 도시를 처음부터 만드는 경험을 할 수 있도록 합니다.
+이 모든 과정은 **오픈 데이터, 오픈소스, 오픈 표준**에만 의존하여, 참가자들이 준비되지 않은 PC에서 디지털 트윈 도시를 처음부터 만드는 경험을 할 수 있도록 합니다.   
 
 ---
 
@@ -32,7 +33,7 @@
 ## 사전 준비사항
 
 ### 필수 소프트웨어
-- **Docker Desktop** (Windows/Mac) 또는 Docker Engine (Linux)
+- **Docker Desktop** (Windows/Mac) 또는 **Docker Engine** (Linux)
 - 저장소 클론을 위한 **Git**
 - **Python** (버전 3.8 이상)
 - **Node.js** (버전 14 이상)
@@ -56,19 +57,22 @@
 
 ## 워크샵 구성
 
-### 1부: 데이터 수집 (30분)
+### 1부: 소개 (15분)
+워크샵 개요, 목표 및 환경 설정을 소개합니다.
+
+### 2부: 데이터 수집 (45분)
 다양한 출처에서 오픈 지오스페이셜 데이터를 수집하고 다운로드하는 방법을 학습합니다.
 
 **주요 내용:**
-- 개발 환경 설정
-- **Overture Maps**에서 건물 풋프린트, 식생 분포도 다운로드
+- 작업 환경 설정
+- **Overture Maps**에서 건물 풋프린트, 토지 이용 다운로드
 - **LINZ Data Service**에서 DEM, 도로, 항공 영상, 포인트 클라우드 데이터 획득
 
 참고로, 전 세계 오픈 데이터는 아래와 같은 소스에서 얻을 수 있습니다:
 - **Copernicus Data Space Ecosystem**에서 Sentinel 위성 영상 다운로드
 - **NASA SRTM/ASTER DEM** DEM 데이터 획득
 
-### 2부: 데이터 가공 (90분)
+### 3부: 데이터 가공 (60분)
 원본 데이터를 웹 최적화된 3D 타일과 지형으로 변환합니다.
 
 **주요 내용:**
@@ -78,18 +82,18 @@
 - **mago3DTiler**를 사용한 산림 3DTiles i3dm 변환
 - **mago3DTiler**를 사용하여 포인트 클라우드 (LAS/LAZ) OGC 3DTiles 변환
 
-### 3부: 시각화 (45분)
+### 4부: 시각화 (40분)
 디지털 트윈 도시를 시각화하는 인터랙티브 3D 웹 애플리케이션을 구축합니다.
 
 **주요 내용:**
 - Access Token 설정 및 CesiumJS 뷰어 설정
 - 지형(Quantized Mesh) 로드
 - 항공 영상 및 도로 레이어 추가
-- 건물 3D Tiles 로드 
+- 건물 3D Tiles 로드
 - 산림 및 포인트 클라우드 3D Tiles 로드
 - 최종 3D 디지털 트윈 도시 확인
 
-### 4부 (선택): 하드웨어 가속 (15분)
+### 5부: 하드웨어 가속 (10분)
 GPU 가속을 통한 데이터 처리 성능 최적화
 
 **주요 내용:**
@@ -100,16 +104,16 @@ GPU 가속을 통한 데이터 처리 성능 최적화
 
 ## 워크샵 일정
 
-| 시간 | 섹션 | 활동 |
-|------|------|------|
-| 00:00 - 00:15 | 소개 | 워크샵 개요 및 환경 설정 |
-| 00:15 - 00:45 | 데이터 수집 | 지오스페이셜 데이터 다운로드 및 정리 |
-| 00:45 - 01:30 | 데이터 가공 - 1부 | GDAL 전처리 및 건물 변환 |
-| 01:30 - 02:00 | 데이터 가공 - 2부 | 지형 생성 및 OGC WMTS 설정 |
-| 02:00 - 02:15 | 휴식 | 커피 브레이크 |
-| 02:15 - 03:00 | 시각화 | 3D 웹 애플리케이션 구축 |
-| 03:00 - 03:15 | 고급 주제 | 하드웨어 가속 (선택) |
-| 03:15 - 03:30 | Q&A | 질의응답 및 마무리 |
+| 시간            | 섹션               | 활동              |
+|---------------|------------------|-----------------|
+| 01:30 - 01:45 | 소개(15분)          | 워크샵 개요 및 환경 설정  |
+| 01:45 - 02:30 | 데이터 수집(45분)      | 지오스페이셜 데이터 다운로드 |
+| 02:30 - 03:00 | 데이터 가공 - 1부(30분) | GDAL 전처리        |
+| 03:00 - 03:30 | 휴식(30분)          | 커피 브레이크         |
+| 03:30 - 04:00 | 데이터 가공 - 2부(30분) | 3차원 데이터 변환      |
+| 04:00 - 04:40 | 시각화(40분)         | 3D 웹 애플리케이션 구축  |
+| 04:40 - 04:50 | 고급 주제(10분)       | 하드웨어 가속         |
+| 04:50 - 05:00 | Q&A(10분)         | 질의응답 및 마무리      |
 
 **총 소요 시간**: 3.5시간
 
@@ -120,24 +124,14 @@ GPU 가속을 통한 데이터 처리 성능 최적화
 ### [1. 데이터 수집 가이드](guides/1_Resource_Guide_Ko.md)
 
 #### 기본 설정
-- 워크샵 디렉터리 구조 생성
-- IDE 준비 및 구성
-- Docker 설치 및 확인
-- OGC WMTS 서비스 확인
+- 실습을 위한 작업 디렉토리 생성
+- IDE 준비 및 Git 저장소 클론
+- 필수 소프트웨어 설치 및 설치 확인
 
 #### 데이터 다운로드
-- Overture Maps 건물 풋프린트
-- 오픈 데이터 소스에서 항공 영상
-- NASA SRTM/ASTER DEM 고도 데이터
-
-- DEM
-https://data.linz.govt.nz/layer/121859-new-zealand-lidar-1m-dem/
-- 항공 영상
-https://data.linz.govt.nz/layer/121752-auckland-0075m-urban-aerial-photos-2024-2025/
-- 도로
-https://data.linz.govt.nz/layer/53378-nz-roads-road-section-geometry/
-- 포인트 클라우드
-https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-cloud-2024/
+- Overture Maps 건물 풋프린트, 토지 이용 벡터 데이터
+- 오픈 데이터 소스(LINZ Data Service) DEM, 포인트 클라우드
+- 오픈 데이터 소스(LINZ Data Service) 항공영상, 도로 WMTS 서비스
 
 ---
 
@@ -174,24 +168,23 @@ https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-clou
 
 #### 3D 애플리케이션 구축
 - 샘플 코드 구조 및 설정
-- IDE에서 애플리케이션 실행
-- CesiumJS 통합 이해
-- 사용자 정의 인터랙션 추가
+- IDE에서 어플리케이션 실행
+- 샘플 코드 설명
+- 변환 옵션에 따른 결과물 확인
 
 #### 결과물
+- CesiumJS 뷰어에서 레이어 시각화
+- 레이어 토글 및 속성 확인
 - 완성된 3D 디지털 트윈 확인
-- 성능 최적화 팁
-- 공유 및 배포 옵션
 
 ---
 
 ### [선택: 하드웨어 가속](guides/Hardware_Acceleration_Ko.md)
 
 #### GPU 가속 처리
-- Docker GPU 지원 구성
-- Linux/Windows용 NVIDIA CUDA 설정
-- 성능 벤치마크
-- 일반적인 문제 해결
+- GPU 가속을 통한 데이터 처리 성능 최적화
+- 접속 브라우저의 그래픽 가속 여부 확인
+- 그래픽 가속 설정 전/후 성능 비교 실습
 
 ---
 
@@ -199,59 +192,53 @@ https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-clou
 
 이 워크샵은 **FOSS4G 개최 도시/지역의 실제 오픈 데이터**를 사용합니다:
 - Overture Maps의 건물 풋프린트
-- 오픈 데이터 소스의 항공 영상
-- NASA SRTM/ASTER의 고도 데이터
-- 도로 네트워크 데이터
-- 식생용 포인트 클라우드 데이터
+- Overture Maps의 토지 이용 데이터
+- LINZ Data Service의 고도 데이터
+- LINZ Data Service의 항공 영상
+- LINZ Data Service의 도로 네트워크 데이터
+- LINZ Data Service의 포인트 클라우드 데이터
 
-**대상 지역**: FOSS4G 2025 개최지에 따라 결정
+**대상 지역**: FOSS4G 2025 개최지 뉴질랜드 오클랜드 중심가
 
-워크샵 중 데이터를 다운로드할 수 없는 참가자를 위해 [`dataset/`](dataset/) 디렉터리에 샘플 데이터셋이 제공됩니다.
+워크샵 중 데이터를 다운로드할 수 없는 참가자를 위해 [`public/`](public/) 디렉터리에 샘플 데이터셋이 제공됩니다.
 
 ---
 
 ## 샘플 코드
 
 [`src/`](src/) 디렉터리에서 다음을 포함한 완전한 작동 예제를 확인할 수 있습니다:
-- CesiumJS 통합을 위한 HTML/JavaScript 샘플
-- mago3D 플랫폼 구성 파일
-- GDAL 처리 스크립트
-- Docker Compose 배포 예제
+- CesiumJS 기반 3D 웹 애플리케이션
+- 지형, 항공 영상, 도로, 건물, 산림, 포인트 클라우드 레이어 로드
+- 사용자 정의 인터랙션 및 시각화 설정
 
 ---
 
 ## 추가 자료
 
-### 문서
-- [mago3D 소개](../lang/ko/1_mago3D_Introduction.md)
-- [mago3D 설치 가이드](../lang/ko/2_mago3D_Installation_Guide.md)
-- [mago3D 사용자 가이드](../lang/ko/3_mago3D_User_Guide.md)
-- [mago3D API 문서](https://mdtp.gaia3d.com/doc/)
-
 ### 데이터 소스
 - [Overture Maps](https://overturemaps.org/)
-- [NASA Earthdata](https://earthdata.nasa.gov/)
-- 오픈 항공 영상 데이터 소스
+- [LINZ Data Service](https://data.linz.govt.nz/)
 
 ### 도구 및 라이브러리
+- [Docker](https://www.docker.com/)
 - [GDAL/OGR](https://gdal.org/)
+- [mago3D Terrainer](https://github.com/Gaia3D/mago-3d-terrainer)
+- [mago3D Tiler](https://github.com/Gaia3D/mago-3d-tiler)
 - [OGC WMTS 표준](https://www.ogc.org/standard/wmts/)
 - [CesiumJS](https://cesium.com/cesiumjs/)
-- [Docker](https://www.docker.com/)
 
 ---
 
 ## 지원 및 문의
 
 **워크샵 강사:**
-- 추후 공지
+- 정연화, 가이아쓰리디, yhjeong@gaia3d.com
+- 조성준, 가이아쓰리디, sjcho@gaia3d.com
+- 윤정인, 가이아쓰리디, jiyoon@gaia3d.com
 
 **기술 지원:**
 - GitHub 이슈: [github.com/Gaia3D/mago3d-doc](https://github.com/Gaia3D/mago3d-doc)
 - 공식 웹사이트: [www.mago3d.com](http://www.mago3d.com/)
-
-**주관:**
-- 가이아쓰리디 주식회사
 
 ---
 
