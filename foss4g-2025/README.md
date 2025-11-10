@@ -72,8 +72,8 @@ For reference, open data from around the world can be obtained from sources such
 Transform raw geospatial data into web-optimized 3D tiles and terrain.
 
 **Topics covered:**
+- Data preprocessing with **GDAL/OGR**
 - Generating Quantized Mesh terrain using **mago3DTerrainer**
-- Preprocessing building data with **GDAL/OGR**
 - Converting 3D buildings to OGC 3DTiles using **mago3DTiler**
 - Converting forest data to 3DTiles i3dm format using **mago3DTiler**
 - Converting point cloud data (LAS/LAZ) to OGC 3DTiles using **mago3DTiler**
@@ -130,30 +130,43 @@ Optimize data processing performance through GPU acceleration.
 - Aerial imagery from open data sources
 - NASA SRTM/ASTER DEM elevation data
 
+- DEM
+https://data.linz.govt.nz/layer/121859-new-zealand-lidar-1m-dem/
+- Aerial Imagery
+https://data.linz.govt.nz/layer/121752-auckland-0075m-urban-aerial-photos-2024-2025/
+- Roads
+https://data.linz.govt.nz/layer/53378-nz-roads-road-section-geometry/
+- Point Cloud
+https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-cloud-2024/
+
 ---
 
 ### [2. Data Processing Guide](guides/2_Processing_Guide_En.md)
 
 #### Data Preprocessing
-- Processing Overture Maps building data
-- Converting aerial imagery formats
-- Preparing DEM/DSM elevation data
+- Preprocessing building height from Overture Maps building footprints
+- Converting Overture Maps land use data to forest data
+- Preparing DEM elevation data and tree instance 3D models
 
-#### mago3D Tools
-- **mago3DTiler**: Convert 3D data to 3D Tiles format
-  - Supported formats: GeoJSON, Shapefile, IFC, OBJ, Collada, LAS/LAZ
+#### mago3D Tools Overview
+- **mago3DTerrainer**: Generate optimized terrain
+  - Creates terrain tiles from DEM (GeoTIFF) with simple commands
+  - Generates high-precision Quantized mesh
+  - Supports multi-resolution DEM tile generation
+  - Calculates Normal Vectors for terrain lighting
+  - Provides various customization options
+- **mago3DTiler**: Convert to 3D Tiles format
+  - Supports various formats: 3DS, OBJ, FBX, Collada DAE, GlTF, GLB, IFC, etc.
+  - High-precision LAS, LAZ data conversion
   - Height extrusion and attribute mapping
-  - CRS transformation and terrain draping
-- **mago3DTerrainer**: Generate optimized terrain tiles
-  - Quantized mesh generation from DEM
-  - Multi-resolution terrain pyramid
-  - Terrain lighting and slope analysis
+  - Coordinate system transformation and terrain draping
+  - Provides various customization options
 
-#### OGC WMTS Configuration
-- Setting up OGC WMTS service
-- Configuring tile layers
-- Publishing raster and vector layers via WMTS
-- Layer preview and styling
+#### mago3D Hands-on Practice
+- Generate terrain with mago3DTerrainer
+- Create building 3D tiles with mago3DTiler
+- Create forest 3D tiles with mago3DTiler
+- Create point cloud 3D tiles with mago3DTiler
 
 ---
 

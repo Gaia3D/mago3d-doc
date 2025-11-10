@@ -144,25 +144,29 @@ https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-clou
 ### [2. 데이터 가공 가이드](guides/2_Processing_Guide_Ko.md)
 
 #### 데이터 전처리
-- Overture Maps 건물 데이터 가공
-- 항공 영상 포맷 변환
-- DEM/DSM 고도 데이터 준비
+- Overture Maps 건물 풋프린트 데이터 건물 높이 전처리
+- Overture Maps 토지 이용 데이터 산림 데이터로 변환
+- DEM 고도 데이터 및 나무 인스턴스 3D 모델 준비
 
-#### mago3D 도구
-- **mago3DTiler**: 3D 데이터를 3D Tiles 형식으로 변환
-  - 지원 형식: GeoJSON, Shapefile, IFC, OBJ, Collada, LAS/LAZ
+#### mago3D 도구 설명
+- **mago3DTerrainer**: 최적화된 지형 생성
+  - DEM(GeoTIFF)를 입력 받아 단순한 커멘드로 지형 타일 생성
+  - 고정밀 Quantized mesh 생성
+  - 다해상도 DEM 타일 생성 지원
+  - 지형 조명을 위한 Normal Vector 계산 지원
+  - 다양한 사용자 정의 옵션 제공
+- **mago3DTiler**: 3D Tiles 형식으로 변환 
+  - 3DS, OBJ, FBX, Collada DAE, GlTF, GLB, IFC 등 다양한 포맷 지원
+  - 높은 정확도의 LAS, LAZ 데이터 변환 
   - 높이 돌출 및 속성 매핑
   - 좌표계 변환 및 지형 드레이핑
-- **mago3DTerrainer**: 최적화된 지형 타일 생성
-  - DEM에서 양자화 메시 생성
-  - 다해상도 지형 피라미드
-  - 지형 조명 및 경사 분석
+  - 다양한 사용자 정의 옵션 제공
 
-#### OGC WMTS 구성
-- OGC WMTS 서비스 설정
-- 타일 레이어 구성
-- WMTS를 통한 래스터 및 벡터 레이어 발행
-- 레이어 미리보기 및 스타일링
+#### mago3D 실습
+- mago3DTerrainer로 지형 생성
+- mago3DTiler로 건물 3D 타일 생성
+- mago3DTiler로 산림 3D 타일 생성
+- mago3DTiler로 포인트 클라우드 3D 타일 생성
 
 ---
 
