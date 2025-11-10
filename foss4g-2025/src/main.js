@@ -31,7 +31,7 @@ const INDIANA_LIDAR_PC_STYLE = [
 
 // --- Initial Setup ---
 // ✏️ Add your Cesium ion access token.
-Cesium.Ion.defaultAccessToken = `YOUR_CESIUM_ION_ACCESS_TOKEN_HERE`;
+Cesium.Ion.defaultAccessToken = `YOUR_CESIUM_ION_ACCESS_TOKEN`;
 
 // Initialize the Cesium Viewer.
 const viewer = new Viewer("cesiumContainer", {
@@ -56,7 +56,7 @@ try {
   // ✏️ Uncomment the line below to load the terrain data.
   /*
   purdueTerrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(
-      "/premade-output/terrain/"
+      "/output/terrain/"
   );
   viewer.terrainProvider = purdueTerrainProvider;
 
@@ -113,7 +113,7 @@ try {
 try {
   // ✏️ Uncomment the code block below to load the building 3D tiles and apply a style.
   /*
-  const tileset = await Cesium.Cesium3DTileset.fromUrl("/perdue/output/tileset/buildings/tileset.json");
+  const tileset = await Cesium.Cesium3DTileset.fromUrl("/output/tileset/buildings/tileset.json");
   tileset.style = new Cesium.Cesium3DTileStyle({
     color: {
       conditions: [
@@ -137,13 +137,13 @@ try {
     tileset.show = !tileset.show;
   };
   toolbar.appendChild(buildingButton);
-
+  */
 
   viewer.camera.flyToBoundingSphere(tileset.boundingSphere, {
     duration: 3,
     offset : new Cesium.HeadingPitchRange( 0,  Cesium.Math.toRadians(-60), tileset.boundingSphere.radius * 1.5 )
   });
-  */
+
 } catch (error) {
   console.log(`Error creating building tileset: ${error}`);
 }
@@ -153,7 +153,7 @@ try {
 try {
   // ✏️ Uncomment the code block below to load the forest 3D tiles.
   /*
-  const forestTileset = await Cesium.Cesium3DTileset.fromUrl("/perdue/output/tileset/forest/tileset.json");
+  const forestTileset = await Cesium.Cesium3DTileset.fromUrl("/output/tileset/forest/tileset.json");
   viewer.scene.primitives.add(forestTileset);
 
   const forestButton = document.createElement("button");
@@ -173,7 +173,7 @@ try {
   // ✏️ Uncomment the code block below to load the point cloud and apply a style.
   /*
   const pointTileset = await Cesium.Cesium3DTileset.fromUrl(
-       '/perdue/output/tileset/pointcloud/tileset.json',
+       '/output/tileset/pointcloud/tileset.json',
        {
          maximumScreenSpaceError: 4,
          maximumMemoryUsage: 4096,
@@ -283,7 +283,7 @@ try {
   /*
   const koordinatesWMTS = new Cesium.UrlTemplateImageryProvider({
     // URL 템플릿 - {z}는 줌 레벨, {x}는 타일 X, {y}는 타일 Y
-    url: 'https://tiles-cdn.koordinates.com/services;key=afeab34cfb4d44b9928b5ad44cbc0d2e/tiles/v4/layer=53378.431413,color=ff0000/{z}/{x}/{y}.png',
+    url: 'https://tiles-cdn.koordinates.com/services;key=d3f88a894bc4452a8105f1231ed363dc/tiles/v4/layer=53378.431413,color=ff0000/{z}/{x}/{y}.png',
 
     // Web Mercator 타일링 스키마 사용
     tilingScheme: new Cesium.WebMercatorTilingScheme(),
