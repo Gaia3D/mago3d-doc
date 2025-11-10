@@ -196,8 +196,6 @@ services:
     volumes:
       - ./certs:/etc/certs:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-#      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-#      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
 
   gdal-converter:
     image: ${REGISTRY}/mago3d-gdal-converter:latest

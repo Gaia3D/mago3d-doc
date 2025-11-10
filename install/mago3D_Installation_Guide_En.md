@@ -46,6 +46,23 @@ Generate a localhost certificate using [mkcert](https://github.com/FiloSottile/m
 If a certificate is installed on the server
 Copy the certificate and place it in the `certs` path.
 
+### Windows Users Notice
+
+If you are using Docker Desktop on Windows, make sure the following is configured for volume mounts to work properly:
+
+1. **Docker Desktop Settings Check**
+   - Docker Desktop > Settings > Resources > File Sharing
+   - Ensure `C:\` drive is in the shared list
+   - Add it and Apply & Restart if not present
+
+2. **Using WSL2** (Recommended)
+   - Docker Desktop > Settings > General
+   - Check "Use the WSL 2 based engine"
+   - WSL2 improves file mount performance
+
+3. **Path Issue Resolution**
+   - Execute scripts from the `install` directory
+   - Ensure working directory is correct for relative paths (`./certs`) to be recognized
 
 ## 2. Create Docker Network
 Run the following command to create the Docker Network.
@@ -54,6 +71,8 @@ docker network create mago3d
 ```
 
 ## 3. Deploy using Docker Compose
+
+### Linux / Mac / Git Bash (Windows)
 
 ```bash
 cd install
@@ -70,7 +89,54 @@ If you want to stop it, run the following command.
 ./compose.sh down
 ```
 
-If Docker Hub access is unstable, load the *.tar files in the `/docker-images` directory first, then run `./compose.sh up -d`.
+### Windows (CMD / PowerShell)
+
+```cmd
+cd install
+compose.bat up -d
+```
+
+If you want to stop it, run the following command.
+```cmd
+compose.bat down
+```
+
+### Compose Script Usage
+
+#### Available Commands
+- `config`: Outputs the final config file, after doing merges and interpolations
+- `build`: Build or rebuild services
+- `push`: Push service images
+- `up`: Create and start containers
+- `down`: Stop and remove containers
+- `ps`: List containers
+- `logs`: View output from containers
+
+#### Options
+- `--env-file <path>`: Specify an environment file (default: .env.compose)
+- `-h, --help`: Print help message
+
+#### Usage Examples
+
+```bash
+# Linux/Mac/Git Bash
+./compose.sh up -d                           # Start in background
+./compose.sh logs -f                         # View logs in real-time
+./compose.sh ps                              # List running containers
+./compose.sh down                            # Stop and remove containers
+./compose.sh --env-file .env.prod up -d      # Use custom environment file
+```
+
+```cmd
+REM Windows
+compose.bat up -d                            REM Start in background
+compose.bat logs -f                          REM View logs in real-time
+compose.bat ps                               REM List running containers
+compose.bat down                             REM Stop and remove containers
+compose.bat --env-file .env.prod up -d       REM Use custom environment file
+```
+
+If Docker Hub access is unstable, load the *.tar files in the `/docker-images` directory first, then run `./compose.sh up -d` (Linux/Mac) or `compose.bat up -d` (Windows).
 
 ### Docker Image Loading
 
@@ -173,6 +239,30 @@ Ensure you have enough disk space before loading. Approximately 13GB or more is 
 ```bash
 docker system df
 ```
+
+##### Windows Volume Mount Errors
+
+If you encounter `Error response from daemon: invalid mount config` or certs-related errors on Windows:
+
+1. **Check Working Directory**
+   ```cmd
+   cd C:\Users\user\IdeaProjects\mago3d-doc\install
+   compose.bat config
+   ```
+   - Use config command to verify volume paths are correct
+
+2. **Restart Docker Desktop**
+   - Completely quit and restart Docker Desktop
+   - Re-share drives in Settings > Resources > File Sharing
+
+3. **Use Absolute Paths** (Last resort)
+   - Modify docker-compose.base.yml file
+   - Change `./certs` → `C:/Users/user/IdeaProjects/mago3d-doc/install/certs`
+   - Note: This may cause compatibility issues in other environments
+
+4. **Use WSL2 Paths** (When using WSL2)
+   - Clone project inside WSL2
+   - Use WSL2 filesystem (`~/projects/mago3d-doc`) instead of `/mnt/c/` path
 
 #### Notes
 

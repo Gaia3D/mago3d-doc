@@ -44,6 +44,23 @@ Linux의 경우, Docker 서비스를 실행합니다.
 
 서버에 인증서가 설치되어 있으면, 인증서를 복사하여 `certs` 경로에 배치합니다.
 
+### Windows 사용자 주의사항
+
+Windows에서 Docker Desktop을 사용하는 경우, 볼륨 마운트가 제대로 작동하려면 다음을 확인하세요:
+
+1. **Docker Desktop 설정 확인**
+   - Docker Desktop > Settings > Resources > File Sharing
+   - `C:\` 드라이브가 공유 목록에 있는지 확인
+   - 없으면 추가 후 Apply & Restart
+
+2. **WSL2 사용 시** (권장)
+   - Docker Desktop > Settings > General
+   - "Use the WSL 2 based engine" 체크 확인
+   - WSL2를 사용하면 파일 마운트 성능이 향상됩니다
+
+3. **경로 문제 해결**
+   - `install` 디렉토리에서 스크립트를 실행해야 합니다
+   - 상대 경로(`./certs`)가 올바르게 인식되도록 작업 디렉토리 확인
 
 ## 2. Docker Network 생성
 아래의 명령어를 실행하여 Docker Network를 생성합니다.
@@ -52,6 +69,8 @@ docker network create mago3d
 ```
 
 ## 3. Docker Compose를 이용한 배포
+
+### Linux / Mac / Git Bash (Windows)
 
 ```bash
 cd install
@@ -68,7 +87,55 @@ chmod +x *.sh
 ./compose.sh down
 ```
 
-만일, docker hub 접속이 원활하지 않을 경우, `/docker-images` 디렉토리 내부의 *.tar 파일들을 미리 로드한 후, `./compose.sh up -d` 명령어를 실행합니다.
+### Windows (CMD / PowerShell)
+
+```cmd
+cd install
+compose.bat up -d
+```
+
+종료를 원하면 다음과 같은 명령어를 실행합니다.
+```cmd
+compose.bat down
+```
+
+### compose 스크립트 사용법
+
+#### 기본 명령어
+- `config`: 병합 및 보간 후 최종 설정 파일 출력
+- `build`: 서비스 빌드 또는 재빌드
+- `push`: 서비스 이미지 푸시
+- `up`: 컨테이너 생성 및 시작
+- `down`: 컨테이너 중지 및 제거
+- `ps`: 컨테이너 목록 표시
+- `logs`: 컨테이너 출력 보기
+
+#### 옵션
+- `--env-file <path>`: 환경 파일 지정 (기본값: .env.compose)
+- `-h, --help`: 도움말 표시
+
+#### 사용 예시
+
+```bash
+# Linux/Mac/Git Bash
+./compose.sh up -d                           # 백그라운드로 시작
+./compose.sh logs -f                         # 로그 실시간 확인
+./compose.sh ps                              # 실행 중인 컨테이너 확인
+./compose.sh down                            # 중지 및 제거
+./compose.sh --env-file .env.prod up -d      # 커스텀 환경 파일 사용
+```
+
+```cmd
+REM Windows
+compose.bat up -d                            REM 백그라운드로 시작
+compose.bat logs -f                          REM 로그 실시간 확인
+compose.bat ps                               REM 실행 중인 컨테이너 확인
+compose.bat down                             REM 중지 및 제거
+compose.bat --env-file .env.prod up -d       REM 커스텀 환경 파일 사용
+```
+
+만일, docker hub 접속이 원활하지 않을 경우, `/docker-images` 디렉토리 내부의 *.tar 파일들을 미리 로드한 후, `./compose.sh up -d` (Linux/Mac) 또는 `compose.bat up -d` (Windows) 명령어를 실행합니다.
+
 ### Docker 이미지 로드 방법
 
 #### Linux / Mac / Git Bash (Windows)
@@ -170,6 +237,30 @@ sudo ./load-images.sh
 ```bash
 docker system df
 ```
+
+#### Windows 볼륨 마운트 오류
+
+Windows에서 `Error response from daemon: invalid mount config` 또는 certs 관련 오류가 발생하는 경우:
+
+1. **작업 디렉토리 확인**
+   ```cmd
+   cd C:\Users\user\IdeaProjects\mago3d-doc\install
+   compose.bat config
+   ```
+   - config 명령으로 볼륨 경로가 올바른지 확인
+
+2. **Docker Desktop 재시작**
+   - Docker Desktop을 완전히 종료 후 재시작
+   - 설정 > Resources > File Sharing에서 드라이브 재공유
+
+3. **절대 경로 사용** (최후의 수단)
+   - docker-compose.base.yml 파일 수정
+   - `./certs` → `C:/Users/user/IdeaProjects/mago3d-doc/install/certs`로 변경
+   - 단, 이 방법은 다른 환경에서 호환성 문제가 발생할 수 있음
+
+4. **WSL2 경로 사용** (WSL2 사용 시)
+   - WSL2 내에서 프로젝트 복제
+   - `/mnt/c/` 경로 대신 WSL2 파일시스템 사용 (`~/projects/mago3d-doc`)
 
 ### 참고
 
