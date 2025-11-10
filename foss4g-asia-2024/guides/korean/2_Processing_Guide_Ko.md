@@ -6,11 +6,11 @@
 이러한 도구들은 도시 디지털 트윈을 구현하고 시각화하는 데 강력한 기능을 제공하지만, 각 도구의 특성과 요구사항에 맞는 데이터 형식으로 변환이 필요합니다.   
 진행할 데이터 변환 작업을 표로 정리하면 다음과 같습니다.
 
-| 원본 파일명 |  변환 전   |    변환 후    |                    변환 이유                     |  
-|:---:|:-------:|:----------:|:--------------------------------------------:|
-|khlongtoei_building.geojson| GeoJSON |  3DTiles   |      osgeo 표준에 맞춰 Mago3D에 원활히 렌더링하기 위해       |
-|khlongtoei_transportation.geojson| GeoJSON | Geopackage |       GeoServer에서의 관리 및 배포 효율성을 높이기 위해       |
-|T47PPR_20240430T033541_TCI_10m.jp2|   JP2   |  GeoTiff   | 위성 이미지를 GeoServer에서 분석과 배포가 용이한 형식으로 변환하기 위해 |
+|               원본 파일명               |  변환 전   |    변환 후    |                    변환 이유                     |  
+|:----------------------------------:|:-------:|:----------:|:--------------------------------------------:|
+|    khlongtoei_building.geojson     | GeoJSON |  3DTiles   |      osgeo 표준에 맞춰 Mago3D에 원활히 렌더링하기 위해       |
+| khlongtoei_transportation.geojson  | GeoJSON | Geopackage |       GeoServer에서의 관리 및 배포 효율성을 높이기 위해       |
+| T47PPR_20240430T033541_TCI_10m.jp2 |   JP2   |  GeoTiff   | 위성 이미지를 GeoServer에서 분석과 배포가 용이한 형식으로 변환하기 위해 |
 
 <br/>
 이제 실습 준비가 완료되었습니다. 다음 단계를 진행하세요! 🚀
