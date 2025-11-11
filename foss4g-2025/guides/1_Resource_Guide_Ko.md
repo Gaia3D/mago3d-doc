@@ -46,7 +46,9 @@ Visual Studio Code 또는 IntelliJ 사용을 권장합니다.
 만약 도커가 설치 되어있지 않다면 실습 진행이 어려우므로, [https://www.docker.com/](https://www.docker.com/) 에서 도커를 다운 받으신 후 진행 하시기 바랍니다.
 
 ---
-### 4. koordinates API 키 발행
+### 4. LINZ Data Service API 키 발행
+설명 추가
+
 [https://data.linz.govt.nz/](https://data.linz.govt.nz/) 에 가입합니다.
 
 다음과 같이 API 키를 발행합니다
