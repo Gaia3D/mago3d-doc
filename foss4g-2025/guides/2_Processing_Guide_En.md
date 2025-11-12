@@ -82,13 +82,13 @@ We will process the building height information using the `ogr2ogr` command from
 **Conversion Logic**:
 1. If `height` value exists, use that value
 2. If `height` is missing but `num_floors` exists, calculate `num_floors × 3.3` (assuming average floor height of 3.3m)
-3. If both are missing, assign default value of 3.3m
+3. If both are missing, assign default value of `3.3`meters
 
 #### Windows (Command Prompt)
 ```shell
 docker run --rm ^
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr ^
-  -f "GeoJSON" /data/converted/auckland_building.geojson /data/auckland_central_building.geojson ^
+  -f "GeoJSON" /data/auckland_building.geojson /data/auckland_central_building.geojson ^
   -dialect SQLite ^
   -sql "SELECT geometry, CASE WHEN height IS NOT NULL THEN height WHEN num_floors IS NOT NULL THEN num_floors * 3.3 ELSE 3.3 END AS height FROM auckland_central_building"
 ```
@@ -97,8 +97,17 @@ docker run --rm ^
 ```shell
 docker run --rm `
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr `
-  -f "GeoJSON" /data/converted/auckland_building.geojson /data/auckland_central_building.geojson `
+  -f "GeoJSON" /data/auckland_building.geojson /data/auckland_central_building.geojson `
   -dialect SQLite `
+  -sql "SELECT geometry, CASE WHEN height IS NOT NULL THEN height WHEN num_floors IS NOT NULL THEN num_floors * 3.3 ELSE 3.3 END AS height FROM auckland_central_building"
+```
+
+#### Windows (Git Bash)
+```shell
+docker run --rm \
+  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
+  -f "GeoJSON" //data/auckland_building.geojson //data/auckland_central_building.geojson \
+  -dialect SQLite \
   -sql "SELECT geometry, CASE WHEN height IS NOT NULL THEN height WHEN num_floors IS NOT NULL THEN num_floors * 3.3 ELSE 3.3 END AS height FROM auckland_central_building"
 ```
 
@@ -106,7 +115,7 @@ docker run --rm `
 ```shell
 docker run --rm \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
-  -f "GeoJSON" /data/converted/auckland_building.geojson /data/auckland_central_building.geojson \
+  -f "GeoJSON" /data/auckland_building.geojson /data/auckland_central_building.geojson \
   -dialect SQLite \
   -sql "SELECT geometry, CASE WHEN height IS NOT NULL THEN height WHEN num_floors IS NOT NULL THEN num_floors * 3.3 ELSE 3.3 END AS height FROM auckland_central_building"
 ```
@@ -120,15 +129,10 @@ docker run --rm \
 - `-dialect SQLite`: SQL query dialect setting
 - `-sql "SELECT ..."`: Data conversion logic
 
-**Expected Output**:
-```
-0...10...20...30...40...50...60...70...80...90...100 - done.
-```
-
 **Result Verification**:
-- Output file: `foss4g-2025/public/converted/auckland_building.geojson`
-- Verify that all buildings have the `height` attribute added
-  **Note**: The `height` attribute will be used in the subsequent 3D tile generation process. The unit is meters.
+- Output file: `foss4g-2025/public/auckland_building.geojson`
+- Verify that all buildings have the `height` attribute added   
+  **Note**: The `height` attribute will be used in the subsequent 3D tile generation process. The unit is meters.   
 
 The building data preprocessing result is as follows.
 ![building_processed.png](../images/building_processed.png)
@@ -150,7 +154,7 @@ Convert to GeoPackage format using the `ogr2ogr` command from GDAL/OGR.
 ```shell
 docker run --rm ^
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr ^
-  -f "GPKG" /data/converted/auckland_forest.gpkg /data/auckland_central_land_use.geojson ^
+  -f "GPKG" /data/auckland_forest.gpkg /data/auckland_central_land_use.geojson ^
   -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
 ```
 
@@ -158,7 +162,15 @@ docker run --rm ^
 ```shell
 docker run --rm `
     -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr `
-    -f "GPKG" /data/converted/auckland_forest.gpkg /data/auckland_central_land_use.geojson `
+    -f "GPKG" /data/auckland_forest.gpkg /data/auckland_central_land_use.geojson `
+    -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
+```
+
+#### Windows (Git Bash)
+```shell
+docker run --rm \
+    -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
+    -f "GPKG" //data/auckland_forest.gpkg //data/auckland_central_land_use.geojson \
     -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
 ```
 
@@ -166,41 +178,45 @@ docker run --rm `
 ```shell
 docker run --rm \
     -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
-    -f "GPKG" /data/converted/auckland_forest.gpkg /data/auckland_central_land_use.geojson \
+    -f "GPKG" /data/auckland_forest.gpkg /data/auckland_central_land_use.geojson \
     -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
 ```
 
 The explanation for the above syntax is as follows:
 **Command Explanation**:
 - `-f "GPKG"`: Specify output format as GeoPackage (GeoJSON is also supported)
-- `20 AS height`: Set tree instance height to 20m (can be adjusted to actual tree height)
-
-[Note] The `height` attribute will be used in the subsequent 3D tile generation process. The unit is meters.
+- `20 AS height`: Set tree instance height to 20m (can be adjusted to actual tree height)   
+  **Note**: The `height` attribute will be used in the subsequent 3D tile generation process. The unit is meters.
 
 **Result Verification**:
-- Output file: `foss4g-2025/public/converted/auckland_forest.gpkg`
+- Output file: `foss4g-2025/public/auckland_forest.gpkg`
 - Verify green (filtered forest) areas within pink (total land use) areas
 
 ![forest_processed.png](../images/forest_processed.png)
 
 **After Completion**:
-Upon completing this step, preprocessed vector data required for 3D tile generation will be ready.
+Upon completing this step, preprocessed vector data required for 3D tile generation will be ready. 🚀
 
 ---
 
-## Data Conversion
-Data conversion is performed using mago3DTerrainer and mago3DTiler tools.
+## ⭐ Data Conversion ⭐
+Data conversion is performed using **mago3DTerrainer** and **mago3DTiler** tools.
 
-* **mago3DTerrainer** is a tool that generates terrain data from GeoTIFF files.
-* **mago3DTiler** is a tool that converts various 3D data to 3D Tiles format.
-* **mago3DTiler** also supports creating 3D tiles from attribute values of 2D data.
+- **mago3DTerrainer** is a tool that generates terrain data from GeoTIFF files.
+- **mago3DTiler** is a tool that converts various 3D data to 3D Tiles format.
+- **mago3DTiler** also supports creating 3D tiles from attribute values of 2D data.
 
-### Terrain Data Generation
+### Terrain
 
 **Purpose**: Convert GeoTIFF elevation data to web-optimized terrain tiles.
 
 **Input**: `BA32.tif` (LINZ Data Service elevation data)
-**Output**: Hierarchical terrain tileset and metadata
+**Output**: terrain tileset and metadata
+
+Terrain generation is performed using the **mago3DTerrainer**.
+
+**Note**: Accommodates source data in various coordinate reference systems.    
+Automatically detects the coordinate reference system of the input file and converts it correctly.   
 
 #### Windows (Command Prompt)
 ```shell
@@ -222,6 +238,16 @@ docker run --rm `
   --calculateNormals --minDepth 0 --maxDepth 17
 ```
 
+#### Windows (Git Bash)
+```shell
+docker run --rm \
+  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-terrainer \
+  --input //workspace/BA32.tif \
+  --output //workspace/output/terrain/ \
+  --log //workspace/output/terrain/log.txt \
+  --calculateNormals --minDepth 0 --maxDepth 17
+```
+
 #### Linux/macOS
 ```shell
 docker run --rm \
@@ -233,14 +259,22 @@ docker run --rm \
 ```
 
 **Key Option Explanation**:
-- `--calculateNormals`: Calculate normal vectors for lighting effects
-- `--minDepth 0`: Minimum tile depth
-- `--maxDepth 17`: Maximum tile depth (higher means more detailed)
+- `--calculateNormals`: Calculate Vertex Normals for lighting effects, Add terrain octVertexNormals (recommended)
+- `--minDepth 0`: Minimum tile depth, range : 0 ~ 22, default : 0
+- `--maxDepth 17`: Maximum tile depth, range : 0 ~ 22, default : 14 (higher means more detailed)
+
+**Check Additional Options**:
+```shell
+docker run --rm gaia3d/mago-3d-terrainer --help
+```
+![mago3d-terrainer-help.png](../images/mago3d-terrainer-help.png)
+
+**Key Options Summary**:
+- `--intensity <arg>`: Mesh refinement strength. (default : 4.0)
+- `--interpolationType <arg>`: Interpolation type (nearest, bilinear) (default : bilinear)
+- `--nodataValue <arg>`: No data value for terrain data (default : -9999)
 
 **Output Directory Structure**:
-```shell
-tree foss4g-2025/public/output/terrain -L 1 -v
-```
 ```
 foss4g-2025/public/output/terrain
 ├── 0/          # LOD 0 tiles
@@ -264,50 +298,36 @@ foss4g-2025/public/output/terrain
   "legend": "insert legend here",
   "scheme": "tms",
   "projection": "EPSG:4326",
-  "tiles": [
-    "{z}/{x}/{y}.terrain?v={version}"
-  ],
+  "tiles": [ "{z}/{x}/{y}.terrain?v={version}" ],
   "bounds": [174.749400158197, -36.8648634141841, 174.794775308094, -36.8330127688094],
-  "extensions": [
-    "octvertexnormals"
-  ],
+  "extensions": [ "octvertexnormals" ],
   "available": [
-    [
-      {
-        "startX": 0,
-        "endX": 1,
-        "startY": 0,
-        "endY": 0
-      }
-    ]
+    [{"startX": 0, "endX": 1, "startY": 0, "endY": 0}]
     // omitted
   ]
 }
 ```
 
-**Check Additional Options**:
-```shell
-docker run gaia3d/mago-3d-terrainer --help
-```
-
-![mago3d-terrainer-help.png](../images/mago3d-terrainer-help.png)
+**Result Preview**:   
+![terrain_preview1.png](../images/terrain_preview1.png)
+![terrain_preview2.png](../images/terrain_preview2.png)
 
 ---
 
-### Building 3D Tiles Generation
+### Building
 
-**Purpose**: Convert 2D building polygons with height information to 3D building models.
+**Purpose**: Convert 2D building footprints with height to 3D building models.
 
 **Input**: `auckland_building.geojson` (preprocessed building data)
 **Output**: glTF-based 3D Tiles (GLB format)
 
-Building 3D tiles generation is performed using the mago3DTiler tool.
+Building 3D tiles generation is performed using the **mago3DTiler**.
 
 #### Windows (Command Prompt)
 ```shell
 docker run --rm ^
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler ^
-  --input /workspace/converted/auckland_building.geojson ^
+  --input /workspace/auckland_building.geojson ^
   --output /workspace/output/tileset/buildings/ ^
   --inputType geojson ^
   --crs 4326 ^
@@ -321,7 +341,7 @@ docker run --rm ^
 ```shell
 docker run --rm `
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler `
-  --input /workspace/converted/auckland_building.geojson `
+  --input /workspace/auckland_building.geojson `
   --output /workspace/output/tileset/buildings/ `
   --inputType geojson `
   --crs 4326 `
@@ -331,11 +351,25 @@ docker run --rm `
   --log /workspace/output/tileset/buildings/log.txt
 ```
 
+#### Windows (Git Bash)
+```shell
+docker run --rm \
+  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
+  --input //workspace/auckland_building.geojson \
+  --output //workspace/output/tileset/buildings/ \
+  --inputType geojson \
+  --crs 4326 \
+  --heightColumn height \
+  --minimumHeight 3.3 \
+  --terrain //workspace/BA32.tif \
+  --log //workspace/output/tileset/buildings/log.txt
+```
+
 #### Linux/macOS
 ```shell
 docker run --rm \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
-  --input /workspace/converted/auckland_building.geojson \
+  --input /workspace/auckland_building.geojson \
   --output /workspace/output/tileset/buildings/ \
   --inputType geojson \
   --crs 4326 \
@@ -353,9 +387,6 @@ docker run --rm \
 - `--terrain`: Terrain data (accurately places buildings on terrain)
 
 **Output Directory Structure**:
-```shell
-tree foss4g-2025/public/output/tileset/buildings -L 2 -v
-```
 ```
 foss4g-2025/public/output/tileset/buildings
 ├── data
@@ -382,43 +413,24 @@ Example `tileset.json` file is as follows:
   "asset": {"version": "1.1"},
   "geometricError": 285.20,
   "root": {
-    "boundingVolume": {
-      "region": [3.0499, -0.6434, 3.0507, -0.6429, -5.138, 155.679]
-    },
+    "boundingVolume": {"region": [3.0499, -0.6434, 3.0507, -0.6429, -5.138, 155.679]},
     "refine": "REPLACE",
     "geometricError": 285.20,
     "children": [
       {
-        "boundingVolume": {
-          "region": [ 3.04993281, -0.64342338, 3.05033109, -0.64303011, -3.99999905, 155.67882846 ]
-        },
+        "boundingVolume": {"region": [ 3.04993281, -0.64342338, 3.05033109, -0.64303011, -3.99999905, 155.67882846 ]},
         "refine": "ADD",
         "geometricError": 120.1,
         "children": [{
-            "boundingVolume": {
-              "region": [
-                3.04994507,
-                -0.64341824,
-                3.05014145,
-                -0.64322286,
-                -3.99999902,
-                128.49599948
-              ]
+            "content": {
+              "uri": "data/RC00.glb"
             },
+            "boundingVolume": {"region": [3.04994507, -0.64341824, 3.05014145, -0.64322286, -3.99999902, 128.49599948]},
             "refine": "ADD",
             "geometricError": 50.1,
             "children": [
               {
-                "boundingVolume": {
-                  "region": [
-                    3.04994609,
-                    -0.64341628,
-                    3.05004485,
-                    -0.64331836,
-                    -3.99999902,
-                    88.53333219
-                  ]
-                },
+                "boundingVolume": {"region": [3.04994609, -0.64341628, 3.05004485, -0.64331836, -3.99999902, 88.53333219]},
                 "refine": "ADD",
                 "geometricError": 8.1,
                 "content": {
@@ -426,16 +438,7 @@ Example `tileset.json` file is as follows:
                 }
               },
               {
-                "boundingVolume": {
-                  "region": [
-                    3.05004087,
-                    -0.64341646,
-                    3.05013344,
-                    -0.64331882,
-                    -3.99999296,
-                    89.32425734
-                  ]
-                },
+                "boundingVolume": {"region": [3.05004087, -0.64341646, 3.05013344, -0.64331882, -3.99999296, 89.32425734]},
                 "refine": "ADD",
                 "geometricError": 8.1,
                 "content": {
@@ -443,16 +446,7 @@ Example `tileset.json` file is as follows:
                 }
               },
               {
-                "boundingVolume": {
-                  "region": [
-                    3.05004049,
-                    -0.64332105,
-                    3.0501333,
-                    -0.64322286,
-                    15.87444325,
-                    91.57850883
-                  ]
-                },
+                "boundingVolume": {"region": [3.05004049, -0.64332105, 3.0501333, -0.64322286, 15.87444325, 91.57850883]},
                 "refine": "ADD",
                 "geometricError": 8.1,
                 "content": {
@@ -460,61 +454,34 @@ Example `tileset.json` file is as follows:
                 }
               },
               {
-                "boundingVolume": {
-                  "region": [
-                    3.04994694,
-                    -0.64332188,
-                    3.0500435,
-                    -0.643223,
-                    -3.999999,
-                    75.51575125
-                  ]
+                "content": {
+                  "uri": "data/RC003.glb"
                 },
+                "boundingVolume": {"region": [3.04994694, -0.64332188, 3.0500435, -0.643223, -3.999999, 75.51575125]},
                 "refine": "ADD",
                 "geometricError": 8.1,
-                "children": [
-                  {
-                    "boundingVolume": {
-                      "region": [
-                        3.04996425,
-                        -0.64327155,
-                        3.04996463,
-                        -0.64327127,
-                        56.4726933,
-                        63.77269329
-                      ]
-                    },
+                "children": [{
+                    "boundingVolume": {"region": [3.04996425, -0.64327155, 3.04996463, -0.64327127, 56.4726933, 63.77269329]},
                     "refine": "ADD",
                     "geometricError": 0.1,
                     "content": {
                       "uri": "data/RC0030.glb"
                     }
-                  }
-                ],
-                "content": {
-                  "uri": "data/RC003.glb"
-                }
+                }]
               }
-            ],
-            "content": {
-              "uri": "data/RC00.glb"
-            }
-          }
-          // omitted
-        ]
+            ]
+        }]
     }]
   }
 }
 ```
 
 **Check All Options**:
-
 ```shell
-docker run gaia3d/mago-3d-tiler --help
+docker run --rm gaia3d/mago-3d-tiler --help
 ```
 
 **Key Options Summary**:
-
 ```
 -i, --input <arg>              Input directory/file path
 -o, --output <arg>             Output directory path
@@ -531,11 +498,7 @@ docker run gaia3d/mago-3d-tiler --help
 **skirtHeight Option**:
 To prevent gaps between building bases and terrain, you can add the `--skirtHeight` option:
 
-```shell
---skirtHeight 5
-```
-
-![building_skirt_height.svg](../images/building_skirt_height.svg)
+![skirt_height.svg](../images/skirt_height.png)
 
 ---
 
@@ -656,7 +619,7 @@ docker run --rm ^
   --output /workspace/output/tileset/pointcloud ^
   --log /workspace/output/tileset/pointcloud/log.txt ^
   --inputType laz ^
-  --crs 4326 ^
+  --crs 2193 ^
   --pointRatio 70 ^
   --tilesVersion 1.0
 ```
@@ -669,7 +632,7 @@ docker run --rm `
   --output /workspace/output/tileset/pointcloud `
   --log /workspace/output/tileset/pointcloud/log.txt `
   --inputType laz `
-  --crs 4326 `
+  --crs 2193 `
   --pointRatio 70 `
   --tilesVersion 1.0
 ```
@@ -682,7 +645,7 @@ docker run --rm \
   --output /workspace/output/tileset/pointcloud \
   --log /workspace/output/tileset/pointcloud/log.txt \
   --inputType laz \
-  --crs 4326 \
+  --crs 2193 \
   --pointRatio 70 \
   --tilesVersion 1.0
 ```
