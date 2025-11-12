@@ -7,8 +7,7 @@ import {
   Viewer
 } from "cesium";
 
-// Cesium Ion 서비스 접근을 위한 워크숍용 임시 토큰
-// 자세한 발급 가이드는 /guides/3_CesiumToken_Guide.md 참고
+// Cesium Ion 서비스 접근을 위한 워크숍용 임시 토큰 자세한 발급 가이드는 /guides/3_CesiumToken_Guide.md 참고
 const CESIUM_TOKEN = "YOUR_KEY"
 Cesium.Ion.defaultAccessToken = CESIUM_TOKEN;
 
@@ -16,75 +15,69 @@ Cesium.Ion.defaultAccessToken = CESIUM_TOKEN;
 const viewer = new Viewer("cesiumContainer", {
   infoBox: true, // 클릭 시 정보 박스 표시 활성화
 });
+
 viewer.scene.globe.depthTestAgainstTerrain = true;
 viewer.scene.globe.enableLighting = true;
 
-// 기본 위성 지도 레이어 추가
-const mapLayer = ImageryLayer.fromWorldImagery({
-  style: IonWorldImageryStyle.AERIAL,
+// 뉴질랜드 오클랜드 근처의 관심 영역 경계 [west, south, east, north]
+const originalBounds = [174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130];
+
+// polyline 좌표 변수
+const rectanglePositions = Cesium.Cartesian3.fromDegreesArray([
+  originalBounds[0], originalBounds[1],
+  originalBounds[2], originalBounds[1],
+  originalBounds[2], originalBounds[3],
+  originalBounds[0], originalBounds[3],
+  originalBounds[0], originalBounds[1]
+]);
+
+// 노란색 테두리 polyline 추가
+viewer.entities.add({
+  name: 'Yellow Bounds',
+  polyline: {
+    positions: rectanglePositions,
+    width: 4,
+    material: Cesium.Color.YELLOW,
+    clampToGround: true  // 지형에 붙도록 설정
+  }
 });
-viewer.imageryLayers.add(mapLayer);
+
+// 카메라를 관심 영역으로 이동
+viewer.camera.setView({
+  destination : new Cesium.Rectangle.fromDegrees(originalBounds[0],originalBounds[1],originalBounds[2],originalBounds[3])
+});
+
 const toolbar = document.getElementById("toolbar");
 
 // ============================================
 // STEP 1: 지형(Terrain) 데이터 로드
 // ============================================
 try {
-  let purdueTerrainProvider;
 
   /* ❌ ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ [STEP 1] UNCOMMENT THIS BLOCK ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-
   // Mago3D로 변환한 지형 데이터를 Cesium Terrain Provider로 로드
-  purdueTerrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(
+  const workshopTerrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(
       "/output/terrain/"  // 지형 데이터가 있는 로컬 경로
   );
 
   // 뷰어에 지형 데이터 적용
-  viewer.terrainProvider = purdueTerrainProvider;
+  viewer.terrainProvider = workshopTerrainProvider;
 
   // 지형 on/off 토글 버튼 생성
   const terrainButton = document.createElement("button");
   terrainButton.textContent = "Toggle Terrain";
   terrainButton.onclick = () => {
     // 현재 지형이 활성화되어 있으면 평평한 지구로, 아니면 지형 데이터로 전환
-    if (viewer.terrainProvider === purdueTerrainProvider) {
+    if (viewer.terrainProvider === workshopTerrainProvider) {
       viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
     } else {
-      viewer.terrainProvider = purdueTerrainProvider;
+      viewer.terrainProvider = workshopTerrainProvider;
     }
   };
   toolbar.appendChild(terrainButton)
 
-  ❌ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ [STEP 1] UNCOMMENT THIS BLOCK ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+❌ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ [STEP 1] UNCOMMENT THIS BLOCK ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
 
-  // ============================================
-  // 관심 영역 표시 및 카메라 초기 위치 설정
-  // ============================================
-  // 뉴질랜드 오클랜드 근처의 관심 영역 경계 [west, south, east, north]
-  const originalBounds = [174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130];
-
-  // 경계를 3D 좌표로 변환하여 노란색 테두리 생성
-  const rectangleCoordinates = Cesium.Cartesian3.fromDegreesArray([
-    originalBounds[0], originalBounds[1], originalBounds[2], originalBounds[1],
-    originalBounds[2], originalBounds[3], originalBounds[0], originalBounds[3],
-    originalBounds[0], originalBounds[1]
-  ]);
-
-  // 노란색 테두리 polyline 추가
-  viewer.entities.add({
-    name: 'Yellow Bounds',
-    polyline: {
-      positions: rectangleCoordinates,
-      width: 4,
-      material: Cesium.Color.YELLOW.withAlpha(0.7), // 투명도 0.7의 노란색
-      clampToGround: true  // 지형에 붙도록 설정
-    }
-  });
-
-  // 카메라를 관심 영역으로 이동
-  viewer.camera.setView({
-    destination : new Cesium.Rectangle.fromDegrees(originalBounds[0],originalBounds[1],originalBounds[2],originalBounds[3])
-  });
 } catch (e) {
   console.log(`Error loading terrain: ${e}`);
 }

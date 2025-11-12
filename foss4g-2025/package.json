@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "vite": "^5.0.8",
-    "vite-plugin-cesium": "^1.2.23",
-    "cesium": "1.130.0"
+    "cesium": "1.130.0",
+    "vite-plugin-cesium": "^1.2.23"
   }
 }
