@@ -104,8 +104,13 @@ Visual Studio Code 또는 IntelliJ 사용을 권장합니다.
    ```
 
 - 다음 명령어를 입력하여 가상환경을 생성합니다.
+#### Windows
 ```sh
 python -m venv myvenv
+```
+#### Linux/macOS
+```sh
+python3 -m venv myvenv
 ```
 
 - 여기서 `myvenv`는 가상환경의 이름입니다. 원하는 이름으로 변경할 수 있습니다.
@@ -156,7 +161,7 @@ overturemaps download ^
     --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 ^
     -f geojson ^
     --type=building ^
-    -o public/auckland_central_building.geojson
+    -o foss4g-2025/public/auckland_central_building.geojson
 ```
 #### Windows (PowerShell)
 ```
@@ -164,7 +169,7 @@ overturemaps download `
     --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 `
     -f geojson `
     --type=building `
-    -o public/auckland_central_building.geojson
+    -o foss4g-2025/public/auckland_central_building.geojson
 ```
 #### Linux/macOS
 ```
@@ -172,7 +177,7 @@ overturemaps download \
     --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 \
     -f geojson \
     --type=building \
-    -o public/auckland_central_building.geojson
+    -o foss4g-2025/public/auckland_central_building.geojson
 ```
 
 - 결과물은 다음 경로에 저장됩니다
@@ -189,7 +194,7 @@ overturemaps download ^
     --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 ^
     -f geojson ^
     --type=land_use ^
-    -o public/auckland_central_land_use.geojson
+    -o foss4g-2025/public/auckland_central_land_use.geojson
 ```
 #### Windows (PowerShell)
 ```
@@ -197,7 +202,7 @@ overturemaps download `
     --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 `
     -f geojson `
     --type=land_use `
-    -o public/auckland_central_land_use.geojson
+    -o foss4g-2025/public/auckland_central_land_use.geojson
 ```
 #### Linux/macOS
 ```
@@ -205,7 +210,7 @@ overturemaps download \
     --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 \
     -f geojson \
     --type=land_use \
-    -o public/auckland_central_land_use.geojson
+    -o foss4g-2025/public/auckland_central_land_use.geojson
 ```
 
 - 결과물은 다음 경로에 저장됩니다

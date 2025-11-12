@@ -13,14 +13,17 @@
 안녕하세요! 이제 데이터 처리 섹션을 시작하겠습니다.
 Hello! Now we'll start the data processing section.
 
+이번 섹션을 진행할 가이아쓰리디에 정연화입니다. 저는 백엔드 개발자입니다. 편하게 루비라고 불러주시기 바랍니다.
+I'm Jeong Yeonhwa from Gaia3D, and I'm a backend developer. Please feel free to call me Ruby.
+
 이 세션은 약 1시간 정도 소요될 예정입니다.
 This session will take about one hour.
 
-데이터 전처리가 끝나고 30분 휴식 시간을 가진 후 데이터 변환으로 이어집니다.
-After data preprocessing, we'll have a 30-minute break followed by data conversion.
+세션을 진행하다가 3시에 30분 휴식 시간을 가질 예정입니다.
+We'll take a 30-minute break at 3 o'clock while proceeding with the session.
 
-우리가 수집한 원시 데이터를 웹에 최적화된 3D 콘텐츠로 변환하는 과정을 함께 진행하겠습니다.
-We'll transform the raw data we collected into web-optimized 3D content.
+앞서 수집한 원시 데이터를 웹에 최적화된 3D 콘텐츠로 변환하는 과정을 함께 진행하겠습니다.
+We'll go through the process of converting the raw data we collected earlier into web-optimized 3D content.
 
 ### **[SLIDE: What We'll Cover Today]**
 
@@ -58,11 +61,21 @@ Make sure you have enough disk space. You'll need about 2 to 4 GB.
 혹시 아직 데이터 다운로드가 완료되지 않으신 분 계신가요?
 Is anyone still downloading data?
 
-다운로드에 문제가 있으시면 public 폴더의 샘플 데이터를 사용하시면 됩니다.
-If you have download issues, you can use the sample data in the public folder.
+다운로드에 문제가 있으시면 `public/raw`의 샘플 데이터를 사용하시면 됩니다.
+If you have trouble downloading, you can use the sample data in `public/raw`.
 
 모두 준비되셨나요? 그럼 시작하겠습니다!
 Is everyone ready? Let's begin!
+
+---
+
+### **[SLIDE: Data Preparation]**
+
+화면에 표를 봐주시기 바랍니다.
+Please look at the table on the screen.
+
+이 표는 우리가 오늘 처리할 데이터 유형과 각 데이터에 사용할 도구를 요약한 것입니다.
+This table summarizes the types of data we'll process today and the tools we'll use for each.
 
 ---
 
@@ -85,13 +98,6 @@ We'll use GDAL to preprocess building data and forest data.
 
 먼저 Overture Maps에서 다운로드한 건물 데이터를 살펴보겠습니다.
 First, let's look at the building data we downloaded from Overture Maps.
-
-터미널 또는 명령 프롬프트를 여시고 작업 디렉토리로 이동하세요.
-Open your terminal or command prompt and go to your working directory.
-
-```bash
-cd foss4g-2025/public
-```
 
 ### **[SLIDE: Building Attributes]**
 
@@ -135,38 +141,11 @@ Now let's run the actual command.
 명령어가 길기 때문에 천천히 따라오세요.
 The command is long, so please follow along carefully.
 
-윈도우 사용자는 Command Prompt를 사용하는 경우와 PowerShell을 사용하는 경우가 다릅니다.
-For Windows users, the command is different for Command Prompt and PowerShell.
+환경에 적절한 명령어를 사용하세요.
+Use the command appropriate for your environment.
 
-Mac이나 Linux 사용자는 세 번째 버전을 사용하시면 됩니다.
-Mac or Linux users should use the third version.
-
-**Windows (Command Prompt):**
-```shell
-docker run --rm ^
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr ^
-  -f "GeoJSON" /data/converted/auckland_building.geojson /data/auckland_central_building.geojson ^
-  -dialect SQLite ^
-  -sql "SELECT geometry, CASE WHEN height IS NOT NULL THEN height WHEN num_floors IS NOT NULL THEN num_floors * 3.3 ELSE 3.3 END AS height FROM auckland_central_building"
-```
-
-**Windows (PowerShell):**
-```shell
-docker run --rm `
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr `
-  -f "GeoJSON" /data/converted/auckland_building.geojson /data/auckland_central_building.geojson `
-  -dialect SQLite `
-  -sql "SELECT geometry, CASE WHEN height IS NOT NULL THEN height WHEN num_floors IS NOT NULL THEN num_floors * 3.3 ELSE 3.3 END AS height FROM auckland_central_building"
-```
-
-**Linux/macOS:**
-```shell
-docker run --rm \
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
-  -f "GeoJSON" /data/converted/auckland_building.geojson /data/auckland_central_building.geojson \
-  -dialect SQLite \
-  -sql "SELECT geometry, CASE WHEN height IS NOT NULL THEN height WHEN num_floors IS NOT NULL THEN num_floors * 3.3 ELSE 3.3 END AS height FROM auckland_central_building"
-```
+YOUR_PROJECT_ROOT_DIR을 여러분의 실제 프로젝트 경로로 바꿔주세요.
+Please replace YOUR_PROJECT_ROOT_DIR with your actual project path.
 
 ### **[SLIDE: Command Explanation]**
 
@@ -178,9 +157,6 @@ docker run --rm은 Docker 컨테이너를 실행하고 완료 후 자동으로 �
 
 -v 옵션은 호스트 디렉토리를 컨테이너에 마운트합니다.
 The "-v" option mounts your host directory to the container.
-
-YOUR_PROJECT_ROOT_DIR을 여러분의 실제 프로젝트 경로로 바꿔주세요.
-Please replace YOUR_PROJECT_ROOT_DIR with your actual project path.
 
 반드시 절대 경로를 사용해야 합니다.
 You must use an absolute path.
@@ -199,16 +175,13 @@ Now please run the command.
 첫 실행 시 Docker 이미지를 다운로드하는데 1-2분 정도 걸릴 수 있습니다.
 On first run, downloading the Docker image may take 1-2 minutes.
 
-처리가 완료되면 0...10...20...100 - done이라는 메시지가 표시됩니다.
-When processing is complete, you'll see a message like "0...10...20...100 - done".
-
 **[Confirmation / 확인]**
 
 모두 파일이 생성되셨나요?
 Has everyone created the file?
 
-converted 폴더 안에 auckland_building.geojson 파일이 보이시나요?
-Can you see the auckland_building.geojson file in the converted folder?
+`public` 폴더 안에 auckland_building.geojson 파일이 보이시나요?
+Can you see the auckland_building.geojson file in the `public` folder?
 
 혹시 에러가 발생하신 분 계신가요?
 Is anyone getting errors?
@@ -217,8 +190,8 @@ Is anyone getting errors?
 
 ### **[SLIDE: Forest Data Overview]**
 
-이제 숲을 만들기 위한 산림 데이터를 처리하겠습니다.
-Now let's process forest data to create forests.
+이제 산림을 만들기 위한 데이터를 처리하겠습니다.
+Now we'll process data to create forests.
 
 Overture Maps의 토지 이용 데이터에서 산림 영역만 추출할 것입니다.
 We'll extract only forest areas from Overture Maps land use data.
@@ -234,40 +207,22 @@ We'll use these attributes to filter park and grass areas.
 왜 공원과 잔디 지역을 선택하냐구요?
 Why are we choosing parks and grass areas?
 
-이 지역들에 나무를 심어서 숲을 만들 것이기 때문입니다.
+이 지역들에 나무를 심어서 산림을 만들 것이기 때문입니다.
 Because we'll plant trees in these areas to create forests.
 
 ### **[SLIDE: Forest Conversion Command]**
 
+환경에 맞는 명령어를 사용하시고 YOUR_PROJECT_ROOT_DIR을 실제 경로로 바꿔주세요.
+Please use the command appropriate for your environment and replace YOUR_PROJECT_ROOT_DIR with your actual path.
+
 이번에는 GeoPackage 형식으로 변환하겠습니다.
 This time we'll convert to GeoPackage format.
 
-GeoPackage는 GeoJSON보다 더 효율적인 형식입니다.
-GeoPackage is a more efficient format than GeoJSON.
+mago3DTiler는 GeoPackage, GeoJSON, Shapefile 등 다양한 형식을 지원합니다.
+mago3DTiler supports various formats like GeoPackage, GeoJSON, and Shapefile.
 
-**Windows (Command Prompt):**
-```shell
-docker run --rm ^
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr ^
-  -f "GPKG" /data/converted/auckland_forest.gpkg /data/auckland_central_land_use.geojson ^
-  -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
-```
-
-**Windows (PowerShell):**
-```shell
-docker run --rm `
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr `
-  -f "GPKG" /data/converted/auckland_forest.gpkg /data/auckland_central_land_use.geojson `
-  -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
-```
-
-**Linux/macOS:**
-```shell
-docker run --rm \
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
-  -f "GPKG" /data/converted/auckland_forest.gpkg /data/auckland_central_land_use.geojson \
-  -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
-```
+따라서, 원하시는 형식으로 지정하여 저장하시면 됩니다.
+So you can specify and save in your desired format.
 
 여기서 중요한 부분은 "20 AS height"입니다.
 The important part here is "20 AS height".
@@ -278,6 +233,9 @@ This means we're setting the tree height to 20 meters.
 이 값은 나중에 원하는 나무 높이로 조정할 수 있습니다.
 You can adjust this value to your desired tree height later.
 
+여기서 height라는 값은 원하시는 값으로 변경하셔도 됩니다. 추후에 mago3DTiler에서 **scaleColumn**에 지정하여 사용하게 됩니다.
+You can change this height value to whatever you want. Later, it will be used in mago3DTiler by specifying it in the **scaleColumn**.
+
 **[Hands-on Time / 실습 시간 - 2 minutes / 2분]**
 
 명령어를 실행하시고 처리가 완료될 때까지 기다려주세요.
@@ -285,8 +243,8 @@ Please run the command and wait for processing to complete.
 
 **[Confirmation / 확인]**
 
-converted 폴더 안에 auckland_forest.gpkg 파일이 생성되었나요?
-Has the auckland_forest.gpkg file been created in the converted folder?
+`public` 폴더 안에 auckland_forest.gpkg 파일이 생성되었나요?
+Has the auckland_forest.gpkg file been created in the `public` folder?
 
 여기까지 모두 잘 따라오셨나요?
 Has everyone followed along well so far?
@@ -296,8 +254,6 @@ Now we've completed GDAL preprocessing.
 
 잠깐 쉬는 시간을 가지면서 각자 데이터를 확인해보시기 바랍니다.
 Let's take a short break and check your data.
-
-**[2-minute break / 2분 휴식]**
 
 ---
 
