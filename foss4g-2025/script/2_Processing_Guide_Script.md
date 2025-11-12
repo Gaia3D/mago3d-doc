@@ -13,8 +13,8 @@
 안녕하세요! 이제 데이터 처리 섹션을 시작하겠습니다.
 Hello! Now we'll start the data processing section.
 
-이번 섹션을 진행할 가이아쓰리디에 정연화입니다. 저는 백엔드 개발자입니다. 편하게 루비라고 불러주시기 바랍니다.
-I'm Jeong Yeonhwa from Gaia3D, and I'm a backend developer. Please feel free to call me Ruby.
+이번 섹션을 진행할 가이아쓰리디에 정연화입니다. 저는 백엔드 웹 개발자입니다. 편하게 루비라고 불러주시기 바랍니다.
+I'm Jeong Yeonhwa from Gaia3D, and I'm a backend web developer. Please feel free to call me Ruby.
 
 이 세션은 약 1시간 정도 소요될 예정입니다.
 This session will take about one hour.
@@ -307,36 +307,6 @@ mago3DTerrainer is provided as a Docker image, so installation is very simple.
 다음 명령어를 실행하세요.
 Please run the following command.
 
-**Windows (Command Prompt):**
-```shell
-docker run --rm ^
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-terrainer ^
-  --input /workspace/BA32.tif ^
-  --output /workspace/output/terrain/ ^
-  --log /workspace/output/terrain/log.txt ^
-  --calculateNormals --minDepth 0 --maxDepth 17
-```
-
-**Windows (PowerShell):**
-```shell
-docker run --rm `
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-terrainer `
-  --input /workspace/BA32.tif `
-  --output /workspace/output/terrain/ `
-  --log /workspace/output/terrain/log.txt `
-  --calculateNormals --minDepth 0 --maxDepth 17
-```
-
-**Linux/macOS:**
-```shell
-docker run --rm \
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-terrainer \
-  --input /workspace/BA32.tif \
-  --output /workspace/output/terrain/ \
-  --log /workspace/output/terrain/log.txt \
-  --calculateNormals --minDepth 0 --maxDepth 17
-```
-
 ### **[SLIDE: Command Options Explained]**
 
 각 옵션의 의미를 설명드리겠습니다.
@@ -350,6 +320,9 @@ Let me explain what each option means.
 
 --calculateNormals는 조명 효과를 위한 법선 벡터를 계산합니다.
 "--calculateNormals" calculates normal vectors for lighting effects.
+
+이 옵션을 추가하면 지형에 더 사실적인 조명 효과를 줄 수 있습니다.
+Adding this option gives the terrain more realistic lighting effects.
 
 --minDepth 0은 최소 타일 깊이입니다.
 "--minDepth 0" is the minimum tile depth.
@@ -371,16 +344,26 @@ Please run the command and watch the processing proceed.
 처리 시간은 DEM 파일의 크기에 따라 다릅니다.
 Processing time varies depending on the DEM file size.
 
-보통 5-10분 정도 소요됩니다.
-It usually takes about 5-10 minutes.
+보통 1-2분 정도 소요됩니다.
+It usually takes about 1-2 minutes.
 
 터미널에 진행 상황이 표시될 것입니다.
 Progress will be displayed in the terminal.
 
 ### **[While Processing / 처리 중 설명]**
 
-처리가 진행되는 동안 출력 구조에 대해 설명드리겠습니다.
-While processing proceeds, let me explain the output structure.
+처리가 진행되는 동안 추가 옵션 및 출력 구조에 대해 설명드리겠습니다.
+While processing proceeds, let me explain additional options and output structure.
+
+다음 명령어를 실행하면 mago3DTerrainer의 모든 옵션을 볼 수 있습니다.
+You can see all options of mago3DTerrainer by running the following command.
+
+```shell
+docker run --rm gaia3d/mago-3d-terrainer --help
+```
+
+추가 옵션에 대해 궁금하신 분들은 나중에 확인해보시기 바랍니다.
+If you're curious about additional options, please check them later.
 
 처리가 완료되면 terrain 폴더 안에 여러 하위 폴더가 생성됩니다.
 When processing is complete, several subfolders will be created in the terrain folder.
@@ -426,14 +409,8 @@ mago3DTiler is a powerful tool that converts various 3D data into OGC 3D Tiles f
 오늘은 세 가지 유형의 데이터를 변환하겠습니다.
 Today we'll convert three types of data.
 
-첫째, 건물 3D Tiles
-First, building 3D Tiles.
-
-둘째, 산림 3D Tiles
-Second, forest 3D Tiles.
-
-셋째, 포인트 클라우드 3D Tiles입니다.
-Third, point cloud 3D Tiles.
+건물, 산림, 포인트 클라우드입니다.
+The buildings, forests, and point clouds.
 
 ### **3.1 Building 3D Tiles Generation (8 minutes / 8분)**
 
@@ -442,53 +419,11 @@ Third, point cloud 3D Tiles.
 먼저 건물부터 시작하겠습니다.
 Let's start with buildings first.
 
-우리는 2D 건물 footprint를 높이 정보를 사용하여 3D 건물로 돌출시킬 것입니다.
-We'll extrude 2D building footprints into 3D buildings using height information.
-
-이것을 영어로 "extrusion"이라고 합니다.
-This is called "extrusion" in English.
+우리는 2D 건물 footprint의 높이 속성을 사용하여 3D 건물로 돌출시킬 것입니다.
+We will extrude 2D building footprints into 3D buildings using height attributes.
 
 다음 명령어를 실행하세요.
 Please run the following command.
-
-**Windows (Command Prompt):**
-```shell
-docker run --rm ^
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler ^
-  --input /workspace/converted/auckland_building.geojson ^
-  --inputType geojson ^
-  --output /workspace/output/tileset/building ^
-  --outputType 3dtiles ^
-  --heightColumn height ^
-  --crs 4326 ^
-  --log /workspace/output/tileset/building/log.txt
-```
-
-**Windows (PowerShell):**
-```shell
-docker run --rm `
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler `
-  --input /workspace/converted/auckland_building.geojson `
-  --inputType geojson `
-  --output /workspace/output/tileset/building `
-  --outputType 3dtiles `
-  --heightColumn height `
-  --crs 4326 `
-  --log /workspace/output/tileset/building/log.txt
-```
-
-**Linux/macOS:**
-```shell
-docker run --rm \
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
-  --input /workspace/converted/auckland_building.geojson \
-  --inputType geojson \
-  --output /workspace/output/tileset/building \
-  --outputType 3dtiles \
-  --heightColumn height \
-  --crs 4326 \
-  --log /workspace/output/tileset/building/log.txt
-```
 
 ### **[SLIDE: Building Command Options]**
 
@@ -498,8 +433,11 @@ Let me explain the important options.
 --inputType geojson은 입력 파일 형식이 GeoJSON임을 지정합니다.
 "--inputType geojson" specifies that the input file format is GeoJSON.
 
---outputType 3dtiles는 출력 형식을 3D Tiles로 지정합니다.
-"--outputType 3dtiles" specifies the output format as 3D Tiles.
+--crs 4326은 좌표 참조 시스템을 지정합니다.
+"--crs 4326" specifies the coordinate reference system.
+
+4326은 WGS84의 EPSG 코드를 의미합니다.
+4326 means the EPSG code for WGS84.
 
 --heightColumn height는 높이 정보가 들어있는 컬럼을 지정합니다.
 "--heightColumn height" specifies the column containing height information.
@@ -510,11 +448,11 @@ This is the most important option.
 이 옵션 덕분에 2D 폴리곤이 3D 건물로 변환됩니다.
 Thanks to this option, 2D polygons are converted into 3D buildings.
 
---crs 4326은 좌표 참조 시스템을 지정합니다.
-"--crs 4326" specifies the coordinate reference system.
+--minHeightColumn 옵션은 건물의 높이 속성에 값이 없는 경우 기본값을 지정합니다.
+"--minHeightColumn" option specifies a default value if the building height attribute has no value.
 
-4326은 WGS84를 의미합니다.
-4326 means WGS84.
+terrain 옵션은 건물을 extrude 할 때 베이스가 되는 높이를 참조할 DEM 파일 경로를 지정합니다.
+The "terrain" option specifies the DEM file path that serves as the base height when extruding buildings.
 
 **[Hands-on Time / 실습 시간 - 4 minutes / 4분]**
 
@@ -526,8 +464,8 @@ Depending on the amount of building data, it may take about 5-10 minutes.
 
 ### **[While Processing / 처리 중 설명]**
 
-처리가 진행되는 동안 3D Tiles 형식에 대해 간단히 설명드리겠습니다.
-While processing proceeds, let me briefly explain the 3D Tiles format.
+처리가 진행되는 동안 3D Tiles 형식에 대해 설명드리겠습니다.
+While processing proceeds, let me explain the 3D Tiles format.
 
 3D Tiles는 OGC의 공식 표준입니다.
 3D Tiles is an official OGC standard.
@@ -550,6 +488,39 @@ Only appropriately detailed data is loaded based on the viewpoint.
 이를 통해 수백만 개의 건물도 웹에서 부드럽게 렌더링할 수 있습니다.
 This allows even millions of buildings to render smoothly on the web.
 
+다음 명령어를 실행하면 mago3DTiler의 모든 옵션을 볼 수 있습니다.
+You can see all options of mago3DTiler by running the following command.
+
+```shell
+docker run --rm gaia3d/mago-3d-tiler --help
+```
+
+옵션에 대해 궁금하신 분들은 나중에 확인해보시기 바랍니다.
+Please check them later if you're curious about the options.
+
+옵션 중에서 `skirtHeight` 옵션에 대해서 설명드리겠습니다.
+Among the options, let me explain the `skirtHeight` option.
+
+이 옵션은 지형과 건물 사이의 틈을 메우기 위해 사용됩니다.
+This option is used to fill gaps between terrain and buildings.
+
+이해를 돕기 위해 그림을 살펴보도록 하겠습니다.
+Let's look at a diagram to help understand.
+
+### **[SLIDE: Skirt Height Explanation]**
+
+건물과 지형 사이에 틈이 있을 수 있습니다.
+There can be gaps between buildings and terrain.
+
+이 틈은 건물이 떠 있는 것처럼 보이게 만듭니다.
+These gaps make buildings appear to be floating.
+
+skirtHeight 옵션은 이 틈을 메우기 위해 건물 바닥에 추가 높이를 아래로 더합니다.
+The skirtHeight option adds extra height downward at the building base to fill these gaps.
+
+이 옵션이 없으면 기본적을 4m의 skirt가 추가됩니다.
+Without this option, a default skirt of 4m is added.
+
 **[Confirmation / 확인]**
 
 처리가 완료되었나요?
@@ -566,12 +537,12 @@ Can you see the tileset.json file and data folder?
 ### **[SLIDE: Forest 3D Tiles - Instanced Models]**
 
 이제 정말 흥미로운 부분입니다!
-Now for a really interesting part!
+Now for a fascinating part!
 
-숲을 만들어보겠습니다!
+산림을 만들어보겠습니다!
 Let's create a forest!
 
-숲은 i3dm 형식을 사용합니다.
+산림은 i3dm 형식을 사용합니다.
 Forests use the i3dm format.
 
 i3dm은 Instanced 3D Model의 약자입니다.
@@ -588,8 +559,8 @@ For example, one tree model can be reused thousands of times.
 먼저 나무 3D 모델이 필요합니다.
 First, we need a tree 3D model.
 
-워크샵 자료에는 instance-LOD3.glb 파일이 포함되어 있습니다.
-The workshop materials include an instance-LOD3.glb file.
+워크샵 자료에는 `mix-tree-1m.glb` 파일이 포함되어 있습니다.
+The workshop materials include an `mix-tree-1m.glb` file.
 
 이것은 GLB 형식의 간단한 나무 모델입니다.
 This is a simple tree model in GLB format.
@@ -599,56 +570,8 @@ In real projects, you can use more complex and realistic models.
 
 ### **[SLIDE: Forest Generation Command]**
 
-다음 명령어로 숲을 생성합니다.
+다음 명령어로 산림을 생성합니다.
 Create the forest with the following command.
-
-**Windows (Command Prompt):**
-```shell
-docker run --rm ^
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler ^
-  --scaleColumn height ^
-  --inputType gpkg ^
-  --input /workspace/converted/auckland_forest.gpkg ^
-  --outputType i3dm ^
-  --output /workspace/output/tileset/forest ^
-  --crs 4326 ^
-  --instance /workspace/instance-LOD3.glb ^
-  --terrain /workspace/BA32.tif ^
-  --log /workspace/output/tileset/forest/log.txt ^
-  --tilesVersion 1.0
-```
-
-**Windows (PowerShell):**
-```shell
-docker run --rm `
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler `
-  --scaleColumn height `
-  --inputType gpkg `
-  --input /workspace/converted/auckland_forest.gpkg `
-  --outputType i3dm `
-  --output /workspace/output/tileset/forest `
-  --crs 4326 `
-  --instance /workspace/instance-LOD3.glb `
-  --terrain /workspace/BA32.tif `
-  --log /workspace/output/tileset/forest/log.txt `
-  --tilesVersion 1.0
-```
-
-**Linux/macOS:**
-```shell
-docker run --rm \
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
-  --scaleColumn height \
-  --inputType gpkg \
-  --input /workspace/converted/auckland_forest.gpkg \
-  --outputType i3dm \
-  --output /workspace/output/tileset/forest \
-  --crs 4326 \
-  --instance /workspace/instance-LOD3.glb \
-  --terrain /workspace/BA32.tif \
-  --log /workspace/output/tileset/forest/log.txt \
-  --tilesVersion 1.0
-```
 
 ### **[SLIDE: Forest Command Options]**
 
@@ -670,8 +593,8 @@ Let me explain the new options.
 --tilesVersion 1.0은 3D Tiles 버전을 지정합니다.
 "--tilesVersion 1.0" specifies the 3D Tiles version.
 
-I3DM은 3D Tiles 버전 1.0을 사용합니다.
-I3DM uses 3D Tiles version 1.0.
+최신 타일 버전에서 i3dm을 호출하는 방식에 장점이 없기 때문에 1.0 버전을 사용합니다.
+We use version 1.0 because there are no advantages in calling i3dm in the latest tile version.
 
 **[Hands-on Time / 실습 시간 - 3 minutes / 3분]**
 
@@ -696,7 +619,7 @@ Have files with .i3dm extension been created?
 마지막으로 포인트 클라우드 데이터를 변환하겠습니다.
 Finally, let's convert point cloud data.
 
-포인트 클라우드는 LiDAR 스캔이나 photogrammetry로 생성된 데이터입니다.
+포인트 클라우드는 LiDAR 스캔이나 사진측량으로 생성된 데이터입니다.
 Point clouds are data generated from LiDAR scans or photogrammetry.
 
 수백만, 수천만 개의 점으로 이루어져 있습니다.
@@ -707,8 +630,8 @@ They provide very detailed surface information.
 
 ### **[SLIDE: LAZ Format]**
 
-LINZ에서 다운로드한 데이터는 LAZ 형식입니다.
-The data we downloaded from LINZ is in LAZ format.
+다운로드한 데이터는 LAZ 형식입니다.
+The data we downloaded is in LAZ format.
 
 LAZ는 LAS 형식의 압축 버전입니다.
 LAZ is a compressed version of LAS format.
@@ -719,46 +642,16 @@ File sizes are much smaller.
 mago3DTiler는 LAZ 파일을 직접 읽을 수 있습니다.
 mago3DTiler can read LAZ files directly.
 
-### **[SLIDE: Point Cloud Command]**
+**[Hands-on Time / 실습 시간 - 4 minutes / 4분]**
 
-**Windows (Command Prompt):**
-```shell
-docker run --rm ^
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler ^
-  --input /workspace ^
-  --output /workspace/output/tileset/pointcloud ^
-  --log /workspace/output/tileset/pointcloud/log.txt ^
-  --inputType laz ^
-  --crs 4326 ^
-  --pointRatio 70 ^
-  --tilesVersion 1.0
-```
+명령어를 실행해주세요.
+Please run the command.
 
-**Windows (PowerShell):**
-```shell
-docker run --rm `
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler `
-  --input /workspace `
-  --output /workspace/output/tileset/pointcloud `
-  --log /workspace/output/tileset/pointcloud/log.txt `
-  --inputType laz `
-  --crs 4326 `
-  --pointRatio 70 `
-  --tilesVersion 1.0
-```
+포인트 클라우드 처리는 데이터 크기에 따라 시간이 걸릴 수 있습니다.
+Point cloud processing may take time depending on data size.
 
-**Linux/macOS:**
-```shell
-docker run --rm \
-  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
-  --input /workspace \
-  --output /workspace/output/tileset/pointcloud \
-  --log /workspace/output/tileset/pointcloud/log.txt \
-  --inputType laz \
-  --crs 4326 \
-  --pointRatio 70 \
-  --tilesVersion 1.0
-```
+우리 샘플 데이터는 20-30분 정도 소요될 수 있습니다.
+Our sample data may take about 20-30 minutes.
 
 ### **[SLIDE: Point Cloud Options]**
 
@@ -779,17 +672,6 @@ Low ratios give fast loading but lower quality.
 
 70%는 품질과 성능의 좋은 균형입니다.
 70% is a good balance of quality and performance.
-
-**[Hands-on Time / 실습 시간 - 4 minutes / 4분]**
-
-명령어를 실행해주세요.
-Please run the command.
-
-포인트 클라우드 처리는 데이터 크기에 따라 시간이 걸릴 수 있습니다.
-Point cloud processing may take time depending on data size.
-
-우리 샘플 데이터는 20-30분 정도 소요될 수 있습니다.
-Our sample data may take about 20-30 minutes.
 
 ### **[While Processing / 처리 중 설명]**
 
@@ -821,6 +703,9 @@ Has point cloud processing completed?
 
 시간이 오래 걸리는 경우, 다음 세션에서 미리 처리된 결과물을 사용할 수 있습니다.
 If it takes too long, we can use pre-processed results in the next session.
+
+`premade-output` 경로에 있는 결과물을 사용하시면 됩니다.
+You can use the results in the `premade-output` path.
 
 output/tileset/pointcloud 폴더가 생성되었나요?
 Has the output/tileset/pointcloud folder been created?
@@ -921,29 +806,3 @@ During the break, please check your generated files and let me know if you have 
 See you in 30 minutes!
 
 ---
-
-## Script Usage Tips / 스크립트 사용 팁
-
-### Time Management / 시간 관리
-- Introduction: 5 min (strictly) / 소개: 5분 (엄수)
-- GDAL Preprocessing: 20 min (core content) / GDAL 전처리: 20분 (핵심 내용)
-- mago3DTerrainer: 15 min (with demo) / mago3DTerrainer: 15분 (시연 포함)
-- mago3DTiler: 25 min (three conversions) / mago3DTiler: 25분 (세 가지 변환)
-- Wrap-up: 5 min (buffer time) / 마무리: 5분 (여유 시간)
-
-### Key Emphasis Points / 강조 포인트
-1. **Hands-on focused**: Brief theory, focus on running commands / 실습 위주: 이론 간단히, 명령어 실행에 집중
-2. **Check progress**: Confirm participants are following at each step / 진행 확인: 각 단계마다 참가자들 확인
-3. **Problem solving**: Prepare solutions for common errors / 문제 해결: 일반적인 오류 해결책 준비
-4. **Time allocation**: Point cloud processing may take long, explain theory during that time / 시간 배분: 포인트 클라우드 처리가 오래 걸릴 수 있으므로 그 동안 이론 설명
-
-### Anticipated Questions / 예상 질문
-- "Can this work with data from other regions?" → Yes, works globally / "다른 지역 데이터로도 가능한가요?" → 예, 전 세계 어디든 가능
-- "Can I use this for commercial projects?" → Yes, Apache 2.0 license allows commercial use / "상용 프로젝트에 사용 가능한가요?" → 예, Apache 2.0 라이선스로 상업적 사용 가능
-- "What about larger datasets?" → Recommend chunked processing or cloud environment / "더 큰 데이터는?" → 청크 단위 처리나 클라우드 환경 권장
-- "Are other formats supported?" → mago3DTiler supports 30+ formats / "다른 포맷도 지원하나요?" → mago3DTiler는 30개 이상 포맷 지원
-
-### Backup Plan / 백업 플랜
-- Network issues → Use sample data / 네트워크 문제 시 → 샘플 데이터 사용
-- Docker issues → Provide pre-processed results / Docker 문제 시 → 미리 처리된 결과물 제공
-- Time shortage → Demo point cloud only / 시간 부족 시 → 포인트 클라우드는 시연만 진행
