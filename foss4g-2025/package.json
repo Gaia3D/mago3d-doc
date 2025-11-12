@@ -1,5 +1,5 @@
 {
-  "name": "perdue-workshop",
+  "name": "foss4g-newzealand",
   "version": "1.0.0",
   "description": "This is a tutorial code for using mago3d written for a 2025 Purdue University workshop.",
   "homepage": "https://gaia3d.com/solution/mago3d",
@@ -23,32 +23,13 @@
   },
   "type": "module",
   "scripts": {
-    "prepare": "husky install",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "eslint": "eslint \"./**/*.js\" \"./**/*.html\" --cache --quiet",
-    "prettier": "prettier --write --no-config \"**/*\"",
-    "prettier-check": "prettier --check --no-config \"**/*\""
-  },
-  "devDependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-cesium": "^10.0.2",
-    "eslint-plugin-es": "^4.1.0",
-    "eslint-plugin-html": "^7.1.0",
-    "husky": "^8.0.3",
-    "prettier": "^3.2.4",
-    "vite": "^5.0.8",
-    "vite-plugin-cesium": "^1.2.23",
-    "vite-plugin-static-copy": "^1.0.0"
+    "preview": "vite preview"
   },
   "dependencies": {
+    "vite": "^5.0.8",
+    "vite-plugin-cesium": "^1.2.23",
     "cesium": "1.130.0"
-  },
-  "lint-staged": {
-    "*.{js,html}": [
-      "eslint --cache --quiet",
-      "prettier --write --no-config"
-    ]
   }
 }
