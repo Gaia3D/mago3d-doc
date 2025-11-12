@@ -7,383 +7,303 @@ import {
   Viewer
 } from "cesium";
 
-// Constants for Point Cloud Styling
-const INDIANA_LIDAR_PC_STYLE = [
-  { id: 0, name: 'Default (No Classification)', color: 'rgb(26,26,26)', enabled: true },
-  { id: 1, name: 'Unclassified', color: 'rgb(170,170,170)', enabled: false },
-  { id: 2, name: 'Ground', color: 'rgb(170,85,0)', enabled: true },
-  { id: 3, name: 'Low Vegetation', color: 'rgb(0,170,170)', enabled: true },
-  { id: 4, name: 'Medium Vegetation', color: 'rgb(85,255,85)', enabled: true },
-  { id: 5, name: 'High Vegetation', color: 'rgb(0,128,0)', enabled: true },
-  { id: 6, name: 'Building', color: 'rgb(255,85,85)', enabled: true },
-  { id: 7, name: 'Low Point (Noise)', color: 'rgb(170,0,0)', enabled: false },
-  { id: 9, name: 'Water', color: 'rgb(0,0,191)', enabled: true },
-  { id: 10, name: 'Rail', color: 'rgb(0,0,64)', enabled: true },
-  { id: 11, name: 'Road Surface', color: 'rgb(80,80,80)', enabled: true },
-  { id: 13, name: 'Wire Guard', color: 'rgb(0,0,8)', enabled: true },
-  { id: 14, name: 'Wire Conductor', color: 'rgb(0,0,4)', enabled: true },
-  { id: 15, name: 'Transmission Tower', color: 'rgb(255,255,0)', enabled: true },
-  { id: 16, name: 'Wire Structure Connector', color: 'rgb(0,0,1)', enabled: true },
-  { id: 17, name: 'Bridge Deck', color: 'rgb(0,0,0)', enabled: true },
-  { id: 18, name: 'High Noise', color: 'rgb(100,100,100)', enabled: false }
-];
+// Cesium Ion 서비스 접근을 위한 워크숍용 임시 토큰
+// 자세한 발급 가이드는 /guides/3_CesiumToken_Guide.md 참고
+const CESIUM_TOKEN = "YOUR_KEY"
+Cesium.Ion.defaultAccessToken = CESIUM_TOKEN;
 
-
-// --- Initial Setup ---
-// ✏️ Add your Cesium ion access token.
-Cesium.Ion.defaultAccessToken = `YOUR_CESIUM_ION_ACCESS_TOKEN`;
-
-// Initialize the Cesium Viewer.
+// Cesium Viewer 생성 및 기본 옵션 설정
 const viewer = new Viewer("cesiumContainer", {
-  infoBox: true,
+  infoBox: true, // 클릭 시 정보 박스 표시 활성화
 });
 viewer.scene.globe.depthTestAgainstTerrain = true;
 viewer.scene.globe.enableLighting = true;
 
-// Add the base imagery layer.
+// 기본 위성 지도 레이어 추가
 const mapLayer = ImageryLayer.fromWorldImagery({
-  style: IonWorldImageryStyle.AERIAL_WITH_LABELS,
+  style: IonWorldImageryStyle.AERIAL,
 });
 viewer.imageryLayers.add(mapLayer);
 const toolbar = document.getElementById("toolbar");
 
-// --- Workshop Steps ---
-
-// Step 1: Load Terrain Data
+// ============================================
+// STEP 1: 지형(Terrain) 데이터 로드
+// ============================================
 try {
   let purdueTerrainProvider;
 
-  // ✏️ Uncomment the line below to load the terrain data.
-  /*
+  /* ❌ ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ [STEP 1] UNCOMMENT THIS BLOCK ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+  // Mago3D로 변환한 지형 데이터를 Cesium Terrain Provider로 로드
   purdueTerrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(
-      "/output/terrain/"
+      "/output/terrain/"  // 지형 데이터가 있는 로컬 경로
   );
+
+  // 뷰어에 지형 데이터 적용
   viewer.terrainProvider = purdueTerrainProvider;
 
-  // --- make button section ---
+  // 지형 on/off 토글 버튼 생성
   const terrainButton = document.createElement("button");
   terrainButton.textContent = "Toggle Terrain";
   terrainButton.onclick = () => {
-    // 현재 지형이 우리가 로드한 지형인지 확인
+    // 현재 지형이 활성화되어 있으면 평평한 지구로, 아니면 지형 데이터로 전환
     if (viewer.terrainProvider === purdueTerrainProvider) {
-      // 기본 타원체 지형으로 변경 (끄기)
       viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
     } else {
-      // 우리가 로드한 지형으로 변경 (켜기)
       viewer.terrainProvider = purdueTerrainProvider;
     }
   };
   toolbar.appendChild(terrainButton)
-  */
 
-  // --- Code to visualize the terrain boundary (for reference) ---
-  // 174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130
+  ❌ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ [STEP 1] UNCOMMENT THIS BLOCK ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+  // ============================================
+  // 관심 영역 표시 및 카메라 초기 위치 설정
+  // ============================================
+  // 뉴질랜드 오클랜드 근처의 관심 영역 경계 [west, south, east, north]
   const originalBounds = [174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130];
-  const buffer = 0.001;
-  const bufferedBounds = [
-    originalBounds[0] - buffer, originalBounds[1] - buffer,
-    originalBounds[2] + buffer, originalBounds[3] + buffer
-  ];
+
+  // 경계를 3D 좌표로 변환하여 노란색 테두리 생성
   const rectangleCoordinates = Cesium.Cartesian3.fromDegreesArray([
-    bufferedBounds[0], bufferedBounds[1], bufferedBounds[2], bufferedBounds[1],
-    bufferedBounds[2], bufferedBounds[3], bufferedBounds[0], bufferedBounds[3],
-    bufferedBounds[0], bufferedBounds[1]
+    originalBounds[0], originalBounds[1], originalBounds[2], originalBounds[1],
+    originalBounds[2], originalBounds[3], originalBounds[0], originalBounds[3],
+    originalBounds[0], originalBounds[1]
   ]);
+
+  // 노란색 테두리 polyline 추가
   viewer.entities.add({
-    name: 'Terrain Bounds',
+    name: 'Yellow Bounds',
     polyline: {
       positions: rectangleCoordinates,
       width: 4,
-      material: Cesium.Color.YELLOW.withAlpha(0.7),
-      clampToGround: true
+      material: Cesium.Color.YELLOW.withAlpha(0.7), // 투명도 0.7의 노란색
+      clampToGround: true  // 지형에 붙도록 설정
     }
   });
 
+  // 카메라를 관심 영역으로 이동
   viewer.camera.setView({
     destination : new Cesium.Rectangle.fromDegrees(originalBounds[0],originalBounds[1],originalBounds[2],originalBounds[3])
   });
-  // --- End of boundary visualization code ---
-
 } catch (e) {
   console.log(`Error loading terrain: ${e}`);
 }
 
-
-// Step 2: Load and Style the Buildings 3D Tileset
+// ============================================
+// STEP 2: 건물 3D 타일셋 로드 및 높이별 스타일링
+// ============================================
 try {
-  // ✏️ Uncomment the code block below to load the building 3D tiles and apply a style.
-  /*
-  const tileset = await Cesium.Cesium3DTileset.fromUrl("/output/tileset/buildings/tileset.json");
+  /* ❌ ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ [STEP 2] UNCOMMENT THIS BLOCK ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+  // Mago3D로 변환한 3D 건물 타일셋 로드
+  const tileset = await Cesium.Cesium3DTileset.fromUrl("/premade-output/tileset/buildings/tileset.json");
+
+  // 건물 높이에 따른 색상 스타일 적용
   tileset.style = new Cesium.Cesium3DTileStyle({
     color: {
       conditions: [
-        ["Number(${height}) < 10", "color('lightgrey')"],
-        ["Number(${height}) < 20", "color('skyblue')"],
-        ["Number(${height}) < 30", "color('green')"],
-        ["Number(${height}) < 40", "color('yellow')"],
-        ["Number(${height}) < 50", "color('orange')"],
-        ["Number(${height}) < 60", "color('red')"],
-        ["Number(${height}) < 70", "color('purple')"],
-        ["true", "color('pink')"]
+        ["Number(${height}) < 10", "color('lightgrey')"],   // 10m 미만: 연한 회색
+        ["Number(${height}) < 20", "color('skyblue')"],     // 10-20m: 하늘색
+        ["Number(${height}) < 30", "color('green')"],       // 20-30m: 녹색
+        ["Number(${height}) < 40", "color('yellow')"],      // 30-40m: 노란색
+        ["Number(${height}) < 50", "color('orange')"],      // 40-50m: 주황색
+        ["Number(${height}) < 60", "color('red')"],         // 50-60m: 빨간색
+        ["Number(${height}) < 70", "color('purple')"],      // 60-70m: 보라색
+        ["true", "color('pink')"]                           // 70m 이상: 분홍색
       ]
     }
   });
 
+  // 씬에 건물 타일셋 추가
   viewer.scene.primitives.add(tileset);
 
+  // 건물 on/off 토글 버튼 생성
   const buildingButton = document.createElement("button");
   buildingButton.textContent = "Toggle Buildings";
   buildingButton.onclick = () => {
     tileset.show = !tileset.show;
   };
   toolbar.appendChild(buildingButton);
-  */
+  
+  ❌ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ [STEP 2] UNCOMMENT THIS BLOCK ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
 
+  // 건물 타일셋으로 카메라 이동
   viewer.camera.flyToBoundingSphere(tileset.boundingSphere, {
     duration: 3,
     offset : new Cesium.HeadingPitchRange( 0,  Cesium.Math.toRadians(-60), tileset.boundingSphere.radius * 1.5 )
   });
 
+
 } catch (error) {
   console.log(`Error creating building tileset: ${error}`);
 }
 
-
-// Step 3: Load the Forest 3D Tileset
+// ============================================
+// STEP 3: 숲(Forest) 3D 타일셋 로드
+// ============================================
 try {
-  // ✏️ Uncomment the code block below to load the forest 3D tiles.
-  /*
-  const forestTileset = await Cesium.Cesium3DTileset.fromUrl("/output/tileset/forest/tileset.json");
+  /* ❌ ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ [STEP 3] UNCOMMENT THIS BLOCK ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+  // Mago3D로 변환한 3D 숲 타일셋 로드
+  const forestTileset = await Cesium.Cesium3DTileset.fromUrl("/premade-output/tileset/forest/tileset.json");
+
+  // 씬에 숲 타일셋 추가
   viewer.scene.primitives.add(forestTileset);
 
+  // 숲 on/off 토글 버튼 생성
   const forestButton = document.createElement("button");
   forestButton.textContent = "Toggle Forest";
   forestButton.onclick = () => {
     forestTileset.show = !forestTileset.show;
   };
   toolbar.appendChild(forestButton);
-  */
+  
+  ❌ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ [STEP 3] UNCOMMENT THIS BLOCK ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
 } catch (error) {
   console.log(`Error creating forest tileset: ${error}`);
 }
 
-
-// Step 4: Load and Style the Point Cloud
+// ============================================
+// STEP 4: 포인트 클라우드(Point Cloud) 로드 및 분류별 스타일링
+// ============================================
 try {
-  // ✏️ Uncomment the code block below to load the point cloud and apply a style.
-  /*
-  const pointTileset = await Cesium.Cesium3DTileset.fromUrl(
-       '/output/tileset/pointcloud/tileset.json',
-       {
-         maximumScreenSpaceError: 4,
-         maximumMemoryUsage: 4096,
-         classificationType: Cesium.ClassificationType.CESIUM_3D_TILE,
-       }
-   );
+  /* ❌ ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ [STEP 4] UNCOMMENT THIS BLOCK ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 
-  const showConditions = INDIANA_LIDAR_PC_STYLE
-      .filter(cls => !cls.enabled)
-      .map(cls => `\${CLASSIFICATION} !== ${cls.id}`);
+  // 포인트 클라우드 타일셋 로드 (LiDAR 데이터)
+  const pointTileset = await Cesium.Cesium3DTileset.fromUrl(
+    '/premade-output/tileset/pointcloud/tileset.json',
+    {
+      classificationType: Cesium.ClassificationType.CESIUM_3D_TILE,
+    }
+  );
+
+  // LiDAR 포인트 클라우드의 분류별 색상 및 표시 여부 정의
+  // https://user-images.githubusercontent.com/11743012/48382415-e61d5e00-e695-11e8-8841-228dd96732c4.png
+  const ASPRS_STYLE = [
+    { id: 0, name: 'Default (No Classification)', color: 'rgb(26,26,26)', enabled: true },
+    { id: 1, name: 'Unclassified', color: 'rgb(170,170,170)', enabled: false },
+    { id: 2, name: 'Ground', color: 'rgb(170,85,0)', enabled: true },             // 지면: 갈색
+    { id: 3, name: 'Low Vegetation', color: 'rgb(0,170,170)', enabled: true },    // 낮은 식생: 청록색
+    { id: 4, name: 'Medium Vegetation', color: 'rgb(85,255,85)', enabled: true }, // 중간 식생: 연두색
+    { id: 5, name: 'High Vegetation', color: 'rgb(0,128,0)', enabled: true },     // 높은 식생: 녹색
+    { id: 6, name: 'Building', color: 'rgb(255,85,85)', enabled: true },          // 건물: 연한 빨강
+    { id: 7, name: 'Low Point (Noise)', color: 'rgb(170,0,0)', enabled: false },  // 노이즈: 숨김
+    { id: 9, name: 'Water', color: 'rgb(0,0,191)', enabled: true },               // 물: 파란색
+    { id: 10, name: 'Rail', color: 'rgb(0,0,64)', enabled: true },                // 철도: 진한 파랑
+    { id: 11, name: 'Road Surface', color: 'rgb(80,80,80)', enabled: true },     // 도로: 회색
+    { id: 13, name: 'Wire Guard', color: 'rgb(0,0,8)', enabled: true },
+    { id: 14, name: 'Wire Conductor', color: 'rgb(0,0,4)', enabled: true },
+    { id: 15, name: 'Transmission Tower', color: 'rgb(255,255,0)', enabled: true }, // 송전탑: 노란색
+    { id: 16, name: 'Wire Structure Connector', color: 'rgb(0,0,1)', enabled: true },
+    { id: 17, name: 'Bridge Deck', color: 'rgb(0,0,0)', enabled: true },         // 교량: 검은색
+    { id: 18, name: 'High Noise', color: 'rgb(100,100,100)', enabled: false }    // 높은 노이즈: 숨김
+  ];
+
+  // enabled가 false인 분류는 표시하지 않도록 조건 생성
+  const showConditions = ASPRS_STYLE
+    .filter(cls => !cls.enabled)
+    .map(cls => `\${CLASSIFICATION} !== ${cls.id}`);
 
   showConditions.push('${CLASSIFICATION} < 18');
 
-  const colorConditions = INDIANA_LIDAR_PC_STYLE
-      .filter(cls => cls.enabled)
-      .map(cls => [`\${CLASSIFICATION} === ${cls.id}`, `color('${cls.color}')`]);
+  // enabled가 true인 분류에 색상 적용
+  const colorConditions = ASPRS_STYLE
+    .filter(cls => cls.enabled)
+    .map(cls => [`\${CLASSIFICATION} === ${cls.id}`, `color('${cls.color}')`]);
 
   colorConditions.push(['true', "color('white')"]);
 
+  // 포인트 클라우드 스타일 적용
   const style = new Cesium.Cesium3DTileStyle({
     show: showConditions.join(' && '),
     color: {
       conditions: colorConditions
     },
-    pointSize: 1.5
+    pointSize: 3  // 포인트 크기
   });
 
   pointTileset.style = style;
   viewer.scene.primitives.add(pointTileset);
 
+  // 포인트 클라우드 on/off 토글 버튼 생성
   const pcButton = document.createElement("button");
   pcButton.textContent = "Toggle Point Cloud";
   pcButton.onclick = () => {
     pointTileset.show = !pointTileset.show;
   };
   toolbar.appendChild(pcButton);
-  */
+  
+  ❌ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ [STEP 4] UNCOMMENT THIS BLOCK ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
 } catch (e) {
   console.log(`Error loading point cloud: ${e}`);
 }
 
-// --- Step 5: Add Aerial Layer ---
+// Koordinates WMTS 타일 서비스 접근을 위한 API 키
+const KOORDINATES_KEY = "YOUR_KEY";
+
+// ============================================
+// STEP 5: WMTS 항공 사진 레이어 추가
+// ============================================
 try {
-  // ✏️ Uncomment the code block below to add the aerial imagery layer.
-  /*
+  /* ❌ ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ [STEP 5] UNCOMMENT THIS BLOCK ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+  // Koordinates의 WMTS 항공 사진 타일 서비스 설정
   const koordinatesWMTS = new Cesium.UrlTemplateImageryProvider({
-    // URL 템플릿 - {z}는 줌 레벨, {x}는 타일 X, {y}는 타일 Y
-    url: 'https://tiles-cdn.koordinates.com/services;key=d3f88a894bc4452a8105f1231ed363dc/tiles/v4/layer=121752/EPSG:3857/{z}/{x}/{y}.png',
-
-    // Web Mercator 타일링 스키마 사용
+    url: `https://tiles-cdn.koordinates.com/services;key=${KOORDINATES_KEY}/tiles/v4/layer=121752/EPSG:3857/{z}/{x}/{y}.png`,
     tilingScheme: new Cesium.WebMercatorTilingScheme(),
-
-    // 최소/최대 줌 레벨 설정 (필요에 따라 조정)
-    minimumLevel: 0,
-    maximumLevel: 21,
-
-    // 크레딧 정보 추가 (선택사항)
-    credit: 'Koordinates'
+    minimumLevel: 0,   // 최소 줌 레벨
+    maximumLevel: 21,  // 최대 줌 레벨
+    credit: 'Koordinates'  // 출처 표시
   });
 
-  // 레이어를 뷰어에 추가
+  // 뷰어에 항공 사진 레이어 추가
   const koordinatesLayer = viewer.imageryLayers.addImageryProvider(koordinatesWMTS);
 
-  // 레이어 투명도 설정 (0.0 ~ 1.0, 필요에 따라 조정)
-  koordinatesLayer.alpha = 1.0;
-
-  // 레이어 표시/숨기기를 위한 버튼 추가
   const toolbar = document.getElementById("toolbar");
+
+  // 항공 사진 레이어 on/off 토글 버튼 생성
   const wmtsButton = document.createElement("button");
   wmtsButton.textContent = "Toggle Aerial Layer";
   wmtsButton.onclick = () => {
     koordinatesLayer.show = !koordinatesLayer.show;
   };
   toolbar.appendChild(wmtsButton);
-  */
-  /*
-  // 투명도 조절 슬라이더 추가 (선택사항)
-  const sliderContainer = document.createElement("div");
-  sliderContainer.style.display = "inline-block";
-  sliderContainer.style.marginLeft = "10px";
+  
+  ❌ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ [STEP 5] UNCOMMENT THIS BLOCK ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
 
-  const sliderLabel = document.createElement("label");
-  sliderLabel.textContent = "Opacity: ";
-  sliderLabel.style.marginRight = "5px";
-
-  const alphaSlider = document.createElement("input");
-  alphaSlider.type = "range";
-  alphaSlider.min = "0";
-  alphaSlider.max = "100";
-  alphaSlider.value = "100";
-  alphaSlider.style.width = "100px";
-  alphaSlider.oninput = (e) => {
-    koordinatesLayer.alpha = e.target.value / 100;
-  };
-
-  sliderContainer.appendChild(sliderLabel);
-  sliderContainer.appendChild(alphaSlider);
-  toolbar.appendChild(sliderContainer);
-  */
 } catch (error) {
   console.error("Error loading Koordinates WMTS layer:", error);
 }
 
-// --- Step 6: Add Road Layer ---
+// ============================================
+// STEP 6: WMTS 도로 레이어 추가
+// ============================================
 try {
-  // ✏️ Uncomment the code block below to add the road imagery layer.
-  /*
+  /* ❌ ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ [STEP 6] UNCOMMENT THIS BLOCK ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+  // Koordinates의 WMTS 도로 타일 서비스 설정 (빨간색으로 표시)
   const koordinatesWMTS = new Cesium.UrlTemplateImageryProvider({
-    // URL 템플릿 - {z}는 줌 레벨, {x}는 타일 X, {y}는 타일 Y
-    url: 'https://tiles-cdn.koordinates.com/services;key=d3f88a894bc4452a8105f1231ed363dc/tiles/v4/layer=53378.431413,color=ff0000/{z}/{x}/{y}.png',
-
-    // Web Mercator 타일링 스키마 사용
-    tilingScheme: new Cesium.WebMercatorTilingScheme(),
-
-    // 최소/최대 줌 레벨 설정 (필요에 따라 조정)
-    minimumLevel: 0,
-    maximumLevel: 21,
-
-    // 크레딧 정보 추가 (선택사항)
-    credit: 'Koordinates'
+    url: `https://tiles-cdn.koordinates.com/services;key=${KOORDINATES_KEY}/tiles/v4/layer=53378.431413,color=ff0000/{z}/{x}/{y}.png`,
+    tilingScheme: new Cesium.WebMercatorTilingScheme(),  // Web Mercator 투영법 (EPSG:3857)
+    minimumLevel: 0,   // 최소 줌 레벨
+    maximumLevel: 21,  // 최대 줌 레벨
+    credit: 'Koordinates'  // 출처 표시
   });
 
-  // 레이어를 뷰어에 추가
+  // 뷰어에 도로 레이어 추가
   const koordinatesLayer = viewer.imageryLayers.addImageryProvider(koordinatesWMTS);
 
-  // 레이어 투명도 설정 (0.0 ~ 1.0, 필요에 따라 조정)
-  koordinatesLayer.alpha = 1.0;
-
-  // 레이어 표시/숨기기를 위한 버튼 추가
   const toolbar = document.getElementById("toolbar");
+  
+  // 도로 레이어 on/off 토글 버튼 생성
   const wmtsButton = document.createElement("button");
   wmtsButton.textContent = "Toggle Road Layer";
   wmtsButton.onclick = () => {
     koordinatesLayer.show = !koordinatesLayer.show;
   };
   toolbar.appendChild(wmtsButton);
-  */
-  /*
-  // 투명도 조절 슬라이더 추가 (선택사항)
-  const sliderContainer = document.createElement("div");
-  sliderContainer.style.display = "inline-block";
-  sliderContainer.style.marginLeft = "10px";
-
-  const sliderLabel = document.createElement("label");
-  sliderLabel.textContent = "Opacity: ";
-  sliderLabel.style.marginRight = "5px";
-
-  const alphaSlider = document.createElement("input");
-  alphaSlider.type = "range";
-  alphaSlider.min = "0";
-  alphaSlider.max = "100";
-  alphaSlider.value = "100";
-  alphaSlider.style.width = "100px";
-  alphaSlider.oninput = (e) => {
-    koordinatesLayer.alpha = e.target.value / 100;
-  };
-
-  sliderContainer.appendChild(sliderLabel);
-  sliderContainer.appendChild(alphaSlider);
-  toolbar.appendChild(sliderContainer);
-  */
+  
+  ❌ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ [STEP 6] UNCOMMENT THIS BLOCK ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
 } catch (error) {
   console.error("Error loading Koordinates WMTS layer:", error);
 }
-
-
-// --- Utility Functions ---
-
-// Log coordinate and camera info to the console on mouse click
-function onClickGet4326() {
-  let handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-  handler.setInputAction(async function (input) {
-    let ellipsoid = viewer.scene.globe.ellipsoid;
-    let cartesian = viewer.camera.pickEllipsoid(input.position, ellipsoid);
-    if (!cartesian) return;
-
-    let carto = Cesium.Ellipsoid.WGS84.cartesianToCartographic(cartesian);
-    let lon = Cesium.Math.toDegrees(carto.longitude);
-    let lat = Cesium.Math.toDegrees(carto.latitude);
-    let TerrainHgt = await getTerrainHeight(lon, lat);
-    let heading = Cesium.Math.toDegrees(viewer.camera.heading);
-    let pitch = Cesium.Math.toDegrees(viewer.camera.pitch);
-    let roll = Cesium.Math.toDegrees(viewer.camera.roll);
-
-    console.log('--- Click Location Info ---');
-    console.log('Longitude:', lon);
-    console.log('Latitude:', lat);
-    console.log('Terrain Height:', TerrainHgt);
-    console.log('Camera Heading:', heading);
-    console.log('Camera Pitch:', pitch);
-    console.log('Camera Roll:', roll);
-
-  }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-}
-
-// Async function to get the terrain height at a specific longitude and latitude
-async function getTerrainHeight(lon, lat) {
-  let cartoLoc = new Cesium.Cartographic.fromDegrees(lon, lat);
-  try {
-    // Check if the terrainProvider is loaded and available
-    if (!viewer.terrainProvider || !viewer.terrainProvider.availability) {
-      console.log("Terrain data is not loaded yet.");
-      return 0;
-    }
-    const updatedLocation = await Cesium.sampleTerrainMostDetailed(viewer.terrainProvider, [cartoLoc]);
-    return updatedLocation[0].height;
-  } catch (error) {
-    console.error("Error sampling terrain height:", error);
-    return 0;
-  }
-}
-
-onClickGet4326();
