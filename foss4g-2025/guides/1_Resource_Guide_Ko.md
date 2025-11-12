@@ -62,10 +62,11 @@ Visual Studio Code 또는 IntelliJ 사용을 권장합니다.
 
 생성된 API 키는 복사하여 따로 저장해야 합니다.
 
-## 데이터 다운로드
-### Overture Maps 데이터
+---
 
-**1. 파이썬 설치**
+## Overture Maps 데이터
+
+### **1. 파이썬 설치**
 
 - Python을 설치합니다 [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
@@ -74,105 +75,127 @@ Visual Studio Code 또는 IntelliJ 사용을 권장합니다.
    ![](../images/installPython.png)
 
 - cmd 창을 열고 Python이 설치되었는지 확인합니다. 다음 명령어를 입력하세요.
-   ```sh
-   python --version
-   ```
+```sh
+python --version
+```
 - 정상적으로 설치되었을 경우 다음과 같이 출력됩니다.
-   ```sh
-   Python 3.12.2
-   ```
-**2. 가상환경 생성**
+```sh
+Python 3.12.2
+```
+
+---
+
+### **2. 가상환경 생성**
 
 - cmd 창에서 가상환경을 생성하려는 디렉터리로 이동합니다. 아까 생성해준 디렉터리로 이동하려면 다음 명령어를 입력하세요.
 
-   - Windows
-      ```sh
-      cd C:\mago3d
-      ```
-   - Mac / Linux
-      ```sh
-      cd ~/mago3d
-      ```
+- Windows
+   ```sh
+   cd C:\mago3d
+   ```
+- Mac / Linux
+   ```sh
+   cd ~/mago3d
+   ```
 
 - 다음 명령어를 입력하여 가상환경을 생성합니다.
-    ```sh
-    python -m venv myvenv
-    ```
+```sh
+python -m venv myvenv
+```
 
 - 여기서 `myvenv`는 가상환경의 이름입니다. 원하는 이름으로 변경할 수 있습니다.
 
-**3. 가상환경 활성화**
+---
+
+### **3. 가상환경 활성화**
 
 - 가상환경을 활성화하려면 cmd 창에서 다음 명령어를 입력합니다.
-  - Windows
-    ```sh
-    myvenv\Scripts\activate
-    ```
-  - Mac / Linux
-    ```sh
-    source myenv/bin/activate
-    ```
+
+#### Windows (Command Prompt)
+```shell
+myvenv\Scripts\activate
+```
+#### Windows (PowerShell)
+```shell
+.\myvenv\Scripts\Activate.ps1
+```
+#### Windows (Git Bash)
+```shell
+source myvenv/Scripts/activate
+```
+#### Linux/macOS
+```shell
+source myenv/bin/activate
+```
 
 - 위 명령어를 실행하면, 프롬프트가 `(myvenv)`와 같이 변경되어 가상환경이 활성화된 것을 알 수 있습니다.
 
-**4. Overture Maps 패키지 설치**
+---
+
+### **4. Overture Maps 패키지 설치**
 
 - 가상환경이 활성화된 상태에서, Overture Maps 패키지를 설치하기 위해 cmd 창에서 다음 명령어를 입력합니다.
-    ```sh
-    pip install overturemaps
-    ```
-**5. Overture Maps 데이터 다운로드**
-- building
-   - Windows
-      ```
-      overturemaps download ^
-      --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 ^
-      -f geojson ^
-      --type=building ^
-      -o foss4g-2025\public\auckland_central_building.geojson
-      ```
-   - Powershell
-      ```
-      overturemaps download `
-      --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 `
-      -f geojson `
-      --type=building `
-      -o foss4g-2025/public/auckland_central_building.geojson
-      ```
-   - Mac / Linux
-      ```
-      overturemaps download \
-      --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 \
-      -f geojson \
-      --type=building \
-      -o foss4g-2025/public/auckland_central_building.geojson
-      ```
+```shell
+pip install overturemaps
+```
 
-- land-use
-   - Windows
-      ```
-      overturemaps download ^
-      --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 ^
-      -f geojson ^
-      --type=land_use ^
-      -o foss4g-2025/public/auckland_central_land_use.geojson
-      ```
-   - Powershell
-      ```
-      overturemaps download `
-      --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 `
-      -f geojson `
-      --type=land_use `
-      -o foss4g-2025/public/auckland_central_land_use.geojson
-      ```
-   - Mac / Linux
-      ```
-      overturemaps download \
-      --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 \
-      -f geojson \
-      --type=land_use \
-      -o foss4g-2025/public/auckland_central_land_use.geojson
-      ```
+---
+
+### **5. Overture Maps 데이터 다운로드**
+
+### Building
+
+#### Windows (Command Prompt)
+```
+overturemaps download ^
+    --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 ^
+    -f geojson ^
+    --type=building ^
+    -o public/auckland_central_building.geojson
+```
+#### Windows (PowerShell)
+```
+overturemaps download `
+    --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 `
+    -f geojson `
+    --type=building `
+    -o public/auckland_central_building.geojson
+```
+#### Linux/macOS
+```
+overturemaps download \
+    --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 \
+    -f geojson \
+    --type=building \
+    -o public/auckland_central_building.geojson
+```
+
+### Land Use
+
+#### Windows (Command Prompt)
+```
+overturemaps download ^
+    --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 ^
+    -f geojson ^
+    --type=land_use ^
+    -o public/auckland_central_land_use.geojson
+```
+#### Windows (PowerShell)
+```
+overturemaps download `
+    --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 `
+    -f geojson `
+    --type=land_use `
+    -o public/auckland_central_land_use.geojson
+```
+#### Linux/macOS
+```
+overturemaps download \
+    --bbox=174.7493740584586419,-36.8648980092102789,174.7949689180301220,-36.8329413929010130 \
+    -f geojson \
+    --type=land_use \
+    -o public/auckland_central_land_use.geojson
+```
 
 ---
 ### 항공 영상 데이터
