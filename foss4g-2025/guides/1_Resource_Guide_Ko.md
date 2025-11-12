@@ -1,31 +1,25 @@
 # mago3D 데이터 수집 가이드
 
 ## 기본 설정
-### 1. 워크샵 디렉터리 구조 생성
+### 1. 레포지토리 클론
 
-실습에 사용할 폴더를 생성합니다.  
-이 폴더는 실습 과정에서 데이터를 저장하고 관리하기 위한 기본 작업 공간이 됩니다.  
-Windows와 Mac/Linux 환경에 맞춰 아래 단계를 따라 진행하세요.
+https://github.com/Gaia3D/mago3d-doc 의 git 주소를 복사합니다.
 
-- Windows
-  1. 명령 프롬프트 실행 
-     - 시작 메뉴에서 cmd 또는 명령 프롬프트를 검색하여 실행합니다.
-  2. 아래 명령어를 입력하여 폴더를 생성합니다:
-     ```sh
-     C:\> mkdir mago3d
-     ```
-  3. 생성된 폴더는 C:\mago3d 경로에 위치합니다.
+![](../images/git_url.png)
 
-- Mac / Linux
-  1. 터미널 실행 
-     - Mac에서는 Launchpad에서, Linux에서는 응용 프로그램 메뉴에서 터미널을 실행합니다.
-  2. 아래 명령어를 입력하여 폴더를 생성합니다:
-     ```sh
-     mkdir ~/mago3d
-     ```
-  3. 생성된 폴더는 홈 디렉토리`~/mago3d`에 위치합니다.
+`C:\` 에서 git bash를 엽니다.
 
-<br/>
+![](../images/git_bash.png)
+
+복사한 url을 붙여넣어 레포지토리를 클론합니다.
+```
+git clone https://github.com/Gaia3D/mago3d-doc.git
+```
+
+![](../images/git_clone.png)
+
+`C:\mago3d-doc` 폴더가 생성된다면 성공입니다.
+
 이제 실습 준비가 완료되었습니다. 다음 단계를 진행하세요! 🚀
 
 ---
@@ -44,6 +38,15 @@ Visual Studio Code 또는 IntelliJ 사용을 권장합니다.
 이번 워크샵의 대부분의 실습은 도커 명령어로 실행됩니다.
 
 만약 도커가 설치 되어있지 않다면 실습 진행이 어려우므로, [https://www.docker.com/](https://www.docker.com/) 에서 도커를 다운 받으신 후 진행 하시기 바랍니다.
+
+터미널을 열고 Docker가 설치되었는지 확인합니다. 다음 명령어를 입력하세요.
+   ```sh
+   docker --version
+   ```
+정상적으로 설치되었을 경우 다음과 같이 출력됩니다.
+   ```sh
+   Docker version 27.3.1, build ce12230
+   ```
 
 ---
 ### 4. LINZ Data Service API 키 발행
@@ -68,20 +71,22 @@ Visual Studio Code 또는 IntelliJ 사용을 권장합니다.
 
 ### **1. 파이썬 설치**
 
-- Python을 설치합니다 [https://www.python.org/downloads/](https://www.python.org/downloads/)
+- Python을 다운로드 합니다 [https://www.python.org/downloads/](https://www.python.org/downloads/)
+
+   ![](../images/python_download.png)
 
 - 설치 시 하단의 [Add python.exe to PATH]를 체크한 후 [Install Now]를 클릭합니다.
 
    ![](../images/installPython.png)
 
 - cmd 창을 열고 Python이 설치되었는지 확인합니다. 다음 명령어를 입력하세요.
-```sh
-python --version
-```
+   ```sh
+   python --version
+   ```
 - 정상적으로 설치되었을 경우 다음과 같이 출력됩니다.
-```sh
-Python 3.12.2
-```
+    ```sh
+    Python 3.12.2
+    ```
 
 ---
 
@@ -91,11 +96,11 @@ Python 3.12.2
 
 - Windows
    ```sh
-   cd C:\mago3d
+   cd C:\mago3d-doc
    ```
 - Mac / Linux
    ```sh
-   cd ~/mago3d
+   cd ~/mago3d-doc
    ```
 
 - 다음 명령어를 입력하여 가상환경을 생성합니다.
@@ -170,6 +175,12 @@ overturemaps download \
     -o public/auckland_central_building.geojson
 ```
 
+- 결과물은 다음 경로에 저장됩니다
+  ```
+  foss4g-2025/public
+  └── auckland_central_building.geojson
+  ```
+
 ### Land Use
 
 #### Windows (Command Prompt)
@@ -197,6 +208,12 @@ overturemaps download \
     -o public/auckland_central_land_use.geojson
 ```
 
+- 결과물은 다음 경로에 저장됩니다
+  ```
+  foss4g-2025/public
+  └── auckland_central_land_use.geojson
+  ```
+
 ---
 ### 항공 영상 데이터
 https://data.linz.govt.nz/layer/121752-auckland-0075m-urban-aerial-photos-2024-2025/
@@ -223,9 +240,17 @@ https://data.linz.govt.nz/layer/121859-new-zealand-lidar-1m-dem/
 
 ![](../images/crop_dem.png)
 
+CRS를 설정하고 Export 합니다.
+
 ![](../images/export_dem.png)
 
+파일을 다운로드합니다.
+
 ![](../images/download_dem.png)
+
+다운로드 받은 파일의 압축을 풀고, `BA32.tif` 파일을 `foss4g-2025/public` 경로에 복사합니다.
+
+![](../images/copy_dem.png)
 
 ---
 ### 포인트 클라우드 데이터
@@ -236,6 +261,14 @@ https://data.linz.govt.nz/layer/d3VcCb5rKzNsNGk/auckland-part-1-lidar-point-clou
 
 ![](../images/crop_pointcloud.png)
 
+CRS를 설정하고 Export 합니다. 최대 50MB를 넘지 않도록 영역을 설정해주세요.
+
 ![](../images/export_pointcloud.png)
 
+파일을 다운로드합니다.
+
 ![](../images/download_pointcloud.png)
+
+다운로드 받은 파일의 압축을 풀고, `.laz` 파일들을 `foss4g-2025/public` 경로에 복사합니다.
+
+![](../images/copy_pointcloud.png)
