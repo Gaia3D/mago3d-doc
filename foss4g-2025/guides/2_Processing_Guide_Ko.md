@@ -113,7 +113,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
   -f "GeoJSON" /data/auckland_building.geojson /data/auckland_central_building.geojson \
   -dialect SQLite \
@@ -176,7 +176,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
     -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
     -f "GPKG" /data/auckland_forest.gpkg /data/auckland_central_land_use.geojson \
     -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
@@ -249,7 +249,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-terrainer \
   --input /workspace/BA32.tif \
   --output /workspace/output/terrain/ \
@@ -370,7 +370,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
   --input /workspace/auckland_building.geojson \
   --output /workspace/output/tileset/buildings/ \
@@ -573,7 +573,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
   --scaleColumn height \
   --inputType gpkg \
@@ -676,7 +676,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
   --input /workspace \
   --output /workspace/output/tileset/pointcloud \
