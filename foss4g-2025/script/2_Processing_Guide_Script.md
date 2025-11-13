@@ -6,68 +6,96 @@
 
 ---
 
+## Previous Practice (1 minutes / 1분)
+
+자, 다들 잘 쉬셨나요?   
+Alright, did everyone have a good break?   
+
+쉬는 동안 모두 다운로드가 완료되었나요?   
+Did everyone finish downloading during the break?   
+
+다운로드 받은 파일에 압축을 풀고 laz 파일을 복사해서 `public` 디렉토리에 붙여넣어 주세요.   
+Please unzip the downloaded file and copy the LAZ file into the `public` directory.   
+
+**[Confirmation / 확인]**
+
+혹시 아직 데이터 다운로드가 완료되지 않으신 분 계신가요?   
+Is there anyone who hasn’t finished downloading the data yet?   
+
+걱정마세요. 다운로드에 문제가 있으시면 `public/raw`의 샘플 데이터를 사용하시면 됩니다.   
+Don’t worry. If you’re having trouble with the download, you can use the source data in `public/raw`.      
+
+모두 준비되셨나요? 그럼 시작하겠습니다!   
+Is everyone ready? Great! Let's get started!   
+
+---
+
 ## Opening & Introduction (5 minutes / 5분)
 
 ### **[SLIDE: Data Processing Overview]**
 
-안녕하세요! 이제 데이터 처리 섹션을 시작하겠습니다.
-Hello! Now we'll start the data processing section.
+안녕하세요! 이제 데이터 처리 세션을 시작하겠습니다.   
+Hello everyone! Now we’ll begin the data processing session.   
 
-이번 섹션을 진행할 가이아쓰리디에 정연화입니다. 저는 백엔드 웹 개발자입니다. 편하게 루비라고 불러주시기 바랍니다.
-I'm Jeong Yeonhwa from Gaia3D, and I'm a backend web developer. Please feel free to call me Ruby.
+이번 세션을 진행할 가이아쓰리디에 정연화입니다. 저는 백엔드 웹 개발자입니다. 편하게 루비라고 불러주시기 바랍니다.   
+I’m YeonHwa Jeong from Gaia3D, and I’ll be leading this session. I’m a backend web developer, and please feel free to call me Ruby.   
 
-이 세션은 약 1시간 정도 소요될 예정입니다.
-This session will take about one hour.
+이 세션은 약 1시간 정도 소요될 예정입니다.   
+This session will take about one hour.   
 
-세션을 진행하다가 3시에 30분 휴식 시간을 가질 예정입니다.
-We'll take a 30-minute break at 3 o'clock while proceeding with the session.
+세션을 진행하다가 3시에 30분 휴식 시간을 가질 예정입니다.   
+We'll have a 30-minute break at 3 PM during the session.  
 
-앞서 수집한 원시 데이터를 웹에 최적화된 3D 콘텐츠로 변환하는 과정을 함께 진행하겠습니다.
-We'll go through the process of converting the raw data we collected earlier into web-optimized 3D content.
+앞서 수집한 원시 데이터를 웹에 최적화된 3D 콘텐츠로 변환하는 과정을 함께 진행하겠습니다.   
+Together, we'll transform the raw data we collected earlier into web-optimized 3D content.
 
 ### **[SLIDE: What We'll Cover Today]**
 
-오늘 다룰 내용은 크게 세 부분으로 나뉩니다.
-Today's content has three main parts.
+오늘 다룰 내용은 크게 세 부분으로 나뉩니다.   
+Today's content has three main parts.   
 
-첫째, GDAL을 사용한 데이터 전처리입니다.
-First, data preprocessing using GDAL.
+첫째, GDAL을 사용한 데이터 전처리입니다.   
+First, data preprocessing using GDAL.   
 
-둘째, mago3DTerrainer를 사용한 지형 생성입니다.
-Second, terrain generation using mago3DTerrainer.
+둘째, mago3DTerrainer를 사용한 지형 생성입니다.   
+Second, we'll generate terrain using mago3DTerrainer.   
 
-셋째, mago3DTiler를 사용한 3D Tiles 변환입니다.
-Third, 3D Tiles conversion using mago3DTiler.
+셋째, mago3DTiler를 사용한 3D Tiles 변환입니다.   
+Third, 3D Tiles conversion using mago3DTiler.   
 
-각 단계마다 실습 시간을 충분히 드릴 예정이니 천천히 따라오시면 됩니다.
-We'll give enough hands-on time for each step, so please follow along at your own pace.
+각 단계마다 실습 시간을 충분히 드릴 예정이니 천천히 따라오시면 됩니다.   
+We'll give enough hands-on time for each step, so please follow along at your own pace.   
 
 ### **[SLIDE: Prerequisites Check]**
 
-시작하기 전에 다음 사항을 확인해주세요.
-Before we start, please check the following items.
+시작하기 전에 다음 사항을 확인해주세요.   
+Before we start, please check the following items.   
 
-Docker Desktop이 설치되어 실행 중인지 확인하세요.
-Make sure Docker Desktop is installed and running.
+Docker Desktop이 설치되어 실행 중인지 확인하세요.   
+Make sure Docker Desktop is installed and running.   
 
-원본 데이터가 foss4g-2025/public 디렉토리에 있는지 확인하세요.
-Check that your source data is in the foss4g-2025/public directory.
+모두 Docker Desktop을 실행합니다.   
+Everyone, please launch Docker Desktop.   
 
-충분한 디스크 공간이 있는지 확인하세요. 약 2-4 GB가 필요합니다.
+실행이 되었다면 터미널을 열고 `docker images` 커멘드를 입력하세요.   
+Once it’s running, open a terminal and type the `docker images` command.   
+
+혹시, 이미 mago3d tiler, terrainer 이미지가 있는 경우 새로운 버전으로 받아야 해서 지워주시기 바랍니다.   
+If you already have the mago3d-tiler or terrainer images, please remove them, as we need to pull the latest versions.   
+
+원본 데이터가 `foss4g-2025/public` 디렉토리에 있는지 확인하세요.   
+Please confirm that your source data is located in the `foss4g-2025/public` directory.   
+
+충분한 디스크 공간이 있는지 확인하세요. 약 2-4 GB가 필요합니다.   
 Make sure you have enough disk space. You'll need about 2 to 4 GB.
 
-**[Confirmation / 확인]**
+마지막으로, 네트워크 연결 상태가 양호한지 확인해주세요.   
+Finally, please make sure your network connection is stable.   
 
-혹시 아직 데이터 다운로드가 완료되지 않으신 분 계신가요?
-Is anyone still downloading data?
+### **[SLIDE: Tool Versions]**
 
-다운로드에 문제가 있으시면 `public/raw`의 샘플 데이터를 사용하시면 됩니다.
-If you have trouble downloading, you can use the sample data in `public/raw`.
-
-모두 준비되셨나요? 그럼 시작하겠습니다!
-Is everyone ready? Let's begin!
-
----
+이번 세션에서 사용할 도구의 버전 정보는 다음과 같습니다.   
+Here are the version details of the tools we’ll be using in this session.   
 
 ### **[SLIDE: Data Preparation]**
 
@@ -77,20 +105,29 @@ Please look at the table on the screen.
 이 표는 우리가 오늘 처리할 데이터 유형과 각 데이터에 사용할 도구를 요약한 것입니다.
 This table summarizes the types of data we'll process today and the tools we'll use for each.
 
+건물과 산림에 대한 전처리는 geojson 원본데이터를 사용하며, gdal에 org2ogr 도구를 이용합니다.   
+For preprocessing buildings and forests, we’ll use the original GeoJSON data and the ogr2ogr tool from GDAL.   
+
+지형을 생성하기 위해서는 DEM geotiff 파일을 사용하며, mago3DTerrainer 도구를 이용합니다.   
+To generate the terrain, we’ll use the DEM GeoTIFF file and the mago3DTerrainer tool.   
+
+건물, 산림, 포인트 클라우드를 3D로 서비스 하기 위해서 mago3DTiler 도구를 이용합니다.   
+To serve buildings, forests, and point clouds in 3D, we’ll use the mago3DTiler tool.   
+
 ---
 
-## Part 1: Data Preprocessing with GDAL (20 minutes / 20분)
+## Part 1: Data Preprocessing (20 minutes / 20분)
 
 ### **[SLIDE: Data Preprocessing Overview]**
 
-자, 이제 본격적으로 데이터 전처리를 시작하겠습니다.
-Okay, now let's start data preprocessing.
+자, 이제 본격적으로 데이터 전처리를 시작하겠습니다.   
+Alright, now let's start data preprocessing.   
 
-GDAL은 지리공간 데이터를 처리하는 가장 강력한 오픈소스 도구 중 하나입니다.
-GDAL is one of the most powerful open-source tools for processing geospatial data.
+GDAL은 지리공간 데이터를 처리하는 가장 강력한 오픈소스 도구 중 하나입니다.   
+GDAL is one of the most powerful open-source tools for processing geospatial data.   
 
-우리는 GDAL을 사용하여 건물 데이터와 산림 데이터를 전처리할 것입니다.
-We'll use GDAL to preprocess building data and forest data.
+우리는 GDAL을 사용하여 건물 데이터와 산림 데이터를 전처리할 것입니다.   
+We'll use GDAL to preprocess building and forest data.   
 
 ### **1.1 Building Data Preprocessing (10 minutes / 10분)**
 
@@ -102,50 +139,50 @@ First, let's look at the building data we downloaded from Overture Maps.
 ### **[SLIDE: Building Attributes]**
 
 건물 데이터에는 두 가지 중요한 속성이 있습니다.
-The building data has two important attributes.
+The building data contains two important attributes.
 
 하나는 height입니다. 이것은 건물의 실제 높이를 미터 단위로 나타냅니다.
-One is "height". This shows the actual building height in meters.
+The first one is "height", which represents the actual building height in meters.
 
 다른 하나는 num_floors입니다. 이것은 건물의 층수를 나타냅니다.
-The other is "num_floors". This shows the number of floors in the building.
+The second one is "num_floors", This shows the number of floors in the building.
 
 ### **[SLIDE: Conversion Logic]**
 
 건물의 3D 모델을 만들기 위해서는 높이 정보가 필수적입니다.
-Height information is essential for creating 3D models of buildings.
+Height information is essential for creating 3D building models.
 
 하지만 모든 건물에 높이 정보가 있는 것은 아닙니다.
-But not all buildings have height information.
+However, not all buildings include height information.
 
 그래서 우리는 다음과 같은 로직을 사용합니다.
-So we use the following logic.
+Therefore, we'll apply the following logic:
 
 첫째, height 값이 있으면 그 값을 사용합니다.
-First, if there's a height value, we use that value.
+First, if a height value is available, we'll use that value directly.
 
 둘째, height가 없고 num_floors가 있으면, num_floors에 3.3을 곱합니다.
-Second, if there's no height but there's num_floors, we multiply num_floors by 3.3.
+Second, if height is missing but num_floors exists, we'll multiply num_floors by 3.3.
 
 이것은 평균 층고가 3.3미터라고 가정한 것입니다.
-This assumes an average floor height of 3.3 meters.
+This calculation assumes an average floor height of 3.3 meters.
 
 셋째, 둘 다 없으면 기본값 3.3미터를 할당합니다.
-Third, if we have neither, we assign a default value of 3.3 meters.
+Third, if neither attribute is available, we'll assign a default value of 3.3 meters.
 
 ### **[SLIDE: GDAL Command]**
 
 이제 실제 명령어를 실행해보겠습니다.
-Now let's run the actual command.
+Now, let's execute the actual command.
 
 명령어가 길기 때문에 천천히 따라오세요.
-The command is long, so please follow along carefully.
+Since the command is quite long, please follow along carefully.
 
 환경에 적절한 명령어를 사용하세요.
-Use the command appropriate for your environment.
+Please use the command that's appropriate for your operating system.
 
 YOUR_PROJECT_ROOT_DIR을 여러분의 실제 프로젝트 경로로 바꿔주세요.
-Please replace YOUR_PROJECT_ROOT_DIR with your actual project path.
+Remember to replace YOUR_PROJECT_ROOT_DIR with your actual project path.
 
 ### **[SLIDE: Command Explanation]**
 
@@ -153,107 +190,107 @@ Please replace YOUR_PROJECT_ROOT_DIR with your actual project path.
 Let me briefly explain what this command does.
 
 docker run --rm은 Docker 컨테이너를 실행하고 완료 후 자동으로 제거합니다.
-"docker run --rm" runs a Docker container and removes it automatically after completion.
+"docker run --rm" executes a Docker container and automatically removes it upon completion.
 
 -v 옵션은 호스트 디렉토리를 컨테이너에 마운트합니다.
-The "-v" option mounts your host directory to the container.
+The "-v" option mounts your host directory into the container.
 
 반드시 절대 경로를 사용해야 합니다.
-You must use an absolute path.
+It's important to note that you must use an absolute path here.
 
 ogr2ogr은 벡터 데이터 변환 도구입니다.
-"ogr2ogr" is a vector data conversion tool.
+"ogr2ogr" is a powerful vector data conversion tool.
 
 -f "GeoJSON"은 출력 형식을 GeoJSON으로 지정합니다.
-"-f GeoJSON" specifies the output format as GeoJSON.
+"-f GeoJSON" specifies that we want our output format to be GeoJSON.
 
 **[Hands-on Time / 실습 시간 - 3 minutes / 3분]**
 
 이제 명령어를 실행해주세요.
-Now please run the command.
+Now, please go ahead and run the command.
 
 첫 실행 시 Docker 이미지를 다운로드하는데 1-2분 정도 걸릴 수 있습니다.
-On first run, downloading the Docker image may take 1-2 minutes.
+Please note that on your first run, downloading the Docker image may take 1-2 minutes.
 
 **[Confirmation / 확인]**
 
 모두 파일이 생성되셨나요?
-Has everyone created the file?
+Has everyone successfully created the file?
 
 `public` 폴더 안에 auckland_building.geojson 파일이 보이시나요?
-Can you see the auckland_building.geojson file in the `public` folder?
+Can you see the auckland_building.geojson file in your `public` folder?
 
 혹시 에러가 발생하신 분 계신가요?
-Is anyone getting errors?
+Is anyone encountering any errors?
 
 ### **1.2 Forest Data Preprocessing (10 minutes / 10분)**
 
 ### **[SLIDE: Forest Data Overview]**
 
 이제 산림을 만들기 위한 데이터를 처리하겠습니다.
-Now we'll process data to create forests.
+Now, let's process the data to create our forests.
 
 Overture Maps의 토지 이용 데이터에서 산림 영역만 추출할 것입니다.
-We'll extract only forest areas from Overture Maps land use data.
+We'll extract only the forest areas from Overture Maps land use data.
 
 ### **[SLIDE: Forest Attributes]**
 
 토지 이용 데이터에는 subtype과 class라는 속성이 있습니다.
-The land use data has attributes called "subtype" and "class".
+The land use data contains attributes called "subtype" and "class".
 
 우리는 이 속성들을 사용하여 공원과 잔디 지역을 필터링할 것입니다.
-We'll use these attributes to filter park and grass areas.
+We'll use these attributes to filter out park and grass areas.
 
 왜 공원과 잔디 지역을 선택하냐구요?
-Why are we choosing parks and grass areas?
+You might be wondering why we're selecting parks and grass areas.
 
 이 지역들에 나무를 심어서 산림을 만들 것이기 때문입니다.
-Because we'll plant trees in these areas to create forests.
+It's because we'll be planting trees in these areas to create our forests.
 
 ### **[SLIDE: Forest Conversion Command]**
 
 환경에 맞는 명령어를 사용하시고 YOUR_PROJECT_ROOT_DIR을 실제 경로로 바꿔주세요.
-Please use the command appropriate for your environment and replace YOUR_PROJECT_ROOT_DIR with your actual path.
+Please use the command appropriate for your environment and remember to replace YOUR_PROJECT_ROOT_DIR with your actual path.
 
 이번에는 GeoPackage 형식으로 변환하겠습니다.
-This time we'll convert to GeoPackage format.
+This time, we'll convert the data to GeoPackage format.
 
 mago3DTiler는 GeoPackage, GeoJSON, Shapefile 등 다양한 형식을 지원합니다.
-mago3DTiler supports various formats like GeoPackage, GeoJSON, and Shapefile.
+mago3DTiler supports various formats including GeoPackage, GeoJSON, and Shapefile.
 
 따라서, 원하시는 형식으로 지정하여 저장하시면 됩니다.
-So you can specify and save in your desired format.
+So feel free to specify and save in your preferred format.
 
 여기서 중요한 부분은 "20 AS height"입니다.
-The important part here is "20 AS height".
+The key part of this command is "20 AS height".
 
 이것은 나무의 높이를 20미터로 설정한다는 의미입니다.
-This means we're setting the tree height to 20 meters.
+This sets our tree height to 20 meters.
 
 이 값은 나중에 원하는 나무 높이로 조정할 수 있습니다.
-You can adjust this value to your desired tree height later.
+You can adjust this value to match your desired tree height.
 
 여기서 height라는 값은 원하시는 값으로 변경하셔도 됩니다. 추후에 mago3DTiler에서 **scaleColumn**에 지정하여 사용하게 됩니다.
-You can change this height value to whatever you want. Later, it will be used in mago3DTiler by specifying it in the **scaleColumn**.
+The height value can be customized to your preference. Later, we'll use this value in mago3DTiler by specifying it in the **scaleColumn** parameter.
 
 **[Hands-on Time / 실습 시간 - 2 minutes / 2분]**
 
 명령어를 실행하시고 처리가 완료될 때까지 기다려주세요.
-Please run the command and wait for processing to complete.
+Please run the command and wait for the processing to complete.
 
 **[Confirmation / 확인]**
 
 `public` 폴더 안에 auckland_forest.gpkg 파일이 생성되었나요?
-Has the auckland_forest.gpkg file been created in the `public` folder?
+Has the auckland_forest.gpkg file been successfully created in your `public` folder?
 
 여기까지 모두 잘 따라오셨나요?
-Has everyone followed along well so far?
+Is everyone following along well up to this point?
 
 이제 GDAL 전처리는 완료되었습니다.
-Now we've completed GDAL preprocessing.
+Excellent! We've now completed the GDAL preprocessing phase.
 
 잠깐 쉬는 시간을 가지면서 각자 데이터를 확인해보시기 바랍니다.
-Let's take a short break and check your data.
+Let's take a short break while you verify your data.
 
 ---
 
@@ -262,30 +299,30 @@ Let's take a short break and check your data.
 ### **[SLIDE: mago3DTerrainer Introduction]**
 
 좋습니다. 이제 가장 흥미로운 부분을 시작하겠습니다.
-Good. Now let's start the most interesting part.
+Excellent. Now, let's move on to one of the most exciting parts of our workshop.
 
 먼저 mago3DTerrainer를 사용하여 지형을 생성하겠습니다.
 First, we'll generate terrain using mago3DTerrainer.
 
 mago3DTerrainer는 DEM 데이터를 웹 스트리밍에 최적화된 Quantized Mesh 형식으로 변환하는 도구입니다.
-mago3DTerrainer is a tool that converts DEM data into Quantized Mesh format optimized for web streaming.
+mago3DTerrainer is a specialized tool that converts DEM data into Quantized Mesh format, which is optimized for web streaming.
 
 ### **[SLIDE: What is Quantized Mesh?]**
 
 잠깐 Quantized Mesh가 무엇인지 설명드리겠습니다.
-Let me briefly explain what Quantized Mesh is.
+Let me take a moment to explain what Quantized Mesh is.
 
 Quantized Mesh는 Cesium에서 개발한 지형 타일 형식입니다.
 Quantized Mesh is a terrain tile format developed by Cesium.
 
 이 형식의 장점을 몇 가지 말씀드리겠습니다.
-Let me tell you about some advantages of this format.
+This format offers several key advantages:
 
 첫째, 파일 크기가 매우 작습니다.
-First, the file sizes are very small.
+First, the file sizes are remarkably small.
 
 좌표를 압축하여 저장하기 때문입니다.
-This is because coordinates are stored in compressed form.
+This is achieved by storing coordinates in a compressed form.
 
 둘째, 계층적 LOD 구조를 지원합니다.
 Second, it supports a hierarchical LOD structure.
@@ -294,15 +331,15 @@ LOD는 Level of Detail의 약자입니다.
 LOD stands for Level of Detail.
 
 이것은 효율적인 스트리밍을 가능하게 합니다.
-This enables efficient streaming.
+This hierarchical structure enables highly efficient streaming.
 
 셋째, 법선 벡터를 포함하여 사실적인 조명 효과를 구현할 수 있습니다.
-Third, it includes normal vectors for realistic lighting effects.
+Third, it can include normal vectors, allowing for realistic lighting effects.
 
 ### **[SLIDE: Terrain Generation Command]**
 
 mago3DTerrainer는 Docker 이미지로 제공되므로 설치가 매우 간단합니다.
-mago3DTerrainer is provided as a Docker image, so installation is very simple.
+mago3DTerrainer is provided as a Docker image, making installation very straightforward.
 
 다음 명령어를 실행하세요.
 Please run the following command.
@@ -310,45 +347,45 @@ Please run the following command.
 ### **[SLIDE: Command Options Explained]**
 
 각 옵션의 의미를 설명드리겠습니다.
-Let me explain what each option means.
+Let me explain the meaning of each option.
 
 --input은 입력 DEM 파일 경로입니다.
-"--input" is the input DEM file path.
+"--input" specifies the input DEM file path.
 
 --output은 출력 타일셋이 저장될 폴더입니다.
-"--output" is the folder where the output tileset will be saved.
+"--output" designates the folder where the output tileset will be saved.
 
 --calculateNormals는 조명 효과를 위한 법선 벡터를 계산합니다.
 "--calculateNormals" calculates normal vectors for lighting effects.
 
 이 옵션을 추가하면 지형에 더 사실적인 조명 효과를 줄 수 있습니다.
-Adding this option gives the terrain more realistic lighting effects.
+This option enables more realistic lighting effects on the terrain.
 
 --minDepth 0은 최소 타일 깊이입니다.
-"--minDepth 0" is the minimum tile depth.
+"--minDepth 0" sets the minimum tile depth.
 
 --maxDepth 17은 최대 타일 깊이입니다.
-"--maxDepth 17" is the maximum tile depth.
+"--maxDepth 17" sets the maximum tile depth.
 
 숫자가 클수록 더 상세한 지형을 만들 수 있습니다.
-Higher numbers create more detailed terrain.
+Higher numbers generate more detailed terrain.
 
 하지만 처리 시간도 더 오래 걸립니다.
-But processing time also takes longer.
+However, this also increases processing time.
 
 **[Hands-on Time / 실습 시간 - 5 minutes / 5분]**
 
 명령어를 실행하시고 처리가 진행되는 것을 지켜봐주세요.
-Please run the command and watch the processing proceed.
+Please run the command and observe the processing progress.
 
 처리 시간은 DEM 파일의 크기에 따라 다릅니다.
-Processing time varies depending on the DEM file size.
+Processing time will vary depending on your DEM file size.
 
 보통 1-2분 정도 소요됩니다.
-It usually takes about 1-2 minutes.
+Typically, this takes about 1-2 minutes.
 
 터미널에 진행 상황이 표시될 것입니다.
-Progress will be displayed in the terminal.
+You'll see progress updates displayed in your terminal.
 
 ### **[While Processing / 처리 중 설명]**
 
@@ -401,58 +438,58 @@ Great! Terrain generation is complete.
 ### **[SLIDE: mago3DTiler Introduction]**
 
 이제 mago3DTiler를 사용할 차례입니다.
-Now it's time to use mago3DTiler.
+Now, it's time to work with mago3DTiler.
 
 mago3DTiler는 다양한 3D 데이터를 OGC 3D Tiles 형식으로 변환하는 강력한 도구입니다.
-mago3DTiler is a powerful tool that converts various 3D data into OGC 3D Tiles format.
+mago3DTiler is a powerful tool that converts various types of 3D data into the OGC 3D Tiles format.
 
 오늘은 세 가지 유형의 데이터를 변환하겠습니다.
-Today we'll convert three types of data.
+Today, we'll be converting three different types of data:
 
 건물, 산림, 포인트 클라우드입니다.
-The buildings, forests, and point clouds.
+buildings, forests, and point clouds.
 
 ### **3.1 Building 3D Tiles Generation (8 minutes / 8분)**
 
 ### **[SLIDE: Building 3D Tiles]**
 
 먼저 건물부터 시작하겠습니다.
-Let's start with buildings first.
+Let's begin with the buildings.
 
 우리는 2D 건물 footprint의 높이 속성을 사용하여 3D 건물로 돌출시킬 것입니다.
-We will extrude 2D building footprints into 3D buildings using height attributes.
+We'll extrude 2D building footprints into 3D buildings using their height attributes.
 
 다음 명령어를 실행하세요.
-Please run the following command.
+Please execute the following command.
 
 ### **[SLIDE: Building Command Options]**
 
 중요한 옵션들을 설명하겠습니다.
-Let me explain the important options.
+Let me explain the key options.
 
 --inputType geojson은 입력 파일 형식이 GeoJSON임을 지정합니다.
-"--inputType geojson" specifies that the input file format is GeoJSON.
+"--inputType geojson" specifies that our input file format is GeoJSON.
 
 --crs 4326은 좌표 참조 시스템을 지정합니다.
 "--crs 4326" specifies the coordinate reference system.
 
 4326은 WGS84의 EPSG 코드를 의미합니다.
-4326 means the EPSG code for WGS84.
+4326 is the EPSG code for WGS84.
 
 --heightColumn height는 높이 정보가 들어있는 컬럼을 지정합니다.
-"--heightColumn height" specifies the column containing height information.
+"--heightColumn height" specifies the column that contains our height information.
 
 이것이 가장 중요한 옵션입니다.
-This is the most important option.
+This is one of the most critical options.
 
 이 옵션 덕분에 2D 폴리곤이 3D 건물로 변환됩니다.
-Thanks to this option, 2D polygons are converted into 3D buildings.
+This option is what transforms 2D polygons into 3D buildings.
 
 --minHeightColumn 옵션은 건물의 높이 속성에 값이 없는 경우 기본값을 지정합니다.
-"--minHeightColumn" option specifies a default value if the building height attribute has no value.
+"--minimumHeight" option specifies a default value when the building height attribute is missing.
 
 terrain 옵션은 건물을 extrude 할 때 베이스가 되는 높이를 참조할 DEM 파일 경로를 지정합니다.
-The "terrain" option specifies the DEM file path that serves as the base height when extruding buildings.
+The "--terrain" option specifies the DEM file path that provides the base elevation when extruding buildings.
 
 **[Hands-on Time / 실습 시간 - 4 minutes / 4분]**
 
@@ -720,10 +757,10 @@ Are there files with .pnts extension?
 ### **[SLIDE: What We've Accomplished]**
 
 축하합니다! 데이터 처리 단계를 모두 완료하셨습니다!
-Congratulations! You've completed all data processing steps!
+Congratulations! You've successfully completed all the data processing steps!
 
 지금까지 우리가 만든 것을 정리해보겠습니다.
-Let's review what we've created so far.
+Let's take a moment to review what we've accomplished.
 
 첫째, 지형 타일셋을 생성했습니다.
 First, we generated a terrain tileset.
@@ -735,74 +772,74 @@ Second, we created building 3D Tiles.
 Third, we generated forest 3D Tiles.
 
 넷째, 포인트 클라우드 3D Tiles를 변환했습니다.
-Fourth, we converted point cloud 3D Tiles.
+Fourth, we converted point cloud data to 3D Tiles.
 
 이 모든 데이터를 시각화할 준비가 되었습니다!
-We're now ready to visualize all this data!
+We're now ready to visualize all of this data!
 
 ### **[SLIDE: Common Issues]**
 
 혹시 문제가 발생하신 분들을 위해 일반적인 문제와 해결 방법을 정리했습니다.
-For those who encountered problems, here are common issues and solutions.
+For those who encountered any issues, I've compiled some common problems and their solutions.
 
 **문제 1: Docker 실행 권한 오류**
 **Issue 1: Docker permission error**
 
 "Cannot connect to the Docker daemon"이라는 메시지가 나오는 경우입니다.
-This is when you see "Cannot connect to the Docker daemon".
+If you see the message "Cannot connect to the Docker daemon":
 
 해결 방법: Docker Desktop이 실행 중인지 확인하세요.
-Solution: Check that Docker Desktop is running.
+Solution: Please verify that Docker Desktop is running.
 
 **문제 2: 볼륨 마운트 오류**
 **Issue 2: Volume mount error**
 
 "Error response from daemon: invalid mount config"라는 메시지가 나오는 경우입니다.
-This is when you see "Error response from daemon: invalid mount config".
+If you encounter "Error response from daemon: invalid mount config":
 
 해결 방법: 절대 경로를 사용했는지 확인하세요.
-Solution: Make sure you're using an absolute path.
+Solution: Please ensure you're using an absolute path.
 
 경로에 한글이나 공백이 없는지 확인하세요.
-Make sure there are no Korean characters or spaces in the path.
+Also check that there are no Korean characters or spaces in the path.
 
 **문제 3: 메모리 부족**
 **Issue 3: Out of memory**
 
 "Container killed by OOM killer"라는 메시지가 나오는 경우입니다.
-This is when you see "Container killed by OOM killer".
+If you see "Container killed by OOM killer":
 
 해결 방법: Docker Desktop 설정에서 메모리를 최소 4GB 이상으로 늘리세요.
-Solution: Increase memory to at least 4GB in Docker Desktop settings.
+Solution: Please increase the memory allocation to at least 4GB in your Docker Desktop settings.
 
 ### **[SLIDE: Next Steps]**
 
 다음 세션에서는 CesiumJS를 사용하여 이 모든 레이어를 시각화할 것입니다.
-In the next session, we'll visualize all these layers using CesiumJS.
+In the next session, we'll visualize all of these layers using CesiumJS.
 
 우리가 만든 지형, 건물, 숲, 포인트 클라우드를 모두 3D로 볼 수 있습니다.
-We'll be able to see our terrain, buildings, forests, and point clouds all in 3D.
+You'll be able to see the terrain, buildings, forests, and point clouds we've created - all in stunning 3D.
 
 정말 멋진 디지털 트윈 도시가 완성될 것입니다!
-A really amazing digital twin city will be complete!
+It's going to be an amazing digital twin city!
 
 **[Questions / 질문 시간 - 3 minutes / 3분]**
 
 여기까지 질문 있으신가요?
-Any questions so far?
+Does anyone have questions at this point?
 
 특히 데이터 변환 과정에서 이해가 안 되는 부분이 있으면 지금 질문해주세요.
-Especially if there's any part of the data conversion process you don't understand, please ask now.
+If there's any part of the data conversion process that's unclear, please feel free to ask now.
 
 **[Break Announcement / 휴식 안내]**
 
 다음 세션 전에 30분간 휴식 시간을 갖겠습니다.
-We'll have a 30-minute break before the next session.
+We'll take a 30-minute break before our next session.
 
 휴식 시간 동안 생성된 파일들을 확인하시고, 문제가 있으면 저에게 말씀해주세요.
-During the break, please check your generated files and let me know if you have any problems.
+During the break, please take a moment to verify your generated files, and don't hesitate to let me know if you encounter any issues.
 
 30분 후에 다시 만나겠습니다!
-See you in 30 minutes!
+I'll see you back here in 30 minutes!
 
 ---

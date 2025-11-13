@@ -19,18 +19,7 @@ The versions of tools used in this guide are as follows:
 - **mago3DTiler**: latest
 - **mago3DTerrainer**: latest
 
-### Key Concept Introduction
-
-**GDAL (Geospatial Data Abstraction Library)**
-An open-source library that can read and write various geospatial data formats.   
-This guide uses the `ogr2ogr` tool for vector data conversion.
-
-**3D Tiles**
-An OGC standard format for efficiently streaming and rendering large-scale 3D geospatial data on the web.
-
-**Coordinate Reference System (CRS)**
-This guide uses EPSG:4326 (WGS84 latitude/longitude coordinate system).   
-This is the global standard coordinate system used by GPS.   
+---
 
 ### Data Preparation
 
@@ -59,7 +48,8 @@ foss4g-2025/public/
 ├── *.glb                                  # Tree 3D model
 └── *.laz                                  # Point cloud data
 ```
-**Note**: `*.glb` is a tree 3D model file to be used for forest tile generation. It is included in the workshop materials and can be replaced with a different 3D model if desired.
+**Note**: `*.glb` is a tree 3D model file to be used for forest tile generation.
+It's included in the workshop materials, and if you want, you can replace it with a different 3D model.
 
 ---
 
@@ -68,7 +58,7 @@ Data preprocessing is performed using GDAL/OGR tools.
 GDAL/OGR is a powerful open-source library capable of processing various geospatial data formats.
 In this process, we will preprocess building and forest data using the `ogr2ogr` command.
 
-### Building Data Preprocessing
+### Building
 
 **Purpose**: Extract and process height information from Overture Maps building data.
 
@@ -139,7 +129,7 @@ docker run --rm --platform linux/amd64 \
 The building data preprocessing result is as follows.
 ![building_processed.png](../images/building_processed.png)
 
-### Forest Data Preprocessing
+### Forest
 
 **Purpose**: Extract forest areas from Overture Maps land use data.
 

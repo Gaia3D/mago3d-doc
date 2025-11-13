@@ -19,16 +19,7 @@
 - **mago3DTiler**: latest
 - **mago3DTerrainer**: latest
 
-### 주요 개념 소개
-
-**GDAL (Geospatial Data Abstraction Library)**
-다양한 지리공간 데이터 형식을 읽고 쓸 수 있는 오픈 소스 라이브러리입니다. 이 가이드에서는 벡터 데이터 변환을 위해 `ogr2ogr` 도구를 사용합니다.
-
-**3D Tiles**
-대규모 3D 지리공간 데이터를 웹에서 효율적으로 스트리밍하고 렌더링하기 위한 OGC 표준 형식입니다.
-
-**좌표 참조 시스템 (CRS)**
-이 가이드에서는 EPSG:4326 (WGS84 위경도 좌표계)을 사용합니다. 이는 GPS에서 사용하는 전 세계 표준 좌표계입니다.
+---
 
 ### 데이터 준비
 
@@ -66,7 +57,7 @@ foss4g-2025/public/
 GDAL/OGR은 다양한 지리공간 데이터 형식을 처리할 수 있는 강력한 오픈 소스 라이브러리입니다.
 이번 과정에서는 `ogr2ogr` 명령을 사용하여 건물과 산림 데이터를 전처리 합니다.
 
-### 건물 데이터 전처리
+### 건물
 
 **목적**: Overture Maps 건물 데이터에서 높이 정보를 추출하고 가공합니다.
 
@@ -137,7 +128,7 @@ docker run --rm --platform linux/amd64 \
 건물 데이터 전처리 결과는 다음과 같습니다.   
 ![building_processed.png](../images/building_processed.png)
 
-### 산림 데이터 전처리
+### 산림
 
 **목적**: Overture Maps 토지 이용 데이터에서 산림 영역을 추출 합니다.
 
