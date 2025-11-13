@@ -190,10 +190,10 @@ docker run --rm --platform linux/amd64 \
 ---
 
 ## ⭐ 데이터 변환 ⭐
-데이터 변환은 **mago3DTerrainer** 및 **mago3DTiler** 도구를 사용하여 수행됩니다.
+[데이터 변환](../README_Ko.md#-mago3d-도구-사용-가이드-)은 **mago3DTerrainer** 및 **mago3DTiler** 도구를 사용하여 수행됩니다.
 
-- **mago3DTerrainer**는 GeoTIFF 파일로 지형 데이터를 생성하는 도구입니다.
-- **mago3DTiler**는 다양한 3D 데이터를 3D 타일 형식으로 변환하는 도구입니다.
+- **[mago3DTerrainer](https://github.com/Gaia3D/mago-3d-terrainer)**는 GeoTIFF 파일로 지형 데이터를 생성하는 도구입니다.
+- **[mago3DTiler](https://github.com/Gaia3D/mago-3d-tiler)**는 다양한 3D 데이터를 3D 타일 형식으로 변환하는 도구입니다.
 - **mago3DTiler**는 2D 데이터의 속성 값으로 3D 타일 생성도 지원합니다.
 
 ### 지형
@@ -380,6 +380,31 @@ docker run --rm --platform linux/amd64 \
 - `--minimumHeight 3.3`: 최소 건물 높이 (미터)
 - `--terrain`: 지형 데이터 (건물을 지형에 정확히 배치)
 
+**모든 옵션 확인**:
+```shell
+docker run --rm gaia3d/mago-3d-tiler --help
+```
+
+**주요 옵션 요약**:
+
+```
+-i, --input <arg>              입력 디렉토리/파일 경로
+-o, --output <arg>             출력 디렉토리 경로
+-it, --inputType <arg>         입력 형식 (kml, 3ds, fbx, obj, gltf, las, laz, citygml, shp, geojson, gpkg)
+-c, --crs <arg>                좌표 참조 시스템 (EPSG 코드)
+-hc, --heightColumn <arg>      높이 속성 열 이름
+-mh, --minimumHeight <arg>     최소 높이 값
+-te, --terrain <arg>           지형 GeoTIFF 파일 경로
+-sh, --skirtHeight <arg>       건물 스커트 높이 (지형 간격 제거)
+-mx, --maxCount <arg>          타일당 최대 삼각형 수
+-xl, --maxLod <arg>            최대 LOD 레벨
+```
+
+**skirtHeight 옵션**:   
+건물 바닥과 지형 사이의 틈을 방지하려면 `--skirtHeight` 옵션을 추가할 수 있습니다
+
+![skirt_height.png](../images/skirt_height.png)
+
 **출력 디렉토리 구조**:
 ```
 foss4g-2025/public/output/tileset/buildings
@@ -469,31 +494,6 @@ foss4g-2025/public/output/tileset/buildings
   }
 }
 ```
-
-**모든 옵션 확인**:
-```shell
-docker run --rm gaia3d/mago-3d-tiler --help
-```
-
-**주요 옵션 요약**:
-
-```
--i, --input <arg>              입력 디렉토리/파일 경로
--o, --output <arg>             출력 디렉토리 경로
--it, --inputType <arg>         입력 형식 (kml, 3ds, fbx, obj, gltf, las, laz, citygml, shp, geojson, gpkg)
--c, --crs <arg>                좌표 참조 시스템 (EPSG 코드)
--hc, --heightColumn <arg>      높이 속성 열 이름
--mh, --minimumHeight <arg>     최소 높이 값
--te, --terrain <arg>           지형 GeoTIFF 파일 경로
--sh, --skirtHeight <arg>       건물 스커트 높이 (지형 간격 제거)
--mx, --maxCount <arg>          타일당 최대 삼각형 수
--xl, --maxLod <arg>            최대 LOD 레벨
-```
-
-**skirtHeight 옵션**:   
-건물 바닥과 지형 사이의 틈을 방지하려면 `--skirtHeight` 옵션을 추가할 수 있습니다
-
-![skirt_height.png](../images/skirt_height.png)
 
 **결과 미리보기**:
 

@@ -191,10 +191,10 @@ Upon completing this step, preprocessed vector data required for 3D tile generat
 ---
 
 ## ⭐ Data Conversion ⭐
-Data conversion is performed using **mago3DTerrainer** and **mago3DTiler** tools.   
+[Data conversion](../README.md#-mago3d-tools-usage-guide-) is performed using **mago3DTerrainer** and **mago3DTiler** tools.
 
-- **mago3DTerrainer** is a tool that generates terrain data from GeoTIFF files.
-- **mago3DTiler** is a tool that converts various 3D data to 3D Tiles format.
+- **[mago3DTerrainer](https://github.com/Gaia3D/mago-3d-terrainer)** is a tool that generates terrain data from GeoTIFF files.
+- **[mago3DTiler](https://github.com/Gaia3D/mago-3d-tiler)** is a tool that converts various 3D data to 3D Tiles format.
 - **mago3DTiler** also supports creating 3D tiles from attribute values of 2D data.
 
 ### Terrain
@@ -379,6 +379,30 @@ docker run --rm --platform linux/amd64 \
 - `--minimumHeight 3.3`: Minimum building height (meters)
 - `--terrain`: Terrain data (accurately places buildings on terrain)
 
+**Check All Options**:
+```shell
+docker run --rm gaia3d/mago-3d-tiler --help
+```
+
+**Key Options Summary**:
+```
+-i, --input <arg>              Input directory/file path
+-o, --output <arg>             Output directory path
+-it, --inputType <arg>         Input format (kml, 3ds, fbx, obj, gltf, las, laz, citygml, shp, geojson, gpkg)
+-c, --crs <arg>                Coordinate reference system (EPSG code)
+-hc, --heightColumn <arg>      Height attribute column name
+-mh, --minimumHeight <arg>     Minimum height value
+-te, --terrain <arg>           Terrain GeoTIFF file path
+-sh, --skirtHeight <arg>       Building skirt height (removes terrain gaps)
+-mx, --maxCount <arg>          Maximum triangles per tile
+-xl, --maxLod <arg>            Maximum LOD level
+```
+
+**skirtHeight Option**:   
+To prevent gaps between building bases and terrain, you can add the `--skirtHeight` option
+
+![skirt_height.png](../images/skirt_height.png)
+
 **Output Directory Structure**:
 ```
 foss4g-2025/public/output/tileset/buildings
@@ -468,30 +492,6 @@ Example `tileset.json` file is as follows:
   }
 }
 ```
-
-**Check All Options**:
-```shell
-docker run --rm gaia3d/mago-3d-tiler --help
-```
-
-**Key Options Summary**:
-```
--i, --input <arg>              Input directory/file path
--o, --output <arg>             Output directory path
--it, --inputType <arg>         Input format (kml, 3ds, fbx, obj, gltf, las, laz, citygml, shp, geojson, gpkg)
--c, --crs <arg>                Coordinate reference system (EPSG code)
--hc, --heightColumn <arg>      Height attribute column name
--mh, --minimumHeight <arg>     Minimum height value
--te, --terrain <arg>           Terrain GeoTIFF file path
--sh, --skirtHeight <arg>       Building skirt height (removes terrain gaps)
--mx, --maxCount <arg>          Maximum triangles per tile
--xl, --maxLod <arg>            Maximum LOD level
-```
-
-**skirtHeight Option**:   
-To prevent gaps between building bases and terrain, you can add the `--skirtHeight` option
-
-![skirt_height.png](../images/skirt_height.png)
 
 **Result Preview**:
 
