@@ -14,6 +14,8 @@ Additionally, you will create **forests** by planting trees in the city, and the
 
 This entire process relies on **open data, open source, and open standards**, allowing participants to experience building a digital twin city from scratch on an unprepared PC.
 
+![preview.png](images/preview.png)
+
 ---
 
 ## Learning Objectives
@@ -28,6 +30,8 @@ By the end of this workshop, participants will be able to:
 6. Create interactive 3D web applications with CesiumJS
 7. Build a complete digital twin city from scratch in 3 hours
 
+![objectives.png](images/objectives.png)
+
 ---
 
 ## Prerequisites
@@ -36,7 +40,7 @@ By the end of this workshop, participants will be able to:
 - **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
 - **Git** for cloning repositories
 - **Python** (version 3.8 or higher)
-- **Node.js** (version 14 or higher)
+- **Node.js** (version 18 or higher)
 - **IDE**: Visual Studio Code or IntelliJ IDEA (recommended)
 - **Web Browser**: Chrome, Firefox, or Edge (latest version)
 
@@ -44,7 +48,7 @@ By the end of this workshop, participants will be able to:
 - **Cesium ion access token**: Sign up for a free account at [cesium.com/ion](https://cesium.com/ion/) and obtain your access token
 
 ### Hardware Requirements
-- **Minimum**: 8GB RAM, 20GB free disk space
+- **Minimum**: 8GB RAM, 10GB free disk space
 - **Recommended**: 16GB+ RAM, 50GB+ free disk space, dedicated GPU
 - Stable internet connection for downloading data
 
@@ -82,7 +86,14 @@ Transform raw geospatial data into web-optimized 3D tiles and terrain.
 - Converting forest data to 3DTiles i3dm format using **mago3DTiler**
 - Converting point cloud data (LAS/LAZ) to OGC 3DTiles using **mago3DTiler**
 
-### Part 4: Visualization (40 minutes)
+### Part 4: Graphics Acceleration (10 minutes)
+Optimize data processing performance through GPU acceleration.
+
+**Topics covered:**
+- Checking graphics acceleration status in your browser
+- Hands-on comparison of performance before and after enabling graphics acceleration
+
+### Part 5: Visualization (40 minutes)
 Build an interactive 3D web application to visualize your digital twin city.
 
 **Topics covered:**
@@ -93,12 +104,7 @@ Build an interactive 3D web application to visualize your digital twin city.
 - Loading forest and point cloud 3D Tiles
 - Viewing the final 3D digital twin city
 
-### Part 5: Hardware Acceleration (10 minutes)
-Optimize data processing performance through GPU acceleration.
-
-**Topics covered:**
-- Checking graphics acceleration status in your browser
-- Hands-on comparison of performance before and after enabling graphics acceleration
+![workshop_structure.png](images/workshop_structure.png)
 
 ---
 
@@ -111,8 +117,8 @@ Optimize data processing performance through GPU acceleration.
 | 02:30 - 03:00 | Data Processing - Part 1 (30min) | GDAL preprocessing                      |
 | 03:00 - 03:30 | Break (30min)                    | Coffee break                            |
 | 03:30 - 04:00 | Data Processing - Part 2 (30min) | 3D data conversion                      |
+| 04:40 - 04:50 | Graphics Acceleration (10min)    | Graphics acceleration                   |
 | 04:00 - 04:40 | Visualization (40min)            | Build 3D web application                |
-| 04:40 - 04:50 | Advanced Topics (10min)          | Hardware acceleration                   |
 | 04:50 - 05:00 | Q&A (10min)                      | Questions and wrap-up                   |
 
 **Total Duration**: 3.5 hours
@@ -123,26 +129,28 @@ Optimize data processing performance through GPU acceleration.
 
 ### [1. Data Collection Guide](guides/1_Resource_Guide_En.md)
 
-#### Basic Setup
+#### ⚙️ Basic Setup
 - Creating working directory for the workshop
 - IDE preparation and Git repository clone
 - Installing and verifying required software
 
-#### Downloading Data
+#### ⬇️ Downloading Data
 - Overture Maps building footprints and land use vector data
 - Open data sources (LINZ Data Service) DEM and point cloud data
 - Open data sources (LINZ Data Service) aerial imagery and road WMTS service
+
+![data_collection.png](images/data_collection.png)
 
 ---
 
 ### [2. Data Processing Guide](guides/2_Processing_Guide_En.md)
 
-#### Data Preprocessing
+#### 🔧 Data Preprocessing
 - Preprocessing building height from Overture Maps building footprints
 - Converting Overture Maps land use data to forest data
 - Preparing DEM elevation data and tree instance 3D models
 
-#### mago3D Tools Overview
+#### ⭐ mago3D Tools Usage Guide ⭐
 - **mago3DTerrainer**: Generate optimized terrain
   - Creates terrain tiles from DEM (GeoTIFF) with simple commands
   - Generates high-accuracy Quantized mesh
@@ -156,35 +164,39 @@ Optimize data processing performance through GPU acceleration.
   - Coordinate system transformation and terrain draping
   - Provides various customization options
 
-#### mago3D Hands-on Practice
+#### 🎯 mago3D Hands-on Practice
 - Generate terrain with mago3DTerrainer
 - Create building 3D tiles with mago3DTiler
 - Create forest 3D tiles with mago3DTiler
 - Create point cloud 3D tiles with mago3DTiler
 
----
-
-### [3. Visualization Guide](guides/3_Visualization_Guide_En.md)
-
-#### Building the 3D Application
-- Sample code structure and setup
-- Running the application in your IDE
-- Sample code explanation
-- Verifying results based on conversion options
-
-#### Results
-- Visualizing layers in CesiumJS viewer
-- Layer toggling and attribute inspection
-- Viewing the complete 3D digital twin
+![data_processing.png](images/data_processing.png)
 
 ---
 
 ### [Optional: Hardware Acceleration](guides/Hardware_Acceleration_En.md)
 
-#### GPU-Accelerated Processing
+#### 🎮 GPU-Accelerated Processing
 - Optimizing data processing performance through GPU acceleration
 - Checking graphics acceleration status in your browser
 - Performance comparison before/after acceleration
+
+---
+
+### [3. Visualization Guide](src/main.js)
+
+#### 🚀 Building the 3D Application
+- Sample code structure and setup
+- Running the application in your IDE
+- Sample code explanation
+- Verifying results based on conversion options
+
+#### ⭐ Results ⭐
+- Visualizing layers in CesiumJS viewer
+- Layer toggling and attribute inspection
+- Viewing the complete 3D digital twin
+
+![visualization.png](images/visualization.png)
 
 ---
 
