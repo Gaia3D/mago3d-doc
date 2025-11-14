@@ -42,6 +42,12 @@ viewer.entities.add({
   }
 });
 
+const mapLayer = ImageryLayer.fromWorldImagery({
+  style: IonWorldImageryStyle.ROAD,
+});
+
+viewer.imageryLayers.add(mapLayer);
+
 // Move camera to the area of interest
 viewer.camera.setView({
   destination : new Cesium.Rectangle.fromDegrees(originalBounds[0],originalBounds[1],originalBounds[2],originalBounds[3])
