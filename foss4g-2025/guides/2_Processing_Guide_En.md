@@ -19,33 +19,24 @@ The versions of tools used in this guide are as follows:
 - **mago3DTiler**: latest
 - **mago3DTerrainer**: latest
 
-### Key Concept Introduction
-
-**GDAL (Geospatial Data Abstraction Library)**
-An open-source library that can read and write various geospatial data formats. This guide uses the `ogr2ogr` tool for vector data conversion.
-
-**3D Tiles**
-An OGC standard format for efficiently streaming and rendering large-scale 3D geospatial data on the web.
-
-**Coordinate Reference System (CRS)**
-This guide uses EPSG:4326 (WGS84 latitude/longitude coordinate system). This is the global standard coordinate system used by GPS.
+---
 
 ### Data Preparation
 
 This process guides you on how to process collected data for web service delivery.
 We will use open-source tools for data processing.
 
-While these tools provide powerful capabilities for implementing and visualizing urban digital twins, data conversion to formats that match each tool's characteristics and requirements is necessary.
+While these tools provide powerful capabilities for implementing and visualizing urban digital twins, data conversion to formats that match each tool's characteristics and requirements is necessary.   
 The data conversion tasks to be performed are summarized in the following table:
 
-| Conversion Task                 | Input Data Format      | Output Data Format                   | Tool Used                          | Estimated Time |
-|---------------------------------|------------------------|--------------------------------------|------------------------------------|----------------|
-| Building Data Preprocessing     | GeoJSON (.geojson)     | GeoJSON (.geojson)                   | GDAL, ogr2ogr                      | 5 min          |
-| Forest Data Preprocessing       | GeoJSON (.geojson)     | GeoPackage (.gpkg)                   | GDAL, ogr2ogr                      | 5 min          |
-| Terrain Data Generation         | GeoTIFF (.tif)         | terrain directory structure, layer.json | mago3DTerrainer                 | 5-10 min       |
-| Building 3D Tiles Generation    | GeoJSON (.geojson)     | 3D Tiles (glb), tileset.json         | mago3DTiler                        | 5-10 min       |
-| Forest 3D Tiles Generation      | GeoPackage (.gpkg)     | 3D Tiles (i3dm), tileset.json        | mago3DTiler                        | 1-2 min        |
-| Point Cloud 3D Tiles Generation | LAZ (.laz)             | 3D Tiles (pnts), tileset.json        | mago3DTiler                        | 20-30 min      |
+| Conversion Task                 | Input Data Format  | Output Data Format                      | Tool Used       | Estimated Time |
+|---------------------------------|--------------------|-----------------------------------------|-----------------|----------------|
+| Building Data Preprocessing     | GeoJSON (.geojson) | GeoJSON (.geojson)                      | GDAL, ogr2ogr   | 1 min          |
+| Forest Data Preprocessing       | GeoJSON (.geojson) | GeoPackage (.gpkg)                      | GDAL, ogr2ogr   | 1 min          |
+| Terrain Data Generation         | GeoTIFF (.tif)     | terrain directory structure, layer.json | mago3DTerrainer | 1-2 min        |
+| Building 3D Tiles Generation    | GeoJSON (.geojson) | 3D Tiles (glb), tileset.json            | mago3DTiler     | 5-10 min       |
+| Forest 3D Tiles Generation      | GeoPackage (.gpkg) | 3D Tiles (i3dm), tileset.json           | mago3DTiler     | 1-2 min        |
+| Point Cloud 3D Tiles Generation | LAZ (.laz)         | 3D Tiles (pnts), tileset.json           | mago3DTiler     | 20-30 min      |
 
 Ensure all source data is prepared in the `foss4g-2025/public` directory:
 
@@ -54,10 +45,11 @@ foss4g-2025/public/
 ├── auckland_central_building.geojson      # Building data
 ├── auckland_central_land_use.geojson      # Land use data
 ├── BA32.tif                               # Terrain elevation data
-├── instance-LOD3.glb                      # Tree 3D model
+├── *.glb                                  # Tree 3D model
 └── *.laz                                  # Point cloud data
 ```
-**Note**: `instance-LOD3.glb` is a tree 3D model file to be used for forest tile generation. It is included in the workshop materials and can be replaced with a different 3D model if desired.
+**Note**: `*.glb` is a tree 3D model file to be used for forest tile generation.
+It's included in the workshop materials, and if you want, you can replace it with a different 3D model.
 
 ---
 
@@ -66,7 +58,7 @@ Data preprocessing is performed using GDAL/OGR tools.
 GDAL/OGR is a powerful open-source library capable of processing various geospatial data formats.
 In this process, we will preprocess building and forest data using the `ogr2ogr` command.
 
-### Building Data Preprocessing
+### Building
 
 **Purpose**: Extract and process height information from Overture Maps building data.
 
@@ -113,7 +105,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
   -f "GeoJSON" /data/auckland_building.geojson /data/auckland_central_building.geojson \
   -dialect SQLite \
@@ -137,13 +129,13 @@ docker run --rm \
 The building data preprocessing result is as follows.
 ![building_processed.png](../images/building_processed.png)
 
-### Forest Data Preprocessing
+### Forest
 
 **Purpose**: Extract forest areas from Overture Maps land use data.
 
-**Input Data Attributes**:
-- `subtype`: Land use subtype
-- `class`: Land use classification
+**Input Data Attributes**:   
+- `subtype`: Land use subtype   
+- `class`: Land use classification   
 
 Filter forest areas using the `subtype` and `class` attributes from the land use data.
 ![forest_attributes.png](../images/forest_attributes.png)
@@ -176,44 +168,43 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
     -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/data ghcr.io/osgeo/gdal:ubuntu-full-3.9.0 ogr2ogr \
     -f "GPKG" /data/auckland_forest.gpkg /data/auckland_central_land_use.geojson \
     -sql "SELECT subtype, class, 20 AS height FROM auckland_central_land_use WHERE subtype = 'park' OR (subtype = 'managed' AND class = 'grass')"
 ```
 
-The explanation for the above syntax is as follows:
-**Command Explanation**:
+**Command Explanation**:   
 - `-f "GPKG"`: Specify output format as GeoPackage (GeoJSON is also supported)
 - `20 AS height`: Set tree instance height to 20m (can be adjusted to actual tree height)   
   **Note**: The `height` attribute will be used in the subsequent 3D tile generation process. The unit is meters.
 
-**Result Verification**:
-- Output file: `foss4g-2025/public/auckland_forest.gpkg`
-- Verify green (filtered forest) areas within pink (total land use) areas
+**Result Verification**:   
+- Output file: `foss4g-2025/public/auckland_forest.gpkg`   
+- Verify green (filtered forest) areas within pink (total land use) areas   
 
 ![forest_processed.png](../images/forest_processed.png)
 
-**After Completion**:
-Upon completing this step, preprocessed vector data required for 3D tile generation will be ready. 🚀
+**After Completion**:   
+Upon completing this step, preprocessed vector data required for 3D tile generation will be ready. 🚀   
 
 ---
 
 ## ⭐ Data Conversion ⭐
-Data conversion is performed using **mago3DTerrainer** and **mago3DTiler** tools.
+[Data conversion](../README.md#-mago3d-tools-usage-guide-) is performed using **mago3DTerrainer** and **mago3DTiler** tools.
 
-- **mago3DTerrainer** is a tool that generates terrain data from GeoTIFF files.
-- **mago3DTiler** is a tool that converts various 3D data to 3D Tiles format.
+- **[mago3DTerrainer](https://github.com/Gaia3D/mago-3d-terrainer)** is a tool that generates terrain data from GeoTIFF files.
+- **[mago3DTiler](https://github.com/Gaia3D/mago-3d-tiler)** is a tool that converts various 3D data to 3D Tiles format.
 - **mago3DTiler** also supports creating 3D tiles from attribute values of 2D data.
 
 ### Terrain
 
-**Purpose**: Convert GeoTIFF elevation data to web-optimized terrain tiles.
+**Purpose**: Convert GeoTIFF elevation data to web-optimized terrain tiles.   
 
-**Input**: `BA32.tif` (LINZ Data Service elevation data)
-**Output**: terrain tileset and metadata
+**Input**: `BA32.tif` (LINZ Data Service elevation data)    
+**Output**: terrain tileset and metadata   
 
-Terrain generation is performed using the **mago3DTerrainer**.
+Terrain generation is performed using the **mago3DTerrainer**.   
 
 **Note**: Accommodates source data in various coordinate reference systems.    
 Automatically detects the coordinate reference system of the input file and converts it correctly.   
@@ -250,7 +241,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-terrainer \
   --input /workspace/BA32.tif \
   --output /workspace/output/terrain/ \
@@ -259,6 +250,8 @@ docker run --rm \
 ```
 
 **Key Option Explanation**:
+- `--input`: Input GeoTIFF file/directory path
+- `--output`: Output directory path
 - `--calculateNormals`: Calculate Vertex Normals for lighting effects, Add terrain octVertexNormals (recommended)
 - `--minDepth 0`: Minimum tile depth, range : 0 ~ 22, default : 0
 - `--maxDepth 17`: Maximum tile depth, range : 0 ~ 22, default : 14 (higher means more detailed)
@@ -316,12 +309,12 @@ foss4g-2025/public/output/terrain
 
 ### Building
 
-**Purpose**: Convert 2D building footprints with height to 3D building models.
+**Purpose**: Convert 2D building footprints with height to 3D building models.   
 
-**Input**: `auckland_building.geojson` (preprocessed building data)
-**Output**: glTF-based 3D Tiles (GLB format)
+**Input**: `auckland_building.geojson` (preprocessed building data)   
+**Output**: glTF-based 3D Tiles (GLB format)   
 
-Building 3D tiles generation is performed using the **mago3DTiler**.
+Building 3D tiles generation is performed using the **mago3DTiler**.   
 
 #### Windows (Command Prompt)
 ```shell
@@ -367,7 +360,7 @@ docker run --rm \
 
 #### Linux/macOS
 ```shell
-docker run --rm \
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
   --input /workspace/auckland_building.geojson \
   --output /workspace/output/tileset/buildings/ \
@@ -381,10 +374,34 @@ docker run --rm \
 
 **Key Option Explanation**:
 - `--inputType geojson`: Input data format
-- `--crs 4326`: Coordinate system (EPSG:4326, WGS84 latitude/longitude)
+- `--crs 4326`: Coordinate reference system (EPSG:4326, WGS84 latitude/longitude)
 - `--heightColumn height`: Attribute column containing height information
 - `--minimumHeight 3.3`: Minimum building height (meters)
 - `--terrain`: Terrain data (accurately places buildings on terrain)
+
+**Check All Options**:
+```shell
+docker run --rm gaia3d/mago-3d-tiler --help
+```
+
+**Key Options Summary**:
+```
+-i, --input <arg>              Input directory/file path
+-o, --output <arg>             Output directory path
+-it, --inputType <arg>         Input format (kml, 3ds, fbx, obj, gltf, las, laz, citygml, shp, geojson, gpkg)
+-c, --crs <arg>                Coordinate reference system (EPSG code)
+-hc, --heightColumn <arg>      Height attribute column name
+-mh, --minimumHeight <arg>     Minimum height value
+-te, --terrain <arg>           Terrain GeoTIFF file path
+-sh, --skirtHeight <arg>       Building skirt height (removes terrain gaps)
+-mx, --maxCount <arg>          Maximum triangles per tile
+-xl, --maxLod <arg>            Maximum LOD level
+```
+
+**skirtHeight Option**:   
+To prevent gaps between building bases and terrain, you can add the `--skirtHeight` option
+
+![skirt_height.png](../images/skirt_height.png)
 
 **Output Directory Structure**:
 ```
@@ -476,44 +493,24 @@ Example `tileset.json` file is as follows:
 }
 ```
 
-**Check All Options**:
-```shell
-docker run --rm gaia3d/mago-3d-tiler --help
-```
+**Result Preview**:
 
-**Key Options Summary**:
-```
--i, --input <arg>              Input directory/file path
--o, --output <arg>             Output directory path
--it, --inputType <arg>         Input format (kml, 3ds, fbx, obj, gltf, las, laz, citygml, shp, geojson, gpkg)
--c, --crs <arg>                Coordinate reference system (EPSG code)
--hc, --heightColumn <arg>      Height attribute column name
--mh, --minimumHeight <arg>     Minimum height value
--te, --terrain <arg>           Terrain GeoTIFF file path
--sh, --skirtHeight <arg>       Building skirt height (removes terrain gaps)
--mx, --maxCount <arg>          Maximum triangles per tile
--xl, --maxLod <arg>            Maximum LOD level
-```
-
-**skirtHeight Option**:
-To prevent gaps between building bases and terrain, you can add the `--skirtHeight` option:
-
-![skirt_height.svg](../images/skirt_height.png)
+![building_preview.png](../images/building_preview.png)
 
 ---
 
-### Forest 3D Tiles Generation
+### Forest
 
-**Purpose**: Generate tiles with tree 3D model instances placed in forest areas.
+**Purpose**: Generate tiles with tree 3D model instances placed in forest areas.   
 
 **Input**:
-- `auckland_forest.gpkg` (preprocessed forest areas)
-- `instance-LOD3.glb` (tree 3D model)
+- `auckland_forest.gpkg` (preprocessed forest areas)   
+- `mix-tree-1m.glb` (tree 3D model)   
 
-**Output**: I3DM (Instanced 3D Model) format tiles
+**Output**: I3DM (Instanced 3D Model) format tiles   
 
-**Tree Model Preparation**:
-`instance-LOD3.glb` is a tree 3D model that will be repeatedly placed in each forest area. It is included in the workshop materials and can be replaced with a different 3D model (e.g., specific tree species).
+**Tree Model Preparation**:   
+`mix-tree-1m.glb` is a tree 3D model that will be repeatedly placed in each forest area. It is included in the workshop materials and can be replaced with a different 3D model (e.g., specific tree species).
 
 #### Windows (Command Prompt)
 ```shell
@@ -521,11 +518,11 @@ docker run --rm ^
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler ^
   --scaleColumn height ^
   --inputType gpkg ^
-  --input /workspace/converted/auckland_forest.gpkg ^
+  --input /workspace/auckland_forest.gpkg ^
   --outputType i3dm ^
   --output /workspace/output/tileset/forest ^
   --crs 4326 ^
-  --instance /workspace/instance-LOD3.glb ^
+  --instance /workspace/mix-tree-1m.glb ^
   --terrain /workspace/BA32.tif ^
   --log /workspace/output/tileset/forest/log.txt ^
   --tilesVersion 1.0
@@ -537,27 +534,43 @@ docker run --rm `
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler `
   --scaleColumn height `
   --inputType gpkg `
-  --input /workspace/converted/auckland_forest.gpkg `
+  --input /workspace/auckland_forest.gpkg `
   --outputType i3dm `
   --output /workspace/output/tileset/forest `
   --crs 4326 `
-  --instance /workspace/instance-LOD3.glb `
+  --instance /workspace/mix-tree-1m.glb `
   --terrain /workspace/BA32.tif `
   --log /workspace/output/tileset/forest/log.txt `
   --tilesVersion 1.0
 ```
 
-#### Linux/macOS
+#### Windows (Git Bash)
 ```shell
 docker run --rm \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
   --scaleColumn height \
   --inputType gpkg \
-  --input /workspace/converted/auckland_forest.gpkg \
+  --input //workspace/auckland_forest.gpkg \
+  --outputType i3dm \
+  --output //workspace/output/tileset/forest \
+  --crs 4326 \
+  --instance //workspace/mix-tree-1m.glb \
+  --terrain //workspace/BA32.tif \
+  --log //workspace/output/tileset/forest/log.txt \
+  --tilesVersion 1.0
+```
+
+#### Linux/macOS
+```shell
+docker run --rm --platform linux/amd64 \
+  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
+  --scaleColumn height \
+  --inputType gpkg \
+  --input /workspace/auckland_forest.gpkg \
   --outputType i3dm \
   --output /workspace/output/tileset/forest \
   --crs 4326 \
-  --instance /workspace/instance-LOD3.glb \
+  --instance /workspace/mix-tree-1m.glb \
   --terrain /workspace/BA32.tif \
   --log /workspace/output/tileset/forest/log.txt \
   --tilesVersion 1.0
@@ -570,9 +583,6 @@ docker run --rm \
 - `--tilesVersion 1.0`: 3D Tiles version (I3DM uses 1.0)
 
 **Output Directory Structure**:
-```shell
-tree foss4g-2025/public/output/tileset/forest -L 2 -v
-```
 ```
 foss4g-2025/public/output/tileset/forest
 ├── data
@@ -599,17 +609,20 @@ foss4g-2025/public/output/tileset/forest
 └── tileset.json
 ```
 
-**After Completion**:
+**After Completion**:   
 Upon completing this step, 3D tiles with trees automatically placed in park and grass areas will be generated.
+
+**Result Preview**:   
+![forest_preview.png](../images/forest_preview.png)
 
 ---
 
-### Point Cloud 3D Tiles Generation
+### Point Cloud
 
-**Purpose**: Convert LiDAR point cloud data to 3D tiles for web rendering.
+**Purpose**: Convert LiDAR point cloud data to 3D tiles for web rendering.   
 
-**Input**: `*.laz` (LAZ compressed LAS files)
-**Output**: PNTS (Point Cloud) format tiles
+**Input**: `*.laz` (LAZ compressed LAS files)   
+**Output**: PNTS (Point Cloud) format tiles   
 
 #### Windows (Command Prompt)
 ```shell
@@ -637,9 +650,22 @@ docker run --rm `
   --tilesVersion 1.0
 ```
 
-#### Linux/macOS
+#### Windows (Git Bash)
 ```shell
 docker run --rm \
+  -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
+  --input //workspace \
+  --output //workspace/output/tileset/pointcloud \
+  --log //workspace/output/tileset/pointcloud/log.txt \
+  --inputType laz \
+  --crs 2193 \
+  --pointRatio 70 \
+  --tilesVersion 1.0
+```
+
+#### Linux/macOS
+```shell
+docker run --rm --platform linux/amd64 \
   -v {YOUR_PROJECT_ROOT_DIR}/mago3d-doc/foss4g-2025/public:/workspace gaia3d/mago-3d-tiler \
   --input /workspace \
   --output /workspace/output/tileset/pointcloud \
@@ -654,16 +680,9 @@ docker run --rm \
 - `--inputType laz`: LAZ compressed point cloud format
 - `--pointRatio 70`: Use only 70% of source data (optimize file size)
 - `--tilesVersion 1.0`: 3D Tiles version
-
-**Point Ratio Adjustment**:
-- High ratio (90-100): High quality, large file size
-- Medium ratio (50-70): Recommended setting, balanced
-- Low ratio (30-50): Fast loading, lower quality
+- **Note**: The coordinate reference system for Auckland LiDAR data is **EPSG:2193** (New Zealand Transverse Mercator 2000).
 
 **Output Directory Structure**:
-```shell
-tree foss4g-2025/public/output/tileset/pointcloud -L 2 -v
-```
 ```
 foss4g-2025/public/output/tileset/pointcloud
 ├── data
@@ -692,8 +711,11 @@ foss4g-2025/public/output/tileset/pointcloud
 └── tileset.json
 ```
 
-**After Completion**:
+**After Completion**:   
 Upon completing this step, high-density point clouds will be converted to hierarchical tiles for efficient web rendering.
+
+**Result Preview**:
+![pointcloud_preview.png](../images/pointcloud_preview.png)
 
 ---
 
