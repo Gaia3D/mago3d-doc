@@ -200,6 +200,15 @@ Build an interactive 3D web application to visualize your digital twin city.
 
 ---
 
+## Related presentation
+
+[State of mago3DTiler & mago3DTerrainer](https://2025.foss4g.org/program/schedule#event-4334-state-of-mago3dtiler-mago3dterrainer-open-source-tools-for-standards-based-digital-twins) Wed Nov 19, 11:30 AM, WG126
+[From Forest Types to Trees](https://2025.foss4g.org/program/schedule#event-4297-from-forest-types-to-trees-a-web-based-digital-twin-of-individual-trees-using-ogc-3d-tiles) Fri Nov 21, 11:30 AM, WG403
+
+We ask for your attendance.
+
+---
+
 ## Dataset Information
 
 This workshop uses **real-world open data from the FOSS4G host city/region**, including:
