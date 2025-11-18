@@ -745,47 +745,23 @@ When you visualize the conversion result, the point clouds will appear as shown 
 
 ## Wrap-up & Troubleshooting (5 minutes / 5분)
 
-### **[SLIDE: What We've Accomplished]**
-
-축하합니다! 데이터 처리 단계를 모두 완료하셨습니다!  
-Congratulations! You've successfully completed all the data processing steps!
-
-지금까지 우리가 만든 것을 정리해보겠습니다.  
-Let's review what we've accomplished.
-
-첫째, 지형 tileset을 생성했습니다.  
-First, we generated a terrain tileset.
-
-둘째, 건물 3D Tiles를 만들었습니다.  
-Second, we created building 3D Tiles.
-
-셋째, 산림 3D Tiles를 생성했습니다.  
-Third, we generated forest 3D Tiles.
-
-넷째, 포인트 클라우드 3D Tiles를 변환했습니다.  
-Fourth, we converted point cloud data to 3D Tiles.
-
-이 모든 데이터를 시각화할 준비가 되었습니다!  
-We're now ready to visualize all of this data!
+### **[SLIDE: What We’ve Accomplished]**
+Congratulations! You’ve completed all the data processing steps.
+Let’s quickly review what we’ve done so far.
+First, we generated the terrain tileset.
+Second, we created the building 3D Tiles.
+Third, we generated the forest 3D Tiles.
+And fourth, we converted the point cloud data into 3D Tiles.
+Now all of our data is ready to be visualized!
 
 ### **[SLIDE: Next Steps]**
+In the next session, we’ll visualize all these layers using CesiumJS.
+You’ll be able to see the terrain, buildings, forests, and point clouds together in 3D.
+We’re about to complete a really impressive digital twin city.
 
-다음 세션에서는 CesiumJS를 사용하여 이 모든 레이어를 시각화할 것입니다.  
-In the next session, we'll visualize all these layers using CesiumJS.
-
-우리가 만든 지형, 건물, 숲, 포인트 클라우드를 모두 3D로 볼 수 있습니다.  
-You'll see all the terrain, buildings, forests, and point clouds we created in 3D.
-
-정말 멋진 디지털 트윈 도시가 완성될 것입니다!  
-It will be an amazing digital twin city!
-
-**[Questions / 질문 시간 - 3 minutes / 3분]**
-
-여기까지 질문 있으신가요?  
-Does anyone have questions so far?
-
-특히 데이터 변환 과정에서 이해가 안 되는 부분이 있으면 지금 질문해주세요.  
-If there's any part of the data conversion process that's unclear, please feel free to ask now.
+### **[Questions – 3 minutes]**
+Do you have any questions so far?
+If any part of the data conversion process was unclear, feel free to ask now.
 
 **[Break Announcement / 휴식 안내]**
 
