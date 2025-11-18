@@ -125,7 +125,7 @@ Sign up at: [https://data.linz.govt.nz/](https://data.linz.govt.nz/)
     ```
   - #### Linux/macOS
     ```shell
-    source myenv/bin/activate
+    source myvenv/bin/activate
     ```
 
 - After running the command, the prompt will change to `(myvenv)`, indicating that the virtual environment is now active.
