@@ -240,7 +240,7 @@ try {
 }
 
 // API key for accessing Koordinates WMTS tile service
-const KOORDINATES_KEY = "526914358e004b599d6ba581e1617740";
+const KOORDINATES_KEY = "YOUR_KEY";
 
 // ============================================
 // STEP 5: Add WMTS Aerial Imagery Layer
