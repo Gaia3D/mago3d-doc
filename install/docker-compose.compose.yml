@@ -102,7 +102,10 @@ services:
       - KC_DB_URL=jdbc:postgresql://postgresql/${POSTGRES_DB}
       - KC_DB_USERNAME=${POSTGRES_USER}
       - KC_DB_PASSWORD=${POSTGRES_PASS}
+#      - KC_HOSTNAME=seoul.gaia3d.com
+#      - KC_HOSTNAME_PORT=18100
       - KC_HOSTNAME_STRICT=false
+#      - KC_PROXY_HEADERS=xforwarded
       - KC_HTTP_RELATIVE_PATH=/auth
       - KEYCLOAK_ADMIN=${KEYCLOAK_USER}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_PASS}
@@ -202,6 +205,7 @@ services:
 
       # Dashboard
       - --api.dashboard=true
+      - --api.insecure=true
       - --ping
 
       # Provider
@@ -218,7 +222,8 @@ services:
 
       # websecure entrypoint
       - --entrypoints.websecure.address=:443
-      - --entrypoints.websecure.http.tls.certResolver=le
+      - --entrypoints.websecure.http.tls=true
+#      - --entrypoints.websecure.http.tls.certResolver=le
 
       # minio entrypoint
       - --entrypoints.minio.address=:9000
