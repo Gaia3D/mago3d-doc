@@ -89,6 +89,10 @@ services:
       - traefik.http.routers.geoserver.rule=Host(`${DOMAIN}`) && PathPrefix(`/geoserver`)
       - traefik.http.routers.geoserver.entrypoints=websecure
       - traefik.http.routers.geoserver.service=geoserver
+#      - traefik.http.routers.geoserver.middlewares=geoserver-headers
+#      - traefik.http.middlewares.geoserver-headers.headers.customrequestheaders.X-Forwarded-Host=${DOMAIN}
+#      - traefik.http.middlewares.geoserver-headers.headers.customrequestheaders.X-Forwarded-Proto=https
+#      - traefik.http.middlewares.geoserver-headers.headers.customrequestheaders.X-Forwarded-Port=443
       - traefik.http.services.geoserver.loadbalancer.sticky.cookie=true
       - traefik.http.services.geoserver.loadbalancer.server.port=8080
     depends_on:

@@ -46,9 +46,11 @@ services:
 #    user: '0'
     environment:
       - GITEA__server__ROOT_URL=https://${DOMAIN}/configrepo
+      - ADMIN_USERNAME=${CONFIG_USERNAME}
+      - ADMIN_PASSWORD=${CONFIG_PASSWORD}
     networks: *networks
-#    volumes:
-#      - config-data:/var/lib/gitea
+    volumes:
+      - config-data:/var/lib/gitea
 
   configserver:
     image: ${REGISTRY}/mago3d-configserver:latest
@@ -113,8 +115,8 @@ services:
     image: ${REGISTRY}/mago3d-keycloak:latest
     command: start --proxy edge --hostname=${DOMAIN} --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false
     environment:
-      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN:-admin}
-      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      - KEYCLOAK_ADMIN=${KEYCLOAK_USER:-admin}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_PASS:-admin}
     networks: *networks
     volumes:
       - keycloak-data:/opt/keycloak
@@ -268,6 +270,7 @@ services:
 
   frontend:
     image: ${REGISTRY}/mago3d-frontend:latest
+    pull_policy: always
     networks: *networks
     deploy:
       replicas: 1
